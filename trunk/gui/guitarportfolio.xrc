@@ -87,4 +87,57 @@
             </object>
         </object>
     </object>
+    <object class="wxPanel" name="SongBrowserPanel" subclass="SongBrowserPanel">
+        <size>400,300</size>
+        <object class="wxBoxSizer">
+            <orient>wxVERTICAL</orient>
+            <object class="sizeritem">
+                <flag>wxGROW|wxLEFT|wxRIGHT|wxTOP</flag>
+                <border>5</border>
+                <object class="wxBoxSizer">
+                    <orient>wxHORIZONTAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM</flag>
+                        <border>5</border>
+                        <option>1</option>
+                        <object class="wxChoice" name="ID_SONG_SELECTOR">
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                        <border>5</border>
+                        <object class="wxBitmapButton" name="ID_BTN_HOME">
+                            <size>25,25</size>
+                            <style>wxBU_AUTODRAW|wxBU_EXACTFIT</style>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                        <border>5</border>
+                        <object class="wxBitmapButton" name="ID_BTN_BACK">
+                            <size>25,25</size>
+                            <style>wxBU_AUTODRAW|wxBU_EXACTFIT</style>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                        <border>5</border>
+                        <object class="wxBitmapButton" name="ID_BTN_FORWARD">
+                            <size>25,25</size>
+                            <style>wxBU_AUTODRAW|wxBU_EXACTFIT</style>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxGROW|wxLEFT|wxRIGHT|wxBOTTOM</flag>
+                <border>5</border>
+                <option>1</option>
+                <object class="wxHtmlWindow" name="ID_BROWSER_WINDOW">
+                    <size>200,150</size>
+                    <style>wxHW_SCROLLBAR_AUTO|wxSUNKEN_BORDER</style>
+                </object>
+            </object>
+        </object>
+    </object>
 </resource>
