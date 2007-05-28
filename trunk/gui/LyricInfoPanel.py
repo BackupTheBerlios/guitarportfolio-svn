@@ -4,9 +4,11 @@
 import wx
 import wx.html as html
 from wx.lib.pubsub import Publisher
+import wx.xrc as xrc
 
 from objs import signals, songs
 import HtmlInfoGen
+import xmlres
 
 # begin wxGlade: dependencies
 # end wxGlade
@@ -16,14 +18,18 @@ lyricinfo = """<html><body>
 </body></html>
 """
 
-class LyricInfoWindow(html.HtmlWindow):
-    def __init__(self, parent, id):
-        html.HtmlWindow.__init__(self, parent, id, style = wx.NO_FULL_REPAINT_ON_RESIZE)
+class LyricInfoPanel(wx.Panel):
+    def __init__(self, parent, id = -1):
+        pre = wx.PrePanel()
+        xmlres.Res().LoadOnPanel(pre, parent, "LyricsInfoPanel")
+        self.PostCreate(pre)
+
+        self.__lyricsInfo = xrc.XRCCTRL(self, "ID_LYRICSWINDOW")
         if "gtk2" in wx.PlatformInfo:
-            self.SetStandardFonts()
+            self.__lyricsInfo.SetStandardFonts()
             
-        self.SetPage('')
-        
+        self.__lyricsInfo.SetPage('')
+
         # hook up a select signal
         Publisher().subscribe(self.__OnSelectSong, signals.SONG_VIEW_SELECTED)
         Publisher().subscribe(self.__OnSelectSong, signals.SONG_VIEW_UPDATED)
@@ -34,37 +40,9 @@ class LyricInfoWindow(html.HtmlWindow):
         """ Select signal when a new song is selected by SongList, we react on it """
         # replace all items and display text
         if message.data:
-            self.SetPage(HtmlInfoGen.GenerateHtmlFromSong(template = lyricinfo, 
-                                                          song = message.data))
+            self.__lyricsInfo.SetPage(HtmlInfoGen.GenerateHtmlFromSong(template = lyricinfo, 
+                                      song = message.data))
         else:                   
-            self.SetPage('')
-
-class LyricInfoPanel(wx.Panel):
-    def __init__(self, *args, **kwds):
-        # begin wxGlade: LyricInfoPanel.__init__
-        kwds["style"] = wx.TAB_TRAVERSAL
-        wx.Panel.__init__(self, *args, **kwds)
-        self.__lyricsInfo = LyricInfoWindow(self, -1)
-
-        self.__set_properties()
-        self.__do_layout()
-        # end wxGlade
-
-    # --------------------------------------------------------------------------
-    def __set_properties(self):
-        # begin wxGlade: LyricInfoPanel.__set_properties
-        pass
-        # end wxGlade
-
-    # --------------------------------------------------------------------------
-    def __do_layout(self):
-        # begin wxGlade: LyricInfoPanel.__do_layout
-        sizer_22 = wx.BoxSizer(wx.VERTICAL)
-        sizer_22.Add(self.__lyricsInfo, 1, wx.EXPAND, 0)
-        self.SetSizer(sizer_22)
-        sizer_22.Fit(self)
-        # end wxGlade
-
-# end of class LyricInfoPanel
+            self.__lyricsInfo.SetPage('')
 
 

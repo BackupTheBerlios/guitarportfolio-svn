@@ -5,8 +5,9 @@ import wx
 import wx.html as html
 from wx.lib.pubsub import Publisher
 
+import wx.xrc as xrc
 from objs import signals, songs
-import HtmlInfoGen
+import HtmlInfoGen, xmlres
 
 # begin wxGlade: dependencies
 # end wxGlade
@@ -17,49 +18,43 @@ tabinfo = """<html><body>
 """
 
 # TODO: Make sure song information can also be substituted in the tab
-
-class TabHtmlWindow(html.HtmlWindow):
-    def __init__(self, parent, id):
-        html.HtmlWindow.__init__(self, parent, id, style = wx.NO_FULL_REPAINT_ON_RESIZE)
-        if "gtk2" in wx.PlatformInfo:
-            self.SetStandardFonts()
-            
-        self.SetPage('No Tabs')
-        
-    def SetTab(self, tab):
-        if tab == None:
-            self.SetPage('No Tabs')
-        else:
-            page = tabinfo.replace('@currenttab@', tab._text)
-            self.SetPage(page)
-            
+                    
 class GuitarTabPanel(wx.Panel):
-    def __init__(self, *args, **kwds):
-        # begin wxGlade: GuitarTabPanel.__init__
-        kwds["style"] = wx.TAB_TRAVERSAL
-        wx.Panel.__init__(self, *args, **kwds)
-        self.label_20 = wx.StaticText(self, -1, "Select tab version")
-        self.__tabSelect = wx.Choice(self, -1, choices=[])
-        self.__tabWindow = TabHtmlWindow(self, -1)
+    def __init__(self, parent, id = -1):
+        pre = wx.PrePanel()
+        xmlres.Res().LoadOnPanel(pre, parent, "SongTabPanel")
+        self.PostCreate(pre)
 
-        self.__set_properties()
-        self.__do_layout()
+        self.__tabSelect = xrc.XRCCTRL(self, "ID_TABSELECT")
+        self.__tabWindow = xrc.XRCCTRL(self, "ID_HTMLWINDOW")
+
+        if "gtk2" in wx.PlatformInfo:
+            self.__tabWindow.SetStandardFonts()
 
         self.Bind(wx.EVT_CHOICE, self.__OnSelectTab, self.__tabSelect)
-        # end wxGlade
 
         # hook up a select signal
         Publisher().subscribe(self.__OnSongSelected, signals.SONG_VIEW_SELECTED)
         Publisher().subscribe(self.__OnTabAdded, signals.TAB_DB_ADDED)
         Publisher().subscribe(self.__OnTabDeleted, signals.TAB_DB_DELETED)
         Publisher().subscribe(self.__OnTabUpdated, signals.TAB_DB_UPDATED)
-        
+
+    # --------------------------------------------------------------------------
+    def SetTab(self, tab):
+        if tab == None:
+            self.__tabWindow.SetPage('No Tabs')
+        else:
+            page = tabinfo.replace('@currenttab@', tab._text)
+            self.__tabWindow.SetPage(page)
+
+    # --------------------------------------------------------------------------
     def __OnSongSelected(self, message):
         """ Select signal when a new song is selected by SongList, we react on it """
-        self.__tabWindow.SetTab(None)
+        self.SetTab(None)
         self.__tabSelect.Clear()
         self.__tabSelect.Enable(message.data == None)
                          
+    # --------------------------------------------------------------------------
     def __OnTabAdded(self, message):
         """ Add a restored tab or a fresh added tab """
         if message.data <> None:
@@ -68,8 +63,9 @@ class GuitarTabPanel(wx.Panel):
             self.__tabSelect.SetClientData(idx, message.data)
             if self.__tabSelect.GetSelection() == wx.NOT_FOUND:
                 self.__tabSelect.SetSelection(0)
-                self.__tabWindow.SetTab(message.data)     
+                self.SetTab(message.data)     
               
+    # --------------------------------------------------------------------------
     def __OnTabDeleted(self, message):
         """ Remove from list, select other one if we are watching """
         for i in xrange(0, self.__tabSelect.GetCount()):
@@ -78,12 +74,13 @@ class GuitarTabPanel(wx.Panel):
                 self.__tabSelect.Delete(i)
                 if self.__tabSelect.GetCount() > 0:
                     self.__tabSelect.SetSelection(0)
-                    self.__tabWindow.SetTab(self.__tabSelect.GetClientData(0))
+                    self.SetTab(self.__tabSelect.GetClientData(0))
                 else:
                     self.__tabSelect.Enable(False)
-                    self.__tabWindow.SetTab(None)
+                    self.SetTab(None)
                 break
 
+    # --------------------------------------------------------------------------
     def __OnTabUpdated(self, message):
         """ Update in list, select other one if we are watching """
         for i in xrange(0, self.__tabSelect.GetCount()):
@@ -92,31 +89,13 @@ class GuitarTabPanel(wx.Panel):
             if data == message.data:
                 self.__tabSelect.SetString(i, data._name)
                 if oldsel == i:
-                    self.__tabWindow.SetTab(data)
+                    self.SetTab(data)
                     self.__tabSelect.SetSelection(oldsel)
                 break
   
-    def __set_properties(self):
-        # begin wxGlade: GuitarTabPanel.__set_properties
-        pass
-        # end wxGlade
-
-    def __do_layout(self):
-        # begin wxGlade: GuitarTabPanel.__do_layout
-        sizer_23 = wx.BoxSizer(wx.VERTICAL)
-        sizer_24 = wx.BoxSizer(wx.HORIZONTAL)
-        sizer_24.Add(self.label_20, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5)
-        sizer_24.Add(self.__tabSelect, 1, wx.ALL|wx.EXPAND, 5)
-        sizer_23.Add(sizer_24, 0, wx.EXPAND, 0)
-        sizer_23.Add(self.__tabWindow, 1, wx.LEFT|wx.RIGHT|wx.EXPAND, 5)
-        self.SetSizer(sizer_23)
-        sizer_23.Fit(self)
-        # end wxGlade
-
-    def __OnSelectTab(self, event): # wxGlade: GuitarTabPanel.<event_handler>
+    # --------------------------------------------------------------------------
+    def __OnSelectTab(self, event):
         tab = self.__tabSelect.GetClientData(self.__tabSelect.GetSelection())
-        self.__tabWindow.SetTab(tab)         
-        
-# end of class GuitarTabPanel
-
+        self.SetTab(tab)         
+    
 

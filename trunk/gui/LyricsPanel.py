@@ -4,48 +4,31 @@
 import wx
 from wx.lib.pubsub import Publisher
 from objs import signals, songfilter
+
 import db.engine
 from db import songs_peer
+import xmlres
+import wx.xrc as xrc
 
 # begin wxGlade: dependencies
 # end wxGlade
 
 class LyricsPanel(wx.Panel):
-    def __init__(self, *args, **kwds):
-        # begin wxGlade: LyricsPanel.__init__
-        kwds["style"] = wx.TAB_TRAVERSAL
-        wx.Panel.__init__(self, *args, **kwds)
-        self.__lyrics = wx.TextCtrl(self, -1, "", style=wx.TE_MULTILINE)
-        self.__applySelection = wx.ComboBox(self, -1, choices=["Save To Database", "Revert From Database"], style=wx.CB_DROPDOWN|wx.CB_READONLY)
-        self.__applyButton = wx.Button(self, wx.ID_APPLY, "")
+    def __init__(self, parent, id = -1):
+        pre = wx.PrePanel()
+        xmlres.Res().LoadOnPanel(pre, parent, "SongLyricEditPanel")
+        self.PostCreate(pre)
 
-        self.__set_properties()
-        self.__do_layout()
+        self.__lyrics = xrc.XRCCTRL(self, "ID_LYRICS_EDIT")
+        self.__applySelection = xrc.XRCCTRL(self, "ID_ACTION_SELECT")
+        self.__applyButton = xrc.XRCCTRL(self, "wxID_APPLY")
 
         self.Bind(wx.EVT_BUTTON, self.__OnApply, self.__applyButton)
-        # end wxGlade
 
         Publisher().subscribe(self.__OnSongSelected, signals.SONG_VIEW_SELECTED)
+        Publisher().subscribe(self.__OnSongSelected, signals.APP_CLEAR)
 
-    # --------------------------------------------------------------------------
-    def __set_properties(self):
-        # begin wxGlade: LyricsPanel.__set_properties
-        self.__lyrics.SetFont(wx.Font(9, wx.MODERN, wx.NORMAL, wx.NORMAL, 0, ""))
         self.__applySelection.SetSelection(0)
-        # end wxGlade
-
-    # --------------------------------------------------------------------------
-    def __do_layout(self):
-        # begin wxGlade: LyricsPanel.__do_layout
-        sizer_15 = wx.BoxSizer(wx.VERTICAL)
-        sizer_16 = wx.BoxSizer(wx.HORIZONTAL)
-        sizer_15.Add(self.__lyrics, 1, wx.ALL|wx.EXPAND, 5)
-        sizer_16.Add(self.__applySelection, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5)
-        sizer_16.Add(self.__applyButton, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5)
-        sizer_15.Add(sizer_16, 0, wx.EXPAND, 0)
-        self.SetSizer(sizer_15)
-        sizer_15.Fit(self)
-        # end wxGlade
 
     # --------------------------------------------------------------------------
     def __OnApply(self, event): # wxGlade: LyricsPanel.<event_handler>
@@ -76,9 +59,5 @@ class LyricsPanel(wx.Panel):
         if song:
             self.__lyrics.SetValue(song._lyrics)
         else:
-            self.__lyrics.SetValue('')        
-        
-
-# end of class LyricsPanel
-
+            self.__lyrics.SetValue('')
 

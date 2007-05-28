@@ -112,7 +112,7 @@
                         </object>
                     </object>
                     <object class="sizeritem">
-                        <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                        <flag>wxALIGN_CENTER_VERTICAL|wxRIGHT|wxTOP|wxBOTTOM</flag>
                         <border>5</border>
                         <object class="wxBitmapButton" name="ID_BTN_BACK">
                             <size>25,25</size>
@@ -120,7 +120,7 @@
                         </object>
                     </object>
                     <object class="sizeritem">
-                        <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                        <flag>wxALIGN_CENTER_VERTICAL|wxRIGHT|wxTOP|wxBOTTOM</flag>
                         <border>5</border>
                         <object class="wxBitmapButton" name="ID_BTN_FORWARD">
                             <size>25,25</size>
@@ -136,6 +136,257 @@
                 <object class="wxHtmlWindow" name="ID_BROWSER_WINDOW">
                     <size>200,150</size>
                     <style>wxHW_SCROLLBAR_AUTO|wxSUNKEN_BORDER</style>
+                </object>
+            </object>
+        </object>
+    </object>
+    <object class="wxPanel" name="SongTabPanel" subclass="SongTabPanel">
+        <size>400,300</size>
+        <object class="wxBoxSizer">
+            <orient>wxVERTICAL</orient>
+            <object class="sizeritem">
+                <flag>wxGROW|wxLEFT|wxRIGHT</flag>
+                <border>5</border>
+                <object class="wxBoxSizer">
+                    <orient>wxHORIZONTAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_VERTICAL|wxLEFT|wxTOP|wxBOTTOM|wxADJUST_MINSIZE</flag>
+                        <border>5</border>
+                        <object class="wxStaticText" name="wxID_STATIC">
+                            <label>Select tab version</label>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxGROW|wxLEFT|wxTOP|wxBOTTOM</flag>
+                        <border>5</border>
+                        <option>1</option>
+                        <object class="wxChoice" name="ID_TABSELECT">
+                        </object>
+                    </object>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxGROW|wxLEFT|wxRIGHT|wxBOTTOM</flag>
+                <border>5</border>
+                <option>1</option>
+                <object class="wxHtmlWindow" name="ID_HTMLWINDOW">
+                    <size>200,150</size>
+                    <style>wxHW_SCROLLBAR_AUTO|wxSUNKEN_BORDER</style>
+                </object>
+            </object>
+        </object>
+    </object>
+    <object class="wxPanel" name="SongInfoPanel" subclass="SongInfoPanel">
+        <size>400,300</size>
+        <object class="wxBoxSizer">
+            <orient>wxVERTICAL</orient>
+            <object class="sizeritem">
+                <flag>wxGROW|wxALL</flag>
+                <border>5</border>
+                <option>1</option>
+                <object class="wxHtmlWindow" name="ID_SONGINFO">
+                    <size>200,150</size>
+                    <style>wxHW_SCROLLBAR_AUTO|wxSUNKEN_BORDER</style>
+                </object>
+            </object>
+        </object>
+    </object>
+    <object class="wxPanel" name="LyricsInfoPanel" subclass="LyricsInfoPanel">
+        <size>400,300</size>
+        <object class="wxBoxSizer">
+            <orient>wxVERTICAL</orient>
+            <object class="sizeritem">
+                <flag>wxGROW|wxALL</flag>
+                <border>5</border>
+                <option>1</option>
+                <object class="wxHtmlWindow" name="ID_LYRICSWINDOW">
+                    <size>200,150</size>
+                    <style>wxHW_SCROLLBAR_AUTO|wxSUNKEN_BORDER</style>
+                </object>
+            </object>
+        </object>
+    </object>
+    <object class="wxPanel" name="EditLinkDialog" subclass="EditLinkDialog">
+        <size>400,300</size>
+        <object class="wxBoxSizer">
+            <orient>wxHORIZONTAL</orient>
+            <object class="sizeritem">
+                <flag>wxGROW|wxLEFT|wxBOTTOM</flag>
+                <border>5</border>
+                <option>1</option>
+                <object class="wxBoxSizer">
+                    <orient>wxVERTICAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_LEFT</flag>
+                        <border>5</border>
+                        <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>5</border>
+                                <object class="wxStaticBitmap" name="ID_PATH_STATUS">
+                                    <size>16,16</size>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>5</border>
+                                <object class="wxStaticText" name="wxID_STATIC">
+                                    <label>Base path:</label>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                <border>5</border>
+                                <object class="wxStaticText" name="ID_LINK_PATH">
+                                    <font>
+                                        <size>10</size>
+                                        <family>swiss</family>
+                                        <weight>bold</weight>
+                                        <face>Sans</face>
+                                    </font>
+                                    <label>d:\my music\Everlast - Whitey Ford Sings The Blues</label>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxGROW|wxLEFT|wxRIGHT|wxBOTTOM</flag>
+                        <border>5</border>
+                        <option>1</option>
+                        <object class="wxListCtrl" name="ID_LINK_LIST">
+                            <size>100,100</size>
+                            <style>wxLC_REPORT|wxSUNKEN_BORDER</style>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_TOP</flag>
+                <border>5</border>
+                <object class="wxBoxSizer">
+                    <orient>wxVERTICAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>5</border>
+                        <object class="wxButton" name="ID_BTN_CREATE">
+                            <label>&amp;Create</label>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxLEFT|wxRIGHT|wxBOTTOM</flag>
+                        <border>5</border>
+                        <object class="wxButton" name="ID_BTN_EDIT">
+                            <label>&amp;Edit ...</label>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxLEFT|wxRIGHT|wxBOTTOM</flag>
+                        <border>5</border>
+                        <object class="wxButton" name="ID_BTN_REFRESH">
+                            <label>&amp;Refresh</label>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxLEFT|wxRIGHT|wxBOTTOM</flag>
+                        <border>5</border>
+                        <object class="wxButton" name="ID_BTN_ADD">
+                            <label>&amp;Add URL</label>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxLEFT|wxRIGHT|wxBOTTOM</flag>
+                        <border>5</border>
+                        <object class="wxButton" name="ID_BTN_IGNORE">
+                            <label>&amp;Ignore File</label>
+                        </object>
+                    </object>
+                </object>
+            </object>
+        </object>
+    </object>
+    <object class="wxPanel" name="SongInfoEditPanel" subclass="SongInfoEditPanel">
+        <size>400,300</size>
+        <object class="wxBoxSizer">
+            <orient>wxVERTICAL</orient>
+            <object class="sizeritem">
+                <flag>wxGROW|wxLEFT|wxRIGHT|wxTOP</flag>
+                <border>5</border>
+                <option>1</option>
+                <object class="wxTextCtrl" name="ID_SONG_EDIT">
+                    <font>
+                        <size>10</size>
+                        <face>Monospace</face>
+                    </font>
+                    <style>wxTE_MULTILINE</style>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_LEFT</flag>
+                <border>5</border>
+                <object class="wxBoxSizer">
+                    <orient>wxHORIZONTAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                        <border>5</border>
+                        <object class="wxChoice" name="ID_ACTION_SELECT">
+                            <size>180,-1</size>
+                            <content>
+                                <item>Save To Database</item>
+                                <item>Revert From Database</item>
+                            </content>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                        <border>5</border>
+                        <object class="wxButton" name="wxID_APPLY">
+                            <label>&amp;Apply</label>
+                        </object>
+                    </object>
+                </object>
+            </object>
+        </object>
+    </object>
+    <object class="wxPanel" name="SongLyricEditPanel" subclass="SongLyricEditPanel">
+        <size>400,300</size>
+        <object class="wxBoxSizer">
+            <orient>wxVERTICAL</orient>
+            <object class="sizeritem">
+                <flag>wxGROW|wxLEFT|wxRIGHT|wxTOP</flag>
+                <border>5</border>
+                <option>1</option>
+                <object class="wxTextCtrl" name="ID_LYRICS_EDIT">
+                    <font>
+                        <size>10</size>
+                        <face>Monospace</face>
+                    </font>
+                    <style>wxTE_MULTILINE</style>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_LEFT</flag>
+                <border>5</border>
+                <object class="wxBoxSizer">
+                    <orient>wxHORIZONTAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                        <border>5</border>
+                        <object class="wxChoice" name="ID_ACTION_SELECT">
+                            <size>180,-1</size>
+                            <content>
+                                <item>Save To Database</item>
+                                <item>Revert From Database</item>
+                            </content>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                        <border>5</border>
+                        <object class="wxButton" name="wxID_APPLY">
+                            <label>&amp;Apply</label>
+                        </object>
+                    </object>
                 </object>
             </object>
         </object>
