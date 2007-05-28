@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Tasks SYSTEM "Tasks-3.8.dtd">
+<!-- Tasks file for project guitarportfolio -->
+<!-- Saved: 2007-05-27, 16:33:05 -->
+<Tasks version="3.8">
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Small problem, the category relations can be</Description>
+    <Created>2007-05-27, 14:28:23</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>GuitarPortfolioFrame.py</Name>
+      </Filename>
+      <Linenumber>219</Linenumber>
+    </Resource>
+  </Task>
+</Tasks>

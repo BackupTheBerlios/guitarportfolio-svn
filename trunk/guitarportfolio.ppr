@@ -1,0 +1,127 @@
+[Config]
+Relative path=1
+Compilator.FileName=C:\Python25\python.exe
+Compilator.PSPar=d:\personal\src\GuitarPortfolio\branches\db_revival\guitarportfolio.py
+Compilator.SaveAll=0
+Compilator.Capture=0
+Compilator.HideOutput=0
+DefaultCPIndex=0
+LogtoEnd=1
+DontOpen=0
+FileFormat=0
+[Project tree]
+guitarportfolio
+	+Folder
+		+database
+			db\__init__.py
+			db\base.py
+			db\category_peer.py
+			db\engine.py
+			db\songs_peer.py
+			db\tabs_peer.py
+			db\tuning_peer.py
+		+gui
+			gui\__init__.py
+			gui\appcfg.py
+			gui\CategoriesDlg.py
+			gui\CurrInfoNotebook.py
+			gui\CurrSongInfoPanel.py
+			gui\DbProgressDlg.py
+			gui\EditorNotebook.py
+			gui\GuitarNotebook.py
+			gui\guitarportfolio.py
+			gui\GuitarPortfolioFrame.py
+			gui\GuitarTabEditPanel.py
+			gui\GuitarTabPanel.py
+			gui\HtmlInfoGen.py
+			gui\InfoPanel.py
+			gui\LinksPanel.py
+			gui\LyricInfoPanel.py
+			gui\LyricsPanel.py
+			gui\NewLinkDialog.py
+			gui\NewSongDlg.py
+			gui\OptionsDlg.py
+			gui\ProgressPanel.py
+			gui\SongBrowserPanel.py
+			gui\SongFilterPanel.py
+			gui\SongsPanel.py
+			gui\WelcomeDlg.py
+		+objs
+			objs\__init__.py
+			objs\category.py
+			objs\datamgr.py
+			objs\signals.py
+			objs\songfilter.py
+			objs\songs.py
+			objs\tabs.py
+			objs\tuning.py
+			objs\category_mgr.py
+			objs\tuning_mgr.py
+		+testing
+			testing\test_db.py
+			testing\test_songfilter.py
+		guitarportfolio.py
+[Open project files]
+0=objs\signals.py
+1=gui\HtmlInfoGen.py
+2=objs\songs.py
+3=gui\CurrSongInfoPanel.py
+4=gui\SongsPanel.py
+5=gui\LyricsPanel.py
+6=gui\LyricInfoPanel.py
+7=gui\GuitarPortfolioFrame.py
+8=gui\GuitarTabEditPanel.py
+9=db\tabs_peer.py
+10=db\songs_peer.py
+11=db\base.py
+12=gui\SongBrowserPanel.py
+13=objs\songfilter.py
+14=c:\Python25\Lib\site-packages\wx-2.8-msw-unicode\wx\lib\pubsub.py
+[Selected Project Files]
+Main=
+Selected=gui\SongsPanel.py
+[objs\signals.py]
+TopLine=1
+Caret=15,23
+[gui\HtmlInfoGen.py]
+TopLine=11
+Caret=22,53
+[objs\songs.py]
+TopLine=49
+Caret=1,103
+[gui\CurrSongInfoPanel.py]
+TopLine=7
+Caret=15,20
+[gui\SongsPanel.py]
+TopLine=8
+Caret=83,27
+[gui\LyricsPanel.py]
+TopLine=31
+Caret=1,69
+[gui\LyricInfoPanel.py]
+TopLine=16
+Caret=69,30
+[gui\GuitarPortfolioFrame.py]
+TopLine=337
+Caret=28,385
+[gui\GuitarTabEditPanel.py]
+TopLine=108
+Caret=19,161
+[db\tabs_peer.py]
+TopLine=1
+Caret=1,1
+[db\songs_peer.py]
+TopLine=142
+Caret=23,196
+[db\base.py]
+TopLine=10
+Caret=23,38
+[gui\SongBrowserPanel.py]
+TopLine=125
+Caret=1,176
+[objs\songfilter.py]
+TopLine=20
+Caret=1,73
+[c:\Python25\Lib\site-packages\wx-2.8-msw-unicode\wx\lib\pubsub.py]
+TopLine=764
+Caret=38,816
