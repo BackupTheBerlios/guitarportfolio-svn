@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resource version="2.3.0.1" xmlns="http://www.wxwidgets.org/wxxrc">
+    <object class="wxPanel" name="SongFilterPanel" subclass="SongFilterPanel">
+        <object class="wxBoxSizer">
+            <orient>wxVERTICAL</orient>
+            <object class="sizeritem">
+                <flag>wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP</flag>
+                <border>5</border>
+                <object class="wxStaticText" name="wxID_STATIC">
+                    <label>Filter by progress</label>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxGROW|wxALL</flag>
+                <border>5</border>
+                <object class="wxChoice" name="ID_PROGRESS">
+                    <size>200,-1</size>
+                    <content>
+                        <item>All Progress</item>
+                        <item>In Progress</item>
+                        <item>Not Practicing</item>
+                        <item>Completed!</item>
+                        <item>TODO</item>
+                    </content>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_LEFT|wxLEFT|wxRIGHT</flag>
+                <border>5</border>
+                <object class="wxStaticText" name="wxID_STATIC">
+                    <label>Filter by difficulty</label>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxGROW|wxALL</flag>
+                <border>5</border>
+                <object class="wxChoice" name="ID_DIFFICULTY">
+                    <content>
+                        <item>Not Applicable</item>
+                        <item>Easy</item>
+                        <item>Normal</item>
+                        <item>Intermediate</item>
+                        <item>Advanced</item>
+                        <item>Hard</item>
+                        <item>Impossible</item>
+                    </content>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_LEFT|wxALL</flag>
+                <border>5</border>
+                <object class="wxCheckBox" name="ID_SHOW_LOWER_DIFFICULTY">
+                    <label>Also show lower difficulty</label>
+                    <checked>0</checked>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxGROW|wxLEFT|wxRIGHT</flag>
+                <border>5</border>
+                <object class="wxStaticLine" name="ID_STATICLINE">
+                    <style>wxLI_HORIZONTAL</style>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_LEFT|wxALL</flag>
+                <border>5</border>
+                <object class="wxStaticText" name="wxID_STATIC">
+                    <label>Filter by category</label>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxGROW|wxLEFT|wxRIGHT|wxBOTTOM</flag>
+                <border>5</border>
+                <option>1</option>
+                <object class="wxCheckListBox" name="ID_CATEGORIES">
+                    <size>-1,50</size>
+                    <style>wxLB_SINGLE</style>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_LEFT|wxLEFT|wxRIGHT|wxBOTTOM</flag>
+                <border>5</border>
+                <object class="wxCheckBox" name="ID_CAT_ANDFILTER">
+                    <label>Song must have all selected</label>
+                    <checked>0</checked>
+                </object>
+            </object>
+        </object>
+    </object>
+</resource>

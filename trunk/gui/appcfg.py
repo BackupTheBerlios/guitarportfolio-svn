@@ -7,6 +7,8 @@ DBNAME              = 'guitarportfolio.db'
 
 CFG_APPNAME         = 'GuitarPortfolio'
 CFG_VENDORNAME      = 'ImpossibleSoft'
+CFG_XRCFILE         = 'gui/guitarportfolio.xrc'
+
 CFG_DBPATH          = 'DbPath'                      # path to database + filename
 CFG_PROGRESS        = 'filter/status'               # progress filter index
 CFG_DIFFICULTY      = 'filter/difficulty'           # difficulty index

@@ -4,14 +4,18 @@
 
 import wx
 from GuitarPortfolioFrame import GuitarPortfolioFrame
-import appcfg
+import appcfg, xmlres
 
 class GuitarPortfolioApp(wx.App):
     def OnInit(self):
         wx.InitAllImageHandlers()
 
-        self.SetAppName(appcfg.CFG_APPNAME)
+        # load XML handler
+        res = xmlres.Get().Load(appcfg.CFG_XRCFILE)
 
+        self.SetAppName(appcfg.CFG_APPNAME)
+        
+        # init frame, and show
         MainFrame = GuitarPortfolioFrame(None, -1, "")
         self.SetTopWindow(MainFrame)
         MainFrame.Show()

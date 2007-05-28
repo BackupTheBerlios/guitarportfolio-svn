@@ -12,7 +12,7 @@ import db.songs_peer
 
 from objs import signals, songs, category_mgr, tuning_mgr, songfilter
 from gui import SongsPanel, EditorNotebook, CurrInfoNotebook, NewSongDlg, \
-                CategoriesDlg, SongFilterPanel, OptionsDlg, WelcomeDlg
+                CategoriesDlg, SongFilterPanel, OptionsDlg, WelcomeDlg, xmlres
 from images import icon_main_window
 
 import appcfg
@@ -22,53 +22,58 @@ import appcfg
 
 class GuitarPortfolioFrame(wx.Frame):
     def __init__(self, *args, **kwds):
-        # begin wxGlade: GuitarPortfolioFrame.__init__
         kwds["style"] = wx.DEFAULT_FRAME_STYLE
         wx.Frame.__init__(self, *args, **kwds)
-        
-        # Menu Bar
+    
+        # create menu
         self.__menuBar = wx.MenuBar()
         self.SetMenuBar(self.__menuBar)
-        wxglade_tmp_menu = wx.Menu()
-        self.__menuShowDatabaseWizard = wx.MenuItem(wxglade_tmp_menu, wx.NewId(), "&Show Database Wizard ...", "", wx.ITEM_NORMAL)
-        wxglade_tmp_menu.AppendItem(self.__menuShowDatabaseWizard)
-        self.__menuOptions = wx.MenuItem(wxglade_tmp_menu, wx.NewId(), "&Preferences ...", "", wx.ITEM_NORMAL)
-        wxglade_tmp_menu.AppendItem(self.__menuOptions)
-        wxglade_tmp_menu.AppendSeparator()
-        self.__menuExit = wx.MenuItem(wxglade_tmp_menu, wx.NewId(), "E&xit\tCtrl+X", "", wx.ITEM_NORMAL)
-        wxglade_tmp_menu.AppendItem(self.__menuExit)
-        self.__menuBar.Append(wxglade_tmp_menu, "&File")
-        wxglade_tmp_menu = wx.Menu()
-        self.__menuAddNewSong = wx.MenuItem(wxglade_tmp_menu, wx.NewId(), "&Add New ...\tCtrl+A", "", wx.ITEM_NORMAL)
-        wxglade_tmp_menu.AppendItem(self.__menuAddNewSong)
-        self.__menuEditSong = wx.MenuItem(wxglade_tmp_menu, wx.NewId(), "&Edit ...\tCtrl+E", "", wx.ITEM_NORMAL)
-        wxglade_tmp_menu.AppendItem(self.__menuEditSong)
-        self.__menuDeleteSong = wx.MenuItem(wxglade_tmp_menu, wx.NewId(), "&Delete\tCtrl+D", "", wx.ITEM_NORMAL)
-        wxglade_tmp_menu.AppendItem(self.__menuDeleteSong)
-        wxglade_tmp_menu.AppendSeparator()
-        self.__menuEditCategories = wx.MenuItem(wxglade_tmp_menu, wx.NewId(), "Edit &Categories ...\tCtrl+Shift+C", "", wx.ITEM_NORMAL)
-        wxglade_tmp_menu.AppendItem(self.__menuEditCategories)
-        self.__menuBar.Append(wxglade_tmp_menu, "&Songs")
-        wxglade_tmp_menu = wx.Menu()
-        self.__menuRestoreLayout = wx.MenuItem(wxglade_tmp_menu, wx.NewId(), "&Restore Default Layout", "", wx.ITEM_NORMAL)
-        wxglade_tmp_menu.AppendItem(self.__menuRestoreLayout)
-        wxglade_tmp_menu.AppendSeparator()
-        self.__menuToggleEditView = wx.MenuItem(wxglade_tmp_menu, wx.NewId(), "Show &Editors", "", wx.ITEM_NORMAL)
-        wxglade_tmp_menu.AppendItem(self.__menuToggleEditView)
-        self.__menuToggleSongSelect = wx.MenuItem(wxglade_tmp_menu, wx.NewId(), "Show &Song Selector", "", wx.ITEM_NORMAL)
-        wxglade_tmp_menu.AppendItem(self.__menuToggleSongSelect)
-        self.__menuToggelSongFilter = wx.MenuItem(wxglade_tmp_menu, wx.NewId(), "Show Song &Filter", "", wx.ITEM_NORMAL)
-        wxglade_tmp_menu.AppendItem(self.__menuToggelSongFilter)
-        wxglade_tmp_menu.AppendSeparator()
-        self.__menuBrowserMode = wx.MenuItem(wxglade_tmp_menu, wx.NewId(), "&Browser Mode", "", wx.ITEM_NORMAL)
-        wxglade_tmp_menu.AppendItem(self.__menuBrowserMode)
-        self.__menuEditorMode = wx.MenuItem(wxglade_tmp_menu, wx.NewId(), "Editor &Mode", "", wx.ITEM_NORMAL)
-        wxglade_tmp_menu.AppendItem(self.__menuEditorMode)
-        self.__menuBar.Append(wxglade_tmp_menu, "&Windows")
-        # Menu Bar end
+        
+        # file menu	
+        mnu = wx.Menu()        
+        self.__menuShowDatabaseWizard = wx.MenuItem(mnu, wx.NewId(), "&Show Database Wizard ...", "", wx.ITEM_NORMAL)
+        mnu.AppendItem(self.__menuShowDatabaseWizard)
+        self.__menuOptions = wx.MenuItem(mnu, wx.NewId(), "&Preferences ...", "", wx.ITEM_NORMAL)
+        mnu.AppendItem(self.__menuOptions)
+        mnu.AppendSeparator()
+        self.__menuExit = wx.MenuItem(mnu, wx.NewId(), "E&xit\tCtrl+X", "", wx.ITEM_NORMAL)
+        mnu.AppendItem(self.__menuExit)
+        self.__menuBar.Append(mnu, "&File")
 
-        self.__set_properties()
-        self.__do_layout()
+        # songs menu
+        mnu = wx.Menu()
+        self.__menuAddNewSong = wx.MenuItem(mnu, wx.NewId(), "&Add New ...\tCtrl+A", "", wx.ITEM_NORMAL)
+        mnu.AppendItem(self.__menuAddNewSong)
+        self.__menuEditSong = wx.MenuItem(mnu, wx.NewId(), "&Edit ...\tCtrl+E", "", wx.ITEM_NORMAL)
+        mnu.AppendItem(self.__menuEditSong)
+        self.__menuDeleteSong = wx.MenuItem(mnu, wx.NewId(), "&Delete\tCtrl+D", "", wx.ITEM_NORMAL)
+        mnu.AppendItem(self.__menuDeleteSong)
+        mnu.AppendSeparator()
+        self.__menuEditCategories = wx.MenuItem(mnu, wx.NewId(), "Edit &Categories ...\tCtrl+Shift+C", "", wx.ITEM_NORMAL)
+        mnu.AppendItem(self.__menuEditCategories)
+        self.__menuBar.Append(mnu, "&Songs")
+
+        # window layout
+        mnu = wx.Menu()
+        self.__menuRestoreLayout = wx.MenuItem(mnu, wx.NewId(), "&Restore Default Layout", "", wx.ITEM_NORMAL)
+        mnu.AppendItem(self.__menuRestoreLayout)
+        mnu.AppendSeparator()
+        self.__menuToggleEditView = wx.MenuItem(mnu, wx.NewId(), "Show &Editors", "", wx.ITEM_NORMAL)
+        mnu.AppendItem(self.__menuToggleEditView)
+        self.__menuToggleSongSelect = wx.MenuItem(mnu, wx.NewId(), "Show &Song Selector", "", wx.ITEM_NORMAL)
+        mnu.AppendItem(self.__menuToggleSongSelect)
+        self.__menuToggelSongFilter = wx.MenuItem(mnu, wx.NewId(), "Show Song &Filter", "", wx.ITEM_NORMAL)
+        mnu.AppendItem(self.__menuToggelSongFilter)
+        mnu.AppendSeparator()
+        self.__menuBrowserMode = wx.MenuItem(mnu, wx.NewId(), "&Browser Mode", "", wx.ITEM_NORMAL)
+        mnu.AppendItem(self.__menuBrowserMode)
+        self.__menuEditorMode = wx.MenuItem(mnu, wx.NewId(), "Editor &Mode", "", wx.ITEM_NORMAL)
+        mnu.AppendItem(self.__menuEditorMode)
+        self.__menuBar.Append(mnu, "&Windows")
+
+        # set all properties
+        self.SetTitle("Guitar Portfolio")
+        self.Layout()
 
         self.Bind(wx.EVT_MENU, self.__OnShowDatabaseWizard, self.__menuShowDatabaseWizard)
         self.Bind(wx.EVT_MENU, self.__OnShowOptions, self.__menuOptions)
@@ -93,13 +98,12 @@ class GuitarPortfolioFrame(wx.Frame):
         self.__aui.SetManagedWindow(self)
             
         # construct the left panels
-        self.__aui.AddPane(SongsPanel.SongsPanel(self), wx.aui.AuiPaneInfo().
-                             Name("songspanel").Caption("Songs").MinSize(wx.Size(280,100)).
-                             BestSize(wx.Size(280, 200)).Left().MaximizeButton(True))
+        self.__aui.AddPane(SongsPanel.SongsPanel(parent = self), wx.aui.AuiPaneInfo().
+                           Name("songspanel").Caption("Songs").MinSize(wx.Size(280,100)).
+                           BestSize(wx.Size(280, 200)).Left().MaximizeButton(True))
 
-        self.__aui.AddPane(SongFilterPanel.SongFilterPanel(self), wx.aui.AuiPaneInfo().
-                             Name("filterpanel").Caption("Filter").MinSize(wx.Size(250,100)).
-                             BestSize(wx.Size(250, 100)).Left().MaximizeButton(True))
+        self.__aui.AddPane(SongFilterPanel.SongFilterPanel(self), wx.aui.AuiPaneInfo().Name("filterpanel").Caption("Filter").
+                           MinSize(wx.Size(250,100)).BestSize(wx.Size(250, 100)).Left().MaximizeButton(True))
 
         # construct the bottom panel
         self.__aui.AddPane(EditorNotebook.EditorNotebook(self), wx.aui.AuiPaneInfo().
@@ -112,7 +116,7 @@ class GuitarPortfolioFrame(wx.Frame):
                            CenterPane().CloseButton(False).MaximizeButton(True))
 
         self.__aui.Update()
-        
+
         self._filter = songfilter.Get()
         
         # hook up event handlers
@@ -156,17 +160,6 @@ class GuitarPortfolioFrame(wx.Frame):
             self.AddPendingEvent(evt)
         else:
             self.__PopulateData()
-
-    def __set_properties(self):
-        # begin wxGlade: GuitarPortfolioFrame.__set_properties
-        self.SetTitle("Guitar Portfolio")
-        # end wxGlade
-
-    def __do_layout(self):
-        # begin wxGlade: GuitarPortfolioFrame.__do_layout
-        self.Layout()
-        # end wxGlade
-
     #---------------------------------------------------------------------------
     def OnExit(self, event): # wxGlade: GuitarPortfolioFrame.<event_handler>
         self.Close()
