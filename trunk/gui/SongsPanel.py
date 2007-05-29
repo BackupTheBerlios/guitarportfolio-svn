@@ -42,10 +42,16 @@ class SongsListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
         self.__statToIcon[songs.SS_STARTED]     = self.__icons.Add(images.icon_in_progress.getBitmap())
         self.__statToIcon[songs.SS_POSTPONED]   = self.__icons.Add(images.icon_not_practicing.getBitmap())
         self.SetImageList(self.__icons, wx.IMAGE_LIST_SMALL)
+        
         # hook up our event
         self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.__OnItemSelected, self)
-        self.Bind(wx.EVT_COMMAND_RIGHT_CLICK, self.__OnRightClick)
-
+        
+        if "wxGTK" in wx.PlatformInfo:
+            # in wxGTK, there is no right click event
+            self.Bind(wx.EVT_RIGHT_UP, self.__OnRightClick)
+        else:
+            self.Bind(wx.EVT_COMMAND_RIGHT_CLICK, self.__OnRightClick)
+            
         # attach signal to get informed about songs
         Publisher().subscribe(self.__OnSongSelected, signals.SONG_VIEW_SELECTED)  
         Publisher().subscribe(self.__AddSong, signals.SONG_VIEW_ADDED)  

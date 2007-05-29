@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Tasks SYSTEM "Tasks-3.8.dtd">
 <!-- Tasks file for project guitarportfolio -->
-<!-- Saved: 2007-05-28, 22:36:10 -->
+<!-- Saved: 2007-05-29, 15:51:05 -->
 <Tasks version="3.8">
   <Task priority="1" completed="0" bugfix="0">
     <Description>TODO: Small problem, the category relations can be</Description>
@@ -12,72 +12,6 @@
         <Name>GuitarPortfolioFrame.py</Name>
       </Filename>
       <Linenumber>212</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Put the text inside the DB!</Description>
-    <Created>2007-05-28, 19:14:20</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>SongBrowserPanel.py</Name>
-      </Filename>
-      <Linenumber>14</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Substitute version number / appname in HTML text</Description>
-    <Created>2007-05-28, 19:14:20</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>SongBrowserPanel.py</Name>
-      </Filename>
-      <Linenumber>42</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Put inside the DB!</Description>
-    <Created>2007-05-28, 19:14:20</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>SongBrowserPanel.py</Name>
-      </Filename>
-      <Linenumber>43</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Sort the items in the choice</Description>
-    <Created>2007-05-28, 19:14:20</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>SongBrowserPanel.py</Name>
-      </Filename>
-      <Linenumber>92</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Make sure song information can also be substituted in the tab</Description>
-    <Created>2007-05-28, 19:29:31</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>GuitarTabPanel.py</Name>
-      </Filename>
-      <Linenumber>20</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Make a wx.ListCtrl, listmix.ListCtrlAutoWidthMixin custom class for XRC</Description>
-    <Created>2007-05-28, 21:26:06</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>LinksPanel.py</Name>
-      </Filename>
-      <Linenumber>22</Linenumber>
     </Resource>
   </Task>
   <Task priority="1" completed="0" bugfix="0">
@@ -123,5 +57,86 @@
       </Filename>
       <Linenumber>4</Linenumber>
     </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Put the text inside the DB!</Description>
+    <Created>2007-05-29, 13:29:03</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>SongBrowserPanel.py</Name>
+      </Filename>
+      <Linenumber>14</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Substitute version number / appname in HTML text</Description>
+    <Created>2007-05-29, 13:29:03</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>SongBrowserPanel.py</Name>
+      </Filename>
+      <Linenumber>42</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Put inside the DB!</Description>
+    <Created>2007-05-29, 13:29:03</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>SongBrowserPanel.py</Name>
+      </Filename>
+      <Linenumber>43</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Sort the items in the choice</Description>
+    <Created>2007-05-29, 13:29:03</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>SongBrowserPanel.py</Name>
+      </Filename>
+      <Linenumber>92</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Make a wx.ListCtrl, listmix.ListCtrlAutoWidthMixin custom class for XRC</Description>
+    <Created>2007-05-29, 13:51:59</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>LinksPanel.py</Name>
+      </Filename>
+      <Linenumber>22</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Make sure song information can also be substituted in the tab</Description>
+    <Created>2007-05-29, 13:55:02</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>GuitarTabPanel.py</Name>
+      </Filename>
+      <Linenumber>20</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Artists which are mistyped (lower / upper) should not appear twice</Description>
+    <Created>2007-05-29, 15:20:26</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>NewSongDlg.py</Name>
+      </Filename>
+      <Linenumber>53</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="0" completed="0" bugfix="0">
+    <Description>BUG: Categories cannot be added when song is not yet in DB</Description>
+    <Created>2007-05-29, 15:34:59</Created>
   </Task>
 </Tasks>

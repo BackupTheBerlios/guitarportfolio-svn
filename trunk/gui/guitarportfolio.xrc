@@ -401,7 +401,7 @@
                 <object class="wxBoxSizer">
                     <orient>wxHORIZONTAL</orient>
                     <object class="sizeritem">
-                        <flag>wxALIGN_CENTER_VERTICAL|wxRIGHT|wxTOP|wxBOTTOM|wxADJUST_MINSIZE</flag>
+                        <flag>wxALIGN_CENTER_VERTICAL|wxRIGHT|wxTOP|wxBOTTOM</flag>
                         <border>5</border>
                         <object class="wxStaticText" name="wxID_STATIC">
                             <label>Use</label>
@@ -439,7 +439,7 @@
                 <object class="wxBoxSizer">
                     <orient>wxHORIZONTAL</orient>
                     <object class="sizeritem">
-                        <flag>wxALIGN_CENTER_VERTICAL|wxRIGHT|wxTOP|wxBOTTOM|wxADJUST_MINSIZE</flag>
+                        <flag>wxALIGN_CENTER_VERTICAL|wxRIGHT|wxTOP|wxBOTTOM</flag>
                         <border>5</border>
                         <object class="wxStaticText" name="wxID_STATIC">
                             <label>Grade for accuracy</label>
@@ -458,14 +458,14 @@
                         </object>
                     </object>
                     <object class="sizeritem">
-                        <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE</flag>
+                        <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                         <border>5</border>
                         <object class="wxStaticText" name="ID_GRADE_ACC">
                             <label>[00]</label>
                         </object>
                     </object>
                     <object class="sizeritem">
-                        <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE</flag>
+                        <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                         <border>5</border>
                         <object class="wxStaticText" name="wxID_STATIC">
                             <label>Grade for completed</label>
@@ -484,7 +484,7 @@
                         </object>
                     </object>
                     <object class="sizeritem">
-                        <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE</flag>
+                        <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                         <border>5</border>
                         <object class="wxStaticText" name="ID_GRADE_COMP">
                             <label>[00]</label>
@@ -498,14 +498,14 @@
                         </object>
                     </object>
                     <object class="sizeritem">
-                        <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE</flag>
+                        <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                         <border>5</border>
                         <object class="wxStaticText" name="wxID_STATIC">
                             <label>% Done</label>
                         </object>
                     </object>
                     <object class="sizeritem">
-                        <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE</flag>
+                        <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                         <border>5</border>
                         <object class="wxStaticText" name="ID_COMPLETED">
                             <font>
@@ -532,7 +532,7 @@
                 <object class="wxBoxSizer">
                     <orient>wxHORIZONTAL</orient>
                     <object class="sizeritem">
-                        <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE</flag>
+                        <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                         <border>5</border>
                         <object class="wxStaticText" name="wxID_STATIC">
                             <label>Add</label>
@@ -546,7 +546,7 @@
                         </object>
                     </object>
                     <object class="sizeritem">
-                        <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE</flag>
+                        <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                         <border>5</border>
                         <object class="wxStaticText" name="wxID_STATIC">
                             <label>min. studytime</label>
@@ -568,7 +568,7 @@
                         </object>
                     </object>
                     <object class="sizeritem">
-                        <flag>wxALIGN_CENTER_VERTICAL|wxLEFT|wxTOP|wxBOTTOM|wxADJUST_MINSIZE</flag>
+                        <flag>wxALIGN_CENTER_VERTICAL|wxLEFT|wxTOP|wxBOTTOM</flag>
                         <border>5</border>
                         <object class="wxStaticText" name="wxID_STATIC">
                             <label>Change status to</label>
@@ -765,7 +765,7 @@
                             <growablecols>1</growablecols>
                             <growablerows>0</growablerows>
                             <object class="sizeritem">
-                                <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE</flag>
+                                <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>5</border>
                                 <object class="wxStaticText" name="wxID_STATIC">
                                     <label>Number of bars</label>
@@ -788,7 +788,7 @@
                                         </object>
                                     </object>
                                     <object class="sizeritem">
-                                        <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE</flag>
+                                        <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                         <border>5</border>
                                         <object class="wxStaticText" name="wxID_STATIC">
                                             <label>Capo</label>
@@ -807,7 +807,7 @@
                                 </object>
                             </object>
                             <object class="sizeritem">
-                                <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE</flag>
+                                <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>5</border>
                                 <object class="wxStaticText" name="wxID_STATIC">
                                     <label>Song Date</label>
@@ -845,7 +845,7 @@
                                 </object>
                             </object>
                             <object class="sizeritem">
-                                <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE</flag>
+                                <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>5</border>
                                 <object class="wxStaticText" name="wxID_STATIC">
                                     <label>Difficulty</label>
@@ -866,7 +866,7 @@
                                 </object>
                             </object>
                             <object class="sizeritem">
-                                <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE</flag>
+                                <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>5</border>
                                 <object class="wxStaticText" name="wxID_STATIC">
                                     <label>Status of song</label>
@@ -885,7 +885,7 @@
                                 </object>
                             </object>
                             <object class="sizeritem">
-                                <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE</flag>
+                                <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>5</border>
                                 <object class="wxStaticText" name="wxID_STATIC">
                                     <label>Guitar Tuning</label>
@@ -918,7 +918,7 @@
                                                 </object>
                                             </object>
                                             <object class="sizeritem">
-                                                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE</flag>
+                                                <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                                 <border>5</border>
                                                 <object class="wxStaticText" name="ID_TUNING_TEXT">
                                                     <font>
@@ -958,7 +958,7 @@
                                 </object>
                             </object>
                             <object class="sizeritem">
-                                <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE</flag>
+                                <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>5</border>
                                 <object class="wxStaticText" name="wxID_STATIC">
                                     <label>Song Categories</label>
@@ -972,7 +972,7 @@
                                 </object>
                             </object>
                             <object class="sizeritem">
-                                <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE</flag>
+                                <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>5</border>
                                 <object class="wxStaticText" name="wxID_STATIC">
                                     <label>Work Subdirectory</label>
@@ -993,14 +993,14 @@
                                 </object>
                             </object>
                             <object class="sizeritem">
-                                <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE</flag>
+                                <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>5</border>
                                 <object class="wxStaticText" name="wxID_STATIC">
                                     <label>Example</label>
                                 </object>
                             </object>
                             <object class="sizeritem">
-                                <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE</flag>
+                                <flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
                                 <border>5</border>
                                 <object class="wxStaticText" name="ID_EXAMPLE_TEXT">
                                     <font>
@@ -1026,6 +1026,83 @@
                         <object class="wxButton" name="wxID_OK">
                             <label>&amp;OK</label>
                             <default>1</default>
+                        </object>
+                    </object>
+                    <object class="button">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>5</border>
+                        <object class="wxButton" name="wxID_CANCEL">
+                            <label>&amp;Cancel</label>
+                        </object>
+                    </object>
+                </object>
+            </object>
+        </object>
+    </object>
+    <object class="wxDialog" name="OptionsDialog">
+        <style>wxCAPTION|wxRESIZE_BORDER|wxSYSTEM_MENU|wxCLOSE_BOX</style>
+        <exstyle>wxWS_EX_BLOCK_EVENTS</exstyle>
+        <size>400,300</size>
+        <title>Options Dialog</title>
+        <centered>1</centered>
+        <object class="wxBoxSizer">
+            <orient>wxVERTICAL</orient>
+            <object class="sizeritem">
+                <flag>wxGROW|wxALL</flag>
+                <border>5</border>
+                <option>1</option>
+                <object class="wxNotebook" name="ID_NOTEBOOK1">
+                    <style>wxBK_DEFAULT</style>
+                    <object class="notebookpage">
+                        <label>Link Items</label>
+                        <object class="wxPanel" name="ID_PANEL1">
+                            <style>wxTAB_TRAVERSAL</style>
+                            <object class="wxBoxSizer">
+                                <orient>wxVERTICAL</orient>
+                                <object class="sizeritem">
+                                    <flag>wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP</flag>
+                                    <border>5</border>
+                                    <object class="wxStaticText" name="wxID_STATIC">
+                                        <label>Base path for relative file links</label>
+                                    </object>
+                                </object>
+                                <object class="sizeritem">
+                                    <flag>wxGROW</flag>
+                                    <border>5</border>
+                                    <object class="wxBoxSizer">
+                                        <orient>wxHORIZONTAL</orient>
+                                        <object class="sizeritem">
+                                            <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                                            <border>5</border>
+                                            <option>1</option>
+                                            <object class="wxTextCtrl" name="ID_BASE_PATH">
+                                                <size>300,-1</size>
+                                            </object>
+                                        </object>
+                                        <object class="sizeritem">
+                                            <flag>wxALIGN_CENTER_VERTICAL|wxRIGHT|wxTOP|wxBOTTOM</flag>
+                                            <border>5</border>
+                                            <object class="wxButton" name="ID_BROWSE">
+                                                <size>50,-1</size>
+                                                <label>...</label>
+                                            </object>
+                                        </object>
+                                    </object>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+            <object class="sizeritem">
+                <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                <border>5</border>
+                <object class="wxStdDialogButtonSizer">
+                    <object class="button">
+                        <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                        <border>5</border>
+                        <object class="wxButton" name="wxID_OK">
+                            <label>&amp;OK</label>
                         </object>
                     </object>
                     <object class="button">
