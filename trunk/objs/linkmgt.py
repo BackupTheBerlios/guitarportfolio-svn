@@ -17,34 +17,23 @@ _types_lookup = [ ( 'VIDEO',      [ '.avi',  '.mpg', '.mp4', '.mov', '.vlc' ] ),
     to another file, or an internet URL, etc.
 """
 class Link(object):
-    # --------------------------------------------------------------------------
     def __init__(self, name, id):
-        self.__mName = name
-        self.__mID = id
-        self.__mType = ''
+        self._name = name
+        self._id = id
+        self._type = ''
 
         # set type, based upon a dictionary
         root, ext = os.path.splitext(name)
         if ext:            
             for type_name, type_exts in _types_lookup:                
                 if ext.lower() in type_exts:
-                    self.__mType = type_name
+                    self._type = type_name
                     break
-            if not self.__mType:
-                self.__mType = ext
+            if not self._type:
+                self._type = ext
         else:
-            self.__mType = 'UNKNOWN'
-        
-    # --------------------------------------------------------------------------
-    def getName(self): return self.__mName
-    def setName(self, value): self.__mName = value
-    
-    def getType(self): return self.__mType
-    
-    def getID(self): return self.__mID
-    id = property(fget = getID)
-    
-    
+            self._type = 'UNKNOWN'
+
 # ==============================================================================
 
 """
@@ -56,50 +45,46 @@ class Link(object):
 class LinkMgr(object):
     # --------------------------------------------------------------------------
     def __init__(self):
-        self.__mWorkPath = ''
-        self.__mLastLinkID = 0
+        self._workPath = ''
+        self._lastLinkID = 0
         self.Clear()
-        
+
     # --------------------------------------------------------------------------
     def Load(self, workdir):
         """ Checks the work dir, loads all files present, and adjusts the list
             based upon the XML file present (or not) in the direstory """
         self.Clear()
-        self.__mWorkPath = ''
+        self._workPath = ''
         if os.path.exists(workdir):
             # gather files, sort and process
-            self.__mWorkPath = workdir
+            self._workPath = workdir
             items = dircache.listdir(workdir)
             for f in items:
                 if os.path.isfile(os.path.join(workdir, f)):
-                    l = Link(f, self.__mLastLinkID)
-                    self.__mLinks.append(l)
-                    self.__mLastLinkID += 1        
+                    l = Link(f, self._lastLinkID)
+                    self._links.append(l)
+                    self._lastLinkID += 1        
         else:
             return False
 
     # --------------------------------------------------------------------------
     def Clear(self):
-        self.__mLinks = []
-        self.__mLastLinkID = 0
+        self._links = []
+        self._lastLinkID = 0
 
-    # --------------------------------------------------------------------------
-    def getLinks(self): return self.__mLinks
-    links = property(fget = getLinks)
-    
     # --------------------------------------------------------------------------
     def FindLinkByID(self, id):
         """ Return link by ID """
-        for l in self.__mLinks:
-            if l.id == id:
+        for l in self._links:
+            if l._id == id:
                 return l
         return None
-    
+
     # --------------------------------------------------------------------------
     def GetLinkPath(self, link):
         """ Returns the full link name + path that can be used to execute the file """
         result = ''
-        if link in self.__mLinks:
-            result = os.path.join(self.__mWorkPath, link.getName())
+        if link in self._links:
+            result = os.path.join(self._workPath, link._name)
         return result
-        
+

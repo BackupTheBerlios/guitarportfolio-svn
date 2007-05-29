@@ -13,7 +13,8 @@ class OptionsDlg(wx.Dialog):
         self.PostCreate(pre)
 
         self.__absPath = xrc.XRCCTRL(self, "ID_BASE_PATH")
-
+        self.__execPath = xrc.XRCCTRL(self, "ID_SHELL_EXEC")
+        
         self.Bind(wx.EVT_BUTTON, self.__OnBrowsePath, xrc.XRCCTRL(self, "ID_BROWSE"))
         self.Bind(wx.EVT_BUTTON, self.__OnOK,  xrc.XRCCTRL(self, "wxID_OK"))
 
@@ -21,6 +22,13 @@ class OptionsDlg(wx.Dialog):
         
         # read settings
         self.__absPath.SetValue(appcfg.Get().Read(appcfg.CFG_ABSWORKPATH, ''))
+
+        # if we are under linux, we show some elements
+        if "wxMSW" in wx.PlatformInfo:
+            self.__execPath.Enable(False)
+            self.__execPath.SetValue("N/A");
+        else:
+            self.__execPath.SetValue(appcfg.Get().Read(appcfg.CFG_LINUX_EXEC_CMD, 'gnome-open'))        
 
     def __OnBrowsePath(self, event): 
         path = wx.DirSelector('Select the absolute work directory', self.__absPath.GetValue())
@@ -34,6 +42,9 @@ class OptionsDlg(wx.Dialog):
             wx.MessageBox('The path specified is not a valid path!', 'Error', wx.ICON_ERROR | wx.OK)
             return
         appcfg.Get().Write(appcfg.CFG_ABSWORKPATH, path)
+        if "wxGTK" in wx.PlatformInfo:
+            appcfg.Get().Write(appcfg.CFG_LINUX_EXEC_CMD, self.__execPath.GetValue())        
+        
         Publisher().sendMessage(signals.CFG_UPDATED)
         event.Skip()
 

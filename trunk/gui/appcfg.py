@@ -20,6 +20,7 @@ CFG_LAYOUT_DEFAULT  = 'window/default_layout'       # default layout upon saving
 CFG_LAYOUT_LAST     = 'window/last_layout'          # last layout when closing window
 CFG_LAYOUT_LAST_H   = 'window/last_height'          # last height when closing window
 CFG_LAYOUT_LAST_W   = 'window/last_width'           # last width when closing window
+CFG_LINUX_EXEC_CMD  = 'os/linux/shellexec'          # exec command 
 
 # defaults
 DEF_RELPATH         = '{artist}\{title}'            # default path mask to take when no relpath exists
@@ -63,7 +64,10 @@ def GetWorkSubDir(workdir, artist, title):
     """ Substitutes the given tags to create a dir that can be part of the
         work dir for a link. """
     result = workdir.replace('{artist}', artist)
-    result = result.replace('{title}', title)    
+    result = result.replace('{title}', title)
+    # make proper path
+    if "wxGTK" in wx.PlatformInfo:
+        result = result.replace('\\', '/')
     # replace odd characters
     for odd_char, rep_char in _file_illegal_chars:
         result = result.replace(odd_char, rep_char)
@@ -86,4 +90,4 @@ def GetAbsWorkPath(workmask = None, artist = None, title = None):
 # ------------------------------------------------------------------------------
 def GetAbsWorkPathFromSong(song):
     """ Convenience method to get work path from song """
-    return GetAbsWorkPath(song.getRelativePath(), song.getArtist(), song.getTitle())
+    return GetAbsWorkPath(song._relativePath, song._artist, song._title)

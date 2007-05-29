@@ -1,41 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Tasks SYSTEM "Tasks-3.8.dtd">
 <!-- Tasks file for project guitarportfolio -->
-<!-- Saved: 2007-05-29, 15:51:05 -->
+<!-- Saved: 2007-05-29, 22:13:14 -->
 <Tasks version="3.8">
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Small problem, the category relations can be</Description>
-    <Created>2007-05-28, 16:38:11</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>GuitarPortfolioFrame.py</Name>
-      </Filename>
-      <Linenumber>212</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Maybe the selected song needs to be sent as object to modify insead of</Description>
-    <Created>2007-05-28, 21:54:20</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>SongsPanel.py</Name>
-      </Filename>
-      <Linenumber>167</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Maybe the selected song needs to be sent as object to delete insead of</Description>
-    <Created>2007-05-28, 21:54:20</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>SongsPanel.py</Name>
-      </Filename>
-      <Linenumber>175</Linenumber>
-    </Resource>
-  </Task>
   <Task priority="1" completed="0" bugfix="0">
     <Description>TODO: Rename to htmlinfogen and put in objs dir</Description>
     <Created>2007-05-28, 21:54:22</Created>
@@ -103,17 +70,6 @@
     </Resource>
   </Task>
   <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Make a wx.ListCtrl, listmix.ListCtrlAutoWidthMixin custom class for XRC</Description>
-    <Created>2007-05-29, 13:51:59</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>LinksPanel.py</Name>
-      </Filename>
-      <Linenumber>22</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
     <Description>TODO: Make sure song information can also be substituted in the tab</Description>
     <Created>2007-05-29, 13:55:02</Created>
     <Resource>
@@ -124,9 +80,46 @@
       <Linenumber>20</Linenumber>
     </Resource>
   </Task>
+  <Task priority="0" completed="0" bugfix="0">
+    <Description>BUG: Categories cannot be added when song is not yet in DB</Description>
+    <Created>2007-05-29, 15:34:59</Created>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Small problem, the category relations can be</Description>
+    <Created>2007-05-29, 19:42:39</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>GuitarPortfolioFrame.py</Name>
+      </Filename>
+      <Linenumber>207</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Maybe the selected song needs to be sent as object to modify insead of</Description>
+    <Created>2007-05-29, 19:53:02</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>SongsPanel.py</Name>
+      </Filename>
+      <Linenumber>173</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Maybe the selected song needs to be sent as object to delete insead of</Description>
+    <Created>2007-05-29, 19:53:02</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>SongsPanel.py</Name>
+      </Filename>
+      <Linenumber>181</Linenumber>
+    </Resource>
+  </Task>
   <Task priority="1" completed="0" bugfix="0">
     <Description>TODO: Artists which are mistyped (lower / upper) should not appear twice</Description>
-    <Created>2007-05-29, 15:20:26</Created>
+    <Created>2007-05-29, 20:08:47</Created>
     <Resource>
       <Filename>
         <Dir>gui</Dir>
@@ -135,8 +128,48 @@
       <Linenumber>53</Linenumber>
     </Resource>
   </Task>
-  <Task priority="0" completed="0" bugfix="0">
-    <Description>BUG: Categories cannot be added when song is not yet in DB</Description>
-    <Created>2007-05-29, 15:34:59</Created>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Not certain if this will work, if a query is sent after a remove from</Description>
+    <Created>2007-05-29, 20:18:22</Created>
+    <Resource>
+      <Filename>
+        <Dir>objs</Dir>
+        <Name>signals.py</Name>
+      </Filename>
+      <Linenumber>36</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Make a wx.ListCtrl, listmix.ListCtrlAutoWidthMixin custom class for XRC</Description>
+    <Created>2007-05-29, 22:11:47</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>LinksPanel.py</Name>
+      </Filename>
+      <Linenumber>20</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Set icon in front of link</Description>
+    <Created>2007-05-29, 22:11:47</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>LinksPanel.py</Name>
+      </Filename>
+      <Linenumber>118</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Windows only right now!</Description>
+    <Created>2007-05-29, 22:11:47</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>LinksPanel.py</Name>
+      </Filename>
+      <Linenumber>151</Linenumber>
+    </Resource>
   </Task>
 </Tasks>
