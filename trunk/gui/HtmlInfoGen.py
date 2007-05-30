@@ -32,7 +32,7 @@ def GenerateHtmlFromSong(template, song):
             tpl = tpl.replace(HTML_LABEL_LONGDATE, song._time.strftime('%d %B %Y'))
         else:
             tpl = tpl.replace(HTML_LABEL_SHORTDATE, song._time.strftime('%Y'))
-            tpl = tpl.replace(HTML_LABEL_LONGDATE, song._time.strftime('Only Year Is Known'))                    
+            tpl = tpl.replace(HTML_LABEL_LONGDATE, song._time.strftime('In Year %Y'))                    
     else:
         tpl = tpl.replace(HTML_LABEL_SHORTDATE, '--/--/--')
         tpl = tpl.replace(HTML_LABEL_LONGDATE, 'Unknown')
@@ -43,7 +43,10 @@ def GenerateHtmlFromSong(template, song):
             catstr = c._name
         else:
             catstr = catstr + ', ' + c._name
-    tpl = tpl.replace(HTML_LABEL_CATEGORIES, catstr)        
+    if catstr:
+        tpl = tpl.replace(HTML_LABEL_CATEGORIES, catstr)        
+    else:
+        tpl = tpl.replace(HTML_LABEL_CATEGORIES, 'None')        
     # tuning text
     tpl = tpl.replace(HTML_LABEL_TUNINGTEXT, song.GetTuningText())        
     tpl = tpl.replace(HTML_LABEL_TUNINGNAME, song.GetTuningName())
@@ -65,9 +68,19 @@ def GenerateHtmlFromSong(template, song):
     # do lyrics, with friendly <br>
     repl = song._lyrics.replace('\n', '<br>')
     tpl = tpl.replace(HTML_LABEL_LYRICS, repl)
-    tpl = tpl.replace(HTML_LABEL_TIMESTARTED, song._timeStarted.strftime('%d %B %Y'))
+    if song._status == songs.SS_STARTED or song._status == songs.SS_POSTPONED:
+        tpl = tpl.replace(HTML_LABEL_TIMESTARTED, song._timeStarted.strftime('%d %B %Y'))
+    else:
+        tpl = tpl.replace(HTML_LABEL_TIMESTARTED, "Not Yet")
+    
     tpl = tpl.replace(HTML_LABEL_TIMEADDED, song._timeAdded.strftime('%d %B %Y'))
-    tpl = tpl.replace(HTML_LABEL_TIMECOMPLETED, song._timeCompleted.strftime('%d %B %Y'))
+    if song._status == songs.SS_COMPLETED:
+        tpl = tpl.replace(HTML_LABEL_TIMECOMPLETED, song._timeCompleted.strftime('%d %B %Y'))
+    else:
+        if song._status == songs.SS_POSTPONED:
+            tpl = tpl.replace(HTML_LABEL_TIMECOMPLETED, song._timePostponed.strftime('Postponed on %d %B %Y'))
+        else:
+            tpl = tpl.replace(HTML_LABEL_TIMECOMPLETED, "Not Yet")
     tpl = tpl.replace(HTML_LABEL_TIMEPOSTPONED, song._timePostponed.strftime('%d %B %Y'))
     tpl = tpl.replace(HTML_LABEL_ID, repr(song._id))
     # set the page  

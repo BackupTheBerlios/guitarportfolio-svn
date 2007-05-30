@@ -125,15 +125,22 @@ song_row = """
 """
 
 songinfo = """<html><body>
-<font color="#000080" size="+4"><em><strong>@song@</strong></em></font><br>
+<font size="16">@song@</font><br>
 <font size="+2">By @artist@</font><br><br>
 
-<table>
-<tr><td><b>Date:</b></td><td>@ldate@ (@sdate@)</td></tr>
-<tr><td><b>Category:</b></td><td>@categories@</td></tr>
-<tr><td><b>Tuning:</b></td><td>@tuning_text@ (@tuning_name@)</td></tr>
-<tr><td><b>Progress:</b></td><td>@cprogress@ (@percprogress@%)</td></tr>
+<font size="+1" face="Arial, Lucida Grande, sans-serif">
+<table border=0 bgcolor="#eeeef6" width="70%">
+  <tr><td width="30%"><b>Song Date</b></td><td>@ldate@</td></tr>
+  <tr><td width="30%"><b>Categories</b></td><td>@categories@</td></tr>
+  <tr><td width="30%"><b>Tuning</b></td><td>@tuning_text@ (@tuning_name@)</td></tr>
+  <tr><td width="30%"><b>Progress</b></td><td><b>@cprogress@</b> (@percprogress@%)</td></tr>
+  <tr><td width="30%"><b>Added In Database</b></td><td>@time_added@</td></tr>
+  <tr><td width="30%"><b>Started Practicing</b></td><td>@time_started@</td></tr>
+  <tr><td width="30%"><b>Completed Practicing</b></td><td>@time_completed@</td></tr>
 </table>
+<br><br>Change status to: @status_bar@
+</font>
+<br><br><font size="+2">Attachments</font><br><br>
 </body></html>
 """
 
@@ -156,6 +163,9 @@ class SongBrowserPanel(wx.Panel):
             
         self.Bind(wx.EVT_CHOICE, self.__OnSongSelect, self.__songList)
         self.Bind(html.EVT_HTML_LINK_CLICKED, self.__OnLinkClicked, self.__songBrowser)
+        self.Bind(wx.EVT_BUTTON, self.__OnBrowseHome, self.__homeButton)
+        self.Bind(wx.EVT_BUTTON, self.__OnBrowseForward, self.__browseForward)
+        self.Bind(wx.EVT_BUTTON, self.__OnBrowseBack, self.__browseBack)
 
         # signals for song selection dropdown
         Publisher().subscribe(self.__AddSong, signals.SONG_DB_ADDED)  
@@ -194,7 +204,8 @@ class SongBrowserPanel(wx.Panel):
                 break
 
         # if we are on the homepage, update the report
-        if self._currPage == -1:
+        if self._currPage == -1 or self._currPage == message.data._id:
+            self._currPage = -1
             self.__RenderHomepage()
 
     # --------------------------------------------------------------------------
@@ -208,6 +219,9 @@ class SongBrowserPanel(wx.Panel):
         # if we are on the homepage, update the report
         if self._currPage == -1:
             self.__RenderHomepage()
+        elif self._currPage == message.data._id:
+            # we are on the song page, update
+            self.__RenderSongPage(message.data)
 
     # --------------------------------------------------------------------------
     def __ClearSongs(self, message):
@@ -227,6 +241,9 @@ class SongBrowserPanel(wx.Panel):
     # --------------------------------------------------------------------------
     def __OnSongSelected(self, message):
         """ Another song is selected, sync our list """
+        # render the song info page
+        self.__RenderSongPage(message.data)
+        
         # if we already stand on the song, we do nothing
         sl = self.__songList
         idx = sl.GetSelection()
@@ -308,7 +325,14 @@ class SongBrowserPanel(wx.Panel):
         else:
             # no songs, we replace the contents with an empty page
             return page.replace(section[0], '')
-            
+
+    # --------------------------------------------------------------------------
+    def __RenderSongPage(self, song):
+        """ We render the homepage containing all song statuses divided in sections """
+        pg = HtmlInfoGen.GenerateHtmlFromSong(songinfo, song)
+        self.__songBrowser.SetPage(pg)
+        self._currPage = song._id
+
     #---------------------------------------------------------------------------
     def __OnLinkClicked(self, event):
         tag = event.GetLinkInfo().GetHref()
@@ -318,3 +342,39 @@ class SongBrowserPanel(wx.Panel):
             if song_nr:
                 songfilter.Get().SelectSong(int(song_nr))
         
+    #---------------------------------------------------------------------------
+    def __OnBrowseHome(self, event):
+        self._currPage = -1
+        self.__RenderHomepage()
+        
+    #---------------------------------------------------------------------------
+    def __OnBrowseForward(self, event):
+        if self._currPage == -1:
+            # take first (if any)
+            if self.__songList.GetCount() > 0:
+                s = self.__songList.GetClientData(0)
+                songfilter.Get().SelectSong(s._id)
+                return
+        else:
+            # find the next song in the list
+            i = self.__songList.GetSelection()
+            if i < (self.__songList.GetCount() - 1) and i != -1:
+                s = self.__songList.GetClientData(i + 1)
+                songfilter.Get().SelectSong(s._id)
+                return
+                
+    #---------------------------------------------------------------------------
+    def __OnBrowseBack(self, event):
+        if self._currPage == -1:
+            # take last (if any)
+            if self.__songList.GetCount() > 0:
+                s = self.__songList.GetClientData(self.__songList.GetCount() - 1)
+                songfilter.Get().SelectSong(s._id)
+                return
+        else:
+            # find the previous song in the list
+            i = self.__songList.GetSelection()
+            if i > 0:
+                s = self.__songList.GetClientData(i - 1)
+                songfilter.Get().SelectSong(s._id)
+                return

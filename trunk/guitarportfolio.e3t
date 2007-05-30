@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Tasks SYSTEM "Tasks-3.8.dtd">
 <!-- Tasks file for project guitarportfolio -->
-<!-- Saved: 2007-05-30, 15:45:45 -->
+<!-- Saved: 2007-05-30, 20:57:59 -->
 <Tasks version="3.8">
   <Task priority="1" completed="0" bugfix="0">
     <Description>TODO: Make sure song information can also be substituted in the tab</Description>
@@ -27,39 +27,6 @@
         <Name>NewSongDlg.py</Name>
       </Filename>
       <Linenumber>53</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Make a wx.ListCtrl, listmix.ListCtrlAutoWidthMixin custom class for XRC</Description>
-    <Created>2007-05-29, 22:11:47</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>LinksPanel.py</Name>
-      </Filename>
-      <Linenumber>20</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Set icon in front of link</Description>
-    <Created>2007-05-29, 22:11:47</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>LinksPanel.py</Name>
-      </Filename>
-      <Linenumber>118</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Windows only right now!</Description>
-    <Created>2007-05-29, 22:11:47</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>LinksPanel.py</Name>
-      </Filename>
-      <Linenumber>151</Linenumber>
     </Resource>
   </Task>
   <Task priority="1" completed="0" bugfix="0">
@@ -140,19 +107,8 @@
     </Resource>
   </Task>
   <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Small problem, the category relations can be</Description>
-    <Created>2007-05-30, 14:33:26</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>GuitarPortfolioFrame.py</Name>
-      </Filename>
-      <Linenumber>208</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
     <Description>TODO: Rename to htmlinfogen and put in objs dir</Description>
-    <Created>2007-05-30, 15:05:51</Created>
+    <Created>2007-05-30, 20:01:20</Created>
     <Resource>
       <Filename>
         <Dir>gui</Dir>
@@ -163,7 +119,7 @@
   </Task>
   <Task priority="1" completed="0" bugfix="0">
     <Description>TODO: Put this through some testing</Description>
-    <Created>2007-05-30, 15:05:51</Created>
+    <Created>2007-05-30, 20:01:20</Created>
     <Resource>
       <Filename>
         <Dir>gui</Dir>
@@ -173,8 +129,52 @@
     </Resource>
   </Task>
   <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Small problem, the category relations can be</Description>
+    <Created>2007-05-30, 20:46:26</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>GuitarPortfolioFrame.py</Name>
+      </Filename>
+      <Linenumber>208</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Make a wx.ListCtrl, listmix.ListCtrlAutoWidthMixin custom class for XRC</Description>
+    <Created>2007-05-30, 20:47:01</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>LinksPanel.py</Name>
+      </Filename>
+      <Linenumber>20</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Set icon in front of link</Description>
+    <Created>2007-05-30, 20:47:01</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>LinksPanel.py</Name>
+      </Filename>
+      <Linenumber>118</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Windows only right now!</Description>
+    <Created>2007-05-30, 20:47:01</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>LinksPanel.py</Name>
+      </Filename>
+      <Linenumber>151</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
     <Description>TODO: Put the text inside the DB!</Description>
-    <Created>2007-05-30, 15:44:47</Created>
+    <Created>2007-05-30, 20:56:55</Created>
     <Resource>
       <Filename>
         <Dir>gui</Dir>
@@ -185,7 +185,7 @@
   </Task>
   <Task priority="1" completed="0" bugfix="0">
     <Description>TODO: Substitute version number / appname in HTML text</Description>
-    <Created>2007-05-30, 15:44:47</Created>
+    <Created>2007-05-30, 20:56:55</Created>
     <Resource>
       <Filename>
         <Dir>gui</Dir>
@@ -196,7 +196,7 @@
   </Task>
   <Task priority="1" completed="0" bugfix="0">
     <Description>TODO: Put inside the DB!</Description>
-    <Created>2007-05-30, 15:44:47</Created>
+    <Created>2007-05-30, 20:56:55</Created>
     <Resource>
       <Filename>
         <Dir>gui</Dir>
@@ -207,13 +207,13 @@
   </Task>
   <Task priority="1" completed="0" bugfix="0">
     <Description>TODO: Sort the items in the choice</Description>
-    <Created>2007-05-30, 15:44:47</Created>
+    <Created>2007-05-30, 20:56:55</Created>
     <Resource>
       <Filename>
         <Dir>gui</Dir>
         <Name>SongBrowserPanel.py</Name>
       </Filename>
-      <Linenumber>179</Linenumber>
+      <Linenumber>189</Linenumber>
     </Resource>
   </Task>
 </Tasks>

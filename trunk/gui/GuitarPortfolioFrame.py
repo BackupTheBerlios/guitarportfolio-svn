@@ -265,21 +265,26 @@ class GuitarPortfolioFrame(wx.Frame):
         cfg.WriteInt(appcfg.CFG_LAYOUT_LAST_H, height)        
         event.Skip()  
 
+    #---------------------------------------------------------------------------
     def __OnRestoreLayout(self, event): # wxGlade: GuitarPortfolioFrame.<event_handler>
         self.__aui.LoadPerspective(appcfg.Get().Read(appcfg.CFG_LAYOUT_DEFAULT, ''), True)
 
+    #---------------------------------------------------------------------------
     def __OnToggleEditWindow(self, event): # wxGlade: GuitarPortfolioFrame.<event_handler>
         self.__aui.GetPane("editpanel").Show(True)
         self.__aui.Update()
 
+    #---------------------------------------------------------------------------
     def __OnToggleSongSelector(self, event): # wxGlade: GuitarPortfolioFrame.<event_handler>
         self.__aui.GetPane("songspanel").Show(True)
         self.__aui.Update()
 
+    #---------------------------------------------------------------------------
     def __OnToggleFilterWindow(self, event): # wxGlade: GuitarPortfolioFrame.<event_handler>
         self.__aui.GetPane("filterpanel").Show(True)
         self.__aui.Update()
 
+    #---------------------------------------------------------------------------
     def __OnShowDatabaseWizard(self, event): # wxGlade: GuitarPortfolioFrame.<event_handler>
         """ User wants to switch DB's or upgrade, or create a DB, or create a demo db.
             This can also be auto invoked by the application to let the user select a DB """
@@ -362,6 +367,7 @@ class GuitarPortfolioFrame(wx.Frame):
         if song_tab[0] == s and s:
             Publisher().sendMessage(signals.SONG_VIEW_TAB_ADDED, song_tab[1])
 
+    #---------------------------------------------------------------------------
     def __OnBrowserMode(self, event): # wxGlade: GuitarPortfolioFrame.<event_handler>
         """ Show only the browser parts of GuitarPortfolio """
         self.__aui.GetPane("editpanel").Show(False)
@@ -369,6 +375,7 @@ class GuitarPortfolioFrame(wx.Frame):
         self.__aui.GetPane("filterpanel").Show(False)
         self.__aui.Update()
         
+    #---------------------------------------------------------------------------
     def __OnEditorMode(self, event): # wxGlade: GuitarPortfolioFrame.<event_handler>
         """ Show the editor parts of GuitarPortfolio """
         self.__aui.GetPane("editpanel").Show(True)

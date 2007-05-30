@@ -168,13 +168,13 @@ class SongPeer(db.base.Peer):
             obj._relativePath = r[14]
             tuning_id = r[15]
             if r[16] <> None:
-                obj._timeAdded = datetime.datetime.strptime(r[4], '%Y %m %d')
+                obj._timeAdded = datetime.datetime.strptime(r[16], '%Y %m %d')
             if r[17] <> None:
-                obj._timeStarted = datetime.datetime.strptime(r[4], '%Y %m %d')
+                obj._timeStarted = datetime.datetime.strptime(r[17], '%Y %m %d')
             if r[18] <> None:
-                obj._timeCompleted = datetime.datetime.strptime(r[4], '%Y %m %d')
+                obj._timeCompleted = datetime.datetime.strptime(r[18], '%Y %m %d')
             if r[19] <> None:
-                obj._timePostponed = datetime.datetime.strptime(r[4], '%Y %m %d')
+                obj._timePostponed = datetime.datetime.strptime(r[19], '%Y %m %d')
         else:
             self._RestoreError('Cannot restore song with id %d' % (obj._id,))
 
@@ -251,10 +251,10 @@ class SongPeer(db.base.Peer):
                 obj._percAccuracy,
                 obj._capoOnFret,
                 obj._relativePath,
-                obj._timeAdded,
-                obj._timeStarted,
-                obj._timeCompleted,
-                obj._timePostponed) 
+                obj._timeAdded.strftime('%Y %m %d'),
+                obj._timeStarted.strftime('%Y %m %d'),
+                obj._timeCompleted.strftime('%Y %m %d'),
+                obj._timePostponed.strftime('%Y %m %d')) 
         self._ExecuteUpdate(obj, sql, data)
 
         if all:
