@@ -43,8 +43,11 @@ create_sql = """
                            year_only INTEGER,           /* 0 when false, 1 when true (only year display) */
                            capo_number INTEGER,         /* 0 = No capo, any other is the fret number */
                            media_id INTEGER,            /* ID of media, book, CD etc where song is found */
-                           relpath TEXT);               /* relative path as mask / dir spec where link info is found */
-
+                           relpath TEXT,                /* relative path as mask / dir spec where link info is found */
+                           time_added TEXT,             /* time when song is added */ 
+                           time_started TEXT,           /* time song is started TODO -> STARTED */
+                           time_completed TEXT,         /* time when song is set from STARTED -> COMPLETED */
+                           time_postponed TEXT);        /* time when song is set from ?? -> POSTPONED */ 
 
         create table songcats (song_id INTEGER,         /* id of song where category is linked to */
                                category_id INTEGER);    /* id of the category associated with the song */

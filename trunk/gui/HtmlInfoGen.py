@@ -14,6 +14,11 @@ HTML_LABEL_COLORPROGRESS = '@cprogress@'
 HTML_LABEL_PERCPROGRESS  = '@percprogress@'
 HTML_LABEL_SONGINFO      = '@songinfo@'
 HTML_LABEL_LYRICS        = '@lyrics@'
+HTML_LABEL_TIMESTARTED   = '@time_started@'
+HTML_LABEL_TIMEADDED     = '@time_added@'
+HTML_LABEL_TIMECOMPLETED = '@time_completed@'
+HTML_LABEL_TIMEPOSTPONED = '@time_postponed@'
+HTML_LABEL_ID            = '@song_id@'
 
 def GenerateHtmlFromSong(template, song):
     tpl = template
@@ -60,5 +65,10 @@ def GenerateHtmlFromSong(template, song):
     # do lyrics, with friendly <br>
     repl = song._lyrics.replace('\n', '<br>')
     tpl = tpl.replace(HTML_LABEL_LYRICS, repl)
+    tpl = tpl.replace(HTML_LABEL_TIMESTARTED, song._timeStarted.strftime('%d %B %Y'))
+    tpl = tpl.replace(HTML_LABEL_TIMEADDED, song._timeAdded.strftime('%d %B %Y'))
+    tpl = tpl.replace(HTML_LABEL_TIMECOMPLETED, song._timeCompleted.strftime('%d %B %Y'))
+    tpl = tpl.replace(HTML_LABEL_TIMEPOSTPONED, song._timePostponed.strftime('%d %B %Y'))
+    tpl = tpl.replace(HTML_LABEL_ID, repr(song._id))
     # set the page  
     return tpl  

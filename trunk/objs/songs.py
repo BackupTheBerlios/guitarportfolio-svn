@@ -73,6 +73,11 @@ class Song(db.base.Object):
         self._capoOnFret = 0    # capo on none
         self._relativePath = ''
         self.tabs = objlist.ObjList(class_name = tabs.Tab) 
+        self._timeStarted = datetime.datetime.now()
+        self._timeAdded = datetime.datetime.now()
+        self._timeCompleted = datetime.datetime.now()
+        self._timePostponed = datetime.datetime.now()
+        
 
     #--------------------------------------------------------------------------
     def GetProgressPerc(self):

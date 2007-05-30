@@ -19,11 +19,11 @@ class GuitarPortfolioFrame(wx.Frame):
     def __init__(self, *args, **kwds):
         kwds["style"] = wx.DEFAULT_FRAME_STYLE
         wx.Frame.__init__(self, *args, **kwds)
-    
+
         # create menu
         self.__menuBar = wx.MenuBar()
         self.SetMenuBar(self.__menuBar)
-        
+
         # file menu	
         mnu = wx.Menu()        
         self.__menuShowDatabaseWizard = wx.MenuItem(mnu, wx.NewId(), "&Show Database Wizard ...", "", wx.ITEM_NORMAL)
@@ -87,11 +87,11 @@ class GuitarPortfolioFrame(wx.Frame):
 
         self.SetIcon(wx.IconFromBitmap(icon_main_window.getBitmap()))
         self.Bind(wx.EVT_CLOSE, self.__OnClose)
-        
+
         # tell AUI to manage this frame        
         self.__aui = wx.aui.AuiManager()
         self.__aui.SetManagedWindow(self)
-            
+
         # construct the left panels
         self.__aui.AddPane(SongsPanel.SongsPanel(parent = self), wx.aui.AuiPaneInfo().
                            Name("songspanel").Caption("Songs").MinSize(wx.Size(280,100)).
@@ -113,7 +113,7 @@ class GuitarPortfolioFrame(wx.Frame):
         self.__aui.Update()
 
         self._filter = songfilter.Get()
-        
+
         # hook up event handlers
         Publisher().subscribe(self.__OnSongAdded, signals.SONG_DB_ADDED)
         Publisher().subscribe(self.__OnSongDeleted, signals.SONG_DB_DELETED)
@@ -123,7 +123,7 @@ class GuitarPortfolioFrame(wx.Frame):
         Publisher().subscribe(self.__OnQueryDeleteSong, signals.SONG_QUERY_DELETE)
         Publisher().subscribe(self.__OnQueryEditSong, signals.SONG_QUERY_MODIFY)
         Publisher().subscribe(self.__OnTabAdded, signals.SONG_DB_TAB_ADDED)
-        
+
         # dependent on the layout settings, we restore the old perspective, or save the default
         cfg = appcfg.Get()
         pers = cfg.Read(appcfg.CFG_LAYOUT_DEFAULT, '')
@@ -136,7 +136,7 @@ class GuitarPortfolioFrame(wx.Frame):
             pers = cfg.Read(appcfg.CFG_LAYOUT_LAST, '')
             if pers:
                 self.__aui.LoadPerspective(pers)                
-        
+
         # retrieve height / width of main window
         width = cfg.ReadInt(appcfg.CFG_LAYOUT_LAST_W, 800)
         height = cfg.ReadInt(appcfg.CFG_LAYOUT_LAST_H, 800)
@@ -155,6 +155,7 @@ class GuitarPortfolioFrame(wx.Frame):
             self.AddPendingEvent(evt)
         else:
             self.__PopulateData()
+            
     #---------------------------------------------------------------------------
     def OnExit(self, event): # wxGlade: GuitarPortfolioFrame.<event_handler>
         self.Close()
@@ -178,23 +179,23 @@ class GuitarPortfolioFrame(wx.Frame):
             this is either sent from the popup menu or ourselves """
         s = songs.Song()
         s._tuning = tuning_mgr.Get().GetDefaultTuning()
-        
+
         # we use the last used relative path or a default one when present
         s._relativePath = appcfg.Get().Read(appcfg.CFG_LASTRELPATH, appcfg.DEF_RELPATH)
-        
+
         dlg = NewSongDlg.NewSongDlg(self)
         dlg.LoadFromSong(s)
         if dlg.ShowModal() == wx.ID_OK:
             dlg.SaveToSong(s)
-            
+
             # write back the last used relative path spec, for ease of use
             appcfg.Get().Write(appcfg.CFG_LASTRELPATH, s._relativePath)
-            
+
             # write song to database, from here a trigger is sent
             # to add the song to all lists that are interested
             sp = db.songs_peer.SongPeer(db.engine.GetDb())
             sp.Update(s, all = True)
-            
+
         dlg.Destroy()  
 
     #---------------------------------------------------------------------------
@@ -208,7 +209,7 @@ class GuitarPortfolioFrame(wx.Frame):
                 # changed due to a second editor, but cancelling does not
                 # show these changes.
                 dlg.SaveToSong(s)
-                
+
                 # update the song in the database
                 sp = db.songs_peer.SongPeer(db.engine.GetDb())
                 sp.Update(s, all = True)                
@@ -242,8 +243,8 @@ class GuitarPortfolioFrame(wx.Frame):
                 # update the song in the database
                 sp = db.songs_peer.SongPeer(db.engine.GetDb())
                 sp.Update(s, all = True)                
-                
-                
+
+
             dlg.Destroy()
 
     #---------------------------------------------------------------------------
@@ -287,11 +288,11 @@ class GuitarPortfolioFrame(wx.Frame):
         dlg.Centre()
         dlg.ShowModal()
         dlg.Destroy()
-        
+
         if not db.engine.Get().IsOpened():    
             self.Close()
             return
-        
+
         self.__PopulateData()
 
     #---------------------------------------------------------------------------
@@ -299,9 +300,9 @@ class GuitarPortfolioFrame(wx.Frame):
         """ Method that populates everything in all manager classes, and GUI windows
             by emitting a signals.APP_CLEAR to request emptying all lists and views """
         Publisher().sendMessage(signals.APP_CLEAR, None) # None object is crucial
-        
+
         songfilter.Get().Reset()
-        
+
         # make sure we have a valid DB
         if not db.engine.Get().IsOpened():
             wx.MessageBox('An error occured while reading from the database, \n' + \
@@ -309,41 +310,41 @@ class GuitarPortfolioFrame(wx.Frame):
                           wx.ICON_HAND | wx.OK)
             self.Close()
             return
-        
+
         # start loading
         dbc = db.engine.GetDb()
         category_mgr.RestoreFromDb(dbc)
         tuning_mgr.RestoreFromDb(dbc)
-      
+
         # load all songs, and let the callback signals
         # handle the adding to various views
-        
+
         sp = db.songs_peer.SongSetPeer(dbc)
         songs = sp.Restore()
-        
+
         # go restore all relations
         sp = db.songs_peer.SongPeer(dbc)
         for s in songs:
             sp.RestoreCategories(s)
-        
+
         # send everyone that the DB is restored and all went well
         Publisher().sendMessage(signals.APP_READY)
-        
+
     #---------------------------------------------------------------------------
     def __OnSongAdded(self, message):
         # add a song to the view filter
         self._filter.AddSong(message.data)        
-            
+
     #---------------------------------------------------------------------------
     def __OnSongDeleted(self, message):
         # remove a song from the view filter
         self._filter.RemoveSong(message.data)        
-        
+
     #---------------------------------------------------------------------------
     def __OnSongUpdated(self, message):
         # update a song in the view filter
         self._filter.UpdateSong(message.data)        
-        
+
     #---------------------------------------------------------------------------
     def __OnSongPopulate(self, message):
         """ Do some tab restoring, we do this to save mem and time at start-up """
@@ -351,7 +352,7 @@ class GuitarPortfolioFrame(wx.Frame):
         if ss:
             tlp = db.songs_peer.SongTabListPeer(db.engine.GetDb())
             tlp.Restore(ss) 
-        
+
     #---------------------------------------------------------------------------
     def __OnTabAdded(self, message):
         """ Tab is added, we check if it belongs to the song that is selected
@@ -360,7 +361,7 @@ class GuitarPortfolioFrame(wx.Frame):
         s = songfilter.Get()._selectedSong
         if song_tab[0] == s and s:
             Publisher().sendMessage(signals.SONG_VIEW_TAB_ADDED, song_tab[1])
-        
+
     def __OnBrowserMode(self, event): # wxGlade: GuitarPortfolioFrame.<event_handler>
         """ Show only the browser parts of GuitarPortfolio """
         self.__aui.GetPane("editpanel").Show(False)
@@ -368,7 +369,6 @@ class GuitarPortfolioFrame(wx.Frame):
         self.__aui.GetPane("filterpanel").Show(False)
         self.__aui.Update()
         
-
     def __OnEditorMode(self, event): # wxGlade: GuitarPortfolioFrame.<event_handler>
         """ Show the editor parts of GuitarPortfolio """
         self.__aui.GetPane("editpanel").Show(True)

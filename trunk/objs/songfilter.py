@@ -11,14 +11,14 @@ _CRIT_STATUS_ALL = -1
 
 class SongFilter:
     def __init__(self):
-        self.__list = objlist.ObjList(class_name = songs.Song)
+        self._list = objlist.ObjList(class_name = songs.Song)
         self.Reset()
 
     # --------------------------------------------------------------------------
     def Reset(self):
         """ Reset all the data """
         self._critList = []
-        self.__list.clear()
+        self._list.clear()
         self._critStatus = _CRIT_STATUS_ALL
         self._critDifficulty = _CRIT_STATUS_ALL
         self._critCategories = []
@@ -33,22 +33,22 @@ class SongFilter:
     # --------------------------------------------------------------------------
     def AddSong(self, song):
         """ Adds a song to the list of songs to be played """
-        self.__list.append(song)
+        self._list.append(song)
         self.__SyncWithCriteriaList(song, action = ADD)
         pass 
         
     # --------------------------------------------------------------------------
     def RemoveSong(self, song):
         """ Removes the song from the list """
-        if self.__list.has_item(song):
-            self.__list.remove(song)
+        if self._list.has_item(song):
+            self._list.remove(song)
             self.__SyncWithCriteriaList(song, action = DELETE)
 
     # --------------------------------------------------------------------------
     def UpdateSong(self, song):
         """ Updates the song in the database and issues an update signal to update
             all views """
-        if self.__list.has_item(song):
+        if self._list.has_item(song):
             self.__SyncWithCriteriaList(song, action = UPDATE)
 
     # --------------------------------------------------------------------------
@@ -56,7 +56,7 @@ class SongFilter:
         """ Select a song in the list by ID, when succesful, True is returned
             and a signal is emitted to all listerers """
         if song_id <> -1:                        
-            song = self.__list.find_id(song_id)
+            song = self._list.find_id(song_id)
             ss = self._selectedSong
             if song:            
                 if ss and song <> ss:
@@ -119,7 +119,7 @@ class SongFilter:
             the songs. This is easy for a search filter 
             so unused categories are not displayed """
         result = []
-        for s in self.__list:
+        for s in self._list:
             for c in s.categories:
                 if c not in result:
                     result.append(c)
@@ -129,7 +129,7 @@ class SongFilter:
     def __ResyncAllSongs(self):
         """ Resync the whole list, remove all the songs not matching
             add new that are matching """
-        for s in self.__list:
+        for s in self._list:
             self.__SyncWithCriteriaList(s, action = ADD)
 
     # --------------------------------------------------------------------------

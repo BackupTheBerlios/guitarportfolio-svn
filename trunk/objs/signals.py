@@ -32,7 +32,6 @@ SONG_VIEW_SELECTED     = ('song', 'view', 'selected')       # song selected
 SONG_VIEW_TAB_ADDED    = ('song', 'tab', 'added')           # tab added to selected song
 SONG_VIEW_AFTER_SELECT = ('song', 'view', 'after', 'select')
 
-
 # TODO: Not certain if this will work, if a query is sent after a remove from
 # the view, and that song is also removed after the re-evaluating, it will come
 # in some kind of select after select query. Maybe the select query needs to be
