@@ -1,6 +1,8 @@
 
 import dircache
 import os.path
+from wx.lib.pubsub import Publisher
+from objs import signals, objlist
 
 # a comprehensive list of types where extensions are translated to 
 # a description, e.g. .AVI extension becomes VIDEO
@@ -11,6 +13,8 @@ _types_lookup = [ ( 'VIDEO',      [ '.avi',  '.mpg', '.mp4', '.mov', '.vlc' ] ),
                   ( 'PDF TEXT',   [ '.pdf' ] ),
                   ( 'TEXT / TAB', [ '.txt' ] ),
                   ( 'TAB FILE',   [ '.tab' ] ) ]
+
+
 
 """
     The link object holding information per file in the work dir, of a reference
@@ -47,13 +51,14 @@ class LinkMgr(object):
     def __init__(self):
         self._workPath = ''
         self._lastLinkID = 0
+        self.links = objlist.ObjList(class_name = Link)
         self.Clear()
 
     # --------------------------------------------------------------------------
     def Load(self, workdir):
         """ Checks the work dir, loads all files present, and adjusts the list
             based upon the XML file present (or not) in the direstory """
-        self.Clear()
+        self.Clear()        
         self._workPath = ''
         if os.path.exists(workdir):
             # gather files, sort and process
@@ -62,29 +67,31 @@ class LinkMgr(object):
             for f in items:
                 if os.path.isfile(os.path.join(workdir, f)):
                     l = Link(f, self._lastLinkID)
-                    self._links.append(l)
-                    self._lastLinkID += 1        
+                    self.links.append(l)
+                    self._lastLinkID += 1
+            Publisher().sendMessage(signals.LINKMGR_POPULATED)
         else:
             return False
 
     # --------------------------------------------------------------------------
     def Clear(self):
-        self._links = []
+        Publisher().sendMessage(signals.LINKMGR_CLEAR)
+        self.links.clear()
         self._lastLinkID = 0
-
-    # --------------------------------------------------------------------------
-    def FindLinkByID(self, id):
-        """ Return link by ID """
-        for l in self._links:
-            if l._id == id:
-                return l
-        return None
-
+    
     # --------------------------------------------------------------------------
     def GetLinkPath(self, link):
         """ Returns the full link name + path that can be used to execute the file """
         result = ''
-        if link in self._links:
+        if self.links.has_item(link):
             result = os.path.join(self._workPath, link._name)
         return result
 
+# ==============================================================================
+
+__obj = None
+def Get():
+    global __obj
+    if not __obj:
+        __obj = LinkMgr()
+    return __obj

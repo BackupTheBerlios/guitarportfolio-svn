@@ -8,7 +8,7 @@ import db
 import db.engine
 import db.songs_peer
 
-from objs import signals, songs, category_mgr, tuning_mgr, songfilter
+from objs import signals, songs, category_mgr, tuning_mgr, songfilter, linkmgt
 from gui import SongsPanel, EditorNotebook, CurrInfoNotebook, NewSongDlg, \
                 CategoriesDlg, SongFilterPanel, OptionsDlg, WelcomeDlg, xmlres
 from images import icon_main_window
@@ -341,6 +341,7 @@ class GuitarPortfolioFrame(wx.Frame):
         Publisher().sendMessage(signals.APP_CLEAR, None) # None object is crucial
 
         songfilter.Get().Reset()
+        linkmgt.Get().Clear()
 
         # make sure we have a valid DB
         if not db.engine.Get().IsOpened():
@@ -383,15 +384,20 @@ class GuitarPortfolioFrame(wx.Frame):
     def __OnSongUpdated(self, message):
         # update a song in the view filter
         self._filter.UpdateSong(message.data)        
+        # refresh the links
+        linkmgt.Get().Load(appcfg.GetAbsWorkPathFromSong(ss))
         self.__SyncMenuItems()
 
     #---------------------------------------------------------------------------
     def __OnSongPopulate(self, message):
         """ Do some tab restoring, we do this to save mem and time at start-up """
         ss = self._filter._selectedSong
+        # restore the tabs
         if ss:
             tlp = db.songs_peer.SongTabListPeer(db.engine.GetDb())
-            tlp.Restore(ss) 
+            tlp.Restore(ss)
+        # restore the links
+        linkmgt.Get().Load(appcfg.GetAbsWorkPathFromSong(ss))
 
     #---------------------------------------------------------------------------
     def __OnTabAdded(self, message):

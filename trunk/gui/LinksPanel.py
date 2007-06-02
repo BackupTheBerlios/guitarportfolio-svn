@@ -40,11 +40,12 @@ class LinksPanel(wx.Panel):
         Publisher().subscribe(self.__OnSongSelected, signals.SONG_VIEW_SELECTED)
         Publisher().subscribe(self.__OnSongUpdated, signals.SONG_VIEW_UPDATED)
         Publisher().subscribe(self.__OnConfigUpdated, signals.CFG_UPDATED)
+        Publisher().subscribe(self.__OnLinksPopulated, signals.LINKMGR_POPULATED)
+        Publisher().subscribe(self.__OnLinksClear, signals.LINKMGR_CLEAR)
         
         self.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.__OnExecuteLink, self._links)
 
         self._song = None
-        self._linkMgr = linkmgt.LinkMgr()
 
     # --------------------------------------------------------------------------
     def __OnSongSelected(self, message):
@@ -57,12 +58,6 @@ class LinksPanel(wx.Panel):
         self.__create.Enable(self._song <> None)        
         self.__SyncWorkDirState()
         
-        if self._song:
-            self.__RefreshLinks()
-        else:
-            self._linkMgr.Clear()
-            self._links.DeleteAllItems()
-
     # --------------------------------------------------------------------------
     def __OnSongUpdated(self, message):
         """ A song is updated, we need to resync the state of the work dir """
@@ -97,7 +92,15 @@ class LinksPanel(wx.Panel):
             self.__SyncButtonState(False)
             
         return False
-            
+         
+    # --------------------------------------------------------------------------
+    def __OnLinksPopulated(self, message):
+        self.__PopulateLinks()
+        
+    # --------------------------------------------------------------------------
+    def __OnLinksClear(self, message):
+        self._links.DeleteAllItems()
+        
     # --------------------------------------------------------------------------
     def __SyncButtonState(self, valid_path):
         """ Enable / Disable a group of buttons when this is needed """
@@ -110,7 +113,7 @@ class LinksPanel(wx.Panel):
     def __PopulateLinks(self):
         """ Populate the links in the link list view """
         self._links.DeleteAllItems()
-        for l in self._linkMgr._links:
+        for l in linkmgt.Get().links:
             index = self._links.InsertStringItem(sys.maxint, l._name)
             self._links.SetStringItem(index, 1, l._type)
             self._links.SetStringItem(index, 2, '')
@@ -120,8 +123,7 @@ class LinksPanel(wx.Panel):
     # --------------------------------------------------------------------------
     def __RefreshLinks(self):
         """ Refreshes the view, can be called from multiple handlers """
-        self._linkMgr.Load(appcfg.GetAbsWorkPathFromSong(self._song))
-        self.__PopulateLinks() 
+        linkmgt.Get().Load(appcfg.GetAbsWorkPathFromSong(self._song))
             
     # --------------------------------------------------------------------------
     def __OnCreateBasePath(self, event): # wxGlade: LinksPanel.<event_handler>
@@ -144,9 +146,9 @@ class LinksPanel(wx.Panel):
             
     # --------------------------------------------------------------------------
     def __OnExecuteLink(self, event):
-        l = self._linkMgr.FindLinkByID(event.GetData())
+        l = linkmgt.Get().links.find_id(event.GetData())
         if l:
-            path = self._linkMgr.GetLinkPath(l)
+            path = linkmgt.Get().GetLinkPath(l)
             if path:
                 # TODO: Windows only right now!
                 if "wxMSW" in wx.PlatformInfo:
