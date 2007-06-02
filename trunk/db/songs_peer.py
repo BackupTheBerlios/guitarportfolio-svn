@@ -99,6 +99,7 @@ class SongTabListPeer(db.base.Peer):
 
     # --------------------------------------------------------------------------
     def Update(self, obj):
+        # prevent an update on a relation that is not yet changed or even set
         if obj.tabs.is_changed():
             # old tabs        
             sql = 'select tab_id from songtabs where song_id = ?'

@@ -107,7 +107,7 @@ def ParseSongHtml(page, song, subtags = {}):
         ldate_str = 'Unknown'
 
     # time started
-    if song._status == songs.SS_STARTED or song._status == songs.SS_POSTPONED:
+    if not song._status == songs.SS_NOT_STARTED:
         started_str = song._timeStarted.strftime('%d %B %Y')
     else:
         started_str = "Not Yet"
@@ -119,10 +119,9 @@ def ParseSongHtml(page, song, subtags = {}):
     if song._status == songs.SS_COMPLETED:
         completed_str = song._timeCompleted.strftime('%d %B %Y')
     else:
-        if song._status == songs.SS_POSTPONED:
-            completed_str = song._timePostponed.strftime('Postponed on %d %B %Y')
-        else:
-            completed_str = "Not Yet"
+        completed_str = 'Not yet'
+    if song._status == songs.SS_POSTPONED:
+        completed_str = song._timePostponed.strftime('Postponed on %d %B %Y')
 
     # time postponed
     postponed_str = song._timePostponed.strftime('%d %B %Y')

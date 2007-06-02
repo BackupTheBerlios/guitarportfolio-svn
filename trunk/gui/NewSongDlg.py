@@ -12,10 +12,15 @@ import appcfg, xmlres
 import CategoriesDlg
 
 class NewSongDlg(wx.Dialog):
-    def __init__(self, parent, id = wx.ID_ANY):
+    def __init__(self, parent, id = wx.ID_ANY, nodb = False):
         pre = wx.PreDialog()
         xmlres.Res().LoadOnDialog(pre, parent, "NewSongPanel")
         self.PostCreate(pre)
+
+        # if set we can use the category database peer to update the 
+        # song in the DB, if not set, the song is not yet in the DB
+        # and a higher update will take care of it
+        self.__dbAllowed = not nodb
 
         self.__artist = xrc.XRCCTRL(self, "ID_ARTIST")
         self.__title = xrc.XRCCTRL(self, "ID_TITLE")
@@ -150,7 +155,7 @@ class NewSongDlg(wx.Dialog):
         if self.__song:    
             dlg = CategoriesDlg.CategoriesDlg(self)
             dlg.SetCurrentSong(self.__song)
-            if dlg.ShowModal() == wx.ID_OK:
+            if dlg.ShowModal() == wx.ID_OK and self.__dbAllowed:
                 # update the categories
                 sp = db.songs_peer.SongPeer(db.engine.GetDb())
                 sp.UpdateCategories(self.__song)            

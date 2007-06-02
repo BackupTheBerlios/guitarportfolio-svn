@@ -204,7 +204,7 @@ class GuitarPortfolioFrame(wx.Frame):
         # we use the last used relative path or a default one when present
         s._relativePath = appcfg.Get().Read(appcfg.CFG_LASTRELPATH, appcfg.DEF_RELPATH)
 
-        dlg = NewSongDlg.NewSongDlg(self)
+        dlg = NewSongDlg.NewSongDlg(self, nodb = True)
         dlg.LoadFromSong(s)
         if dlg.ShowModal() == wx.ID_OK:
             dlg.SaveToSong(s)
