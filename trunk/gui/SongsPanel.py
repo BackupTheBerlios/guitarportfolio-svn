@@ -136,11 +136,16 @@ class SongsListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
         
         # submenu for changing status
         self.__statusMap = {}
-        items = [ ("&In Progress", songs.SS_STARTED), 
-                  ("&Not Practicing", songs.SS_POSTPONED),
-                  ("&Completed!", songs.SS_COMPLETED),
-                  ("&TODO", songs.SS_NOT_STARTED) ]
-        
+        items = [ ]
+        song = songfilter.Get()._selectedSong
+        if song._status == songs.SS_STARTED:
+            items.append(("&Not Practicing", songs.SS_POSTPONED))
+            items.append(("&Completed!", songs.SS_COMPLETED))
+        elif song._status == songs.SS_NOT_STARTED or \
+             song._status == songs.SS_POSTPONED or \
+             song._status == songs.SS_COMPLETED:
+            items.append(("&In Progress", songs.SS_STARTED))
+
         smenu = wx.Menu()
         for i in items:
             mi = wx.MenuItem(smenu, wx.NewId(), i[0], "", wx.ITEM_NORMAL)

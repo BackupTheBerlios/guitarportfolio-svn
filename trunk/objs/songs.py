@@ -91,7 +91,7 @@ class Song(db.base.Object):
         if self._tuning <> None:
             return self._tuning._id
         return -1    
-                
+              
     #--------------------------------------------------------------------------
     def GetTuningText(self):
         """ Get the tuning, based upon the relation or the alternate text """

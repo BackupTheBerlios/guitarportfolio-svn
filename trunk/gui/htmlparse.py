@@ -22,6 +22,7 @@ HTML_LABEL_TIMECOMPLETED = '@time_completed@'
 HTML_LABEL_TIMEPOSTPONED = '@time_postponed@'
 HTML_LABEL_ID            = '@song_id@'
 HTML_SONG_ICON           = '@song_status_icon@'
+HTML_LABEL_RANK          = '@song_rank@'
 
 # COMMON HTML TAGS
 HTML_ICON_PRACTICING     = '@icon_practicing@'
@@ -37,6 +38,7 @@ STR_ICON_POSTPONED       = 'icon_not_practicing.png'
 STR_ICON_PRACTICING      = 'icon_in_progress.png'
 STR_ICON_COMPLETED       = 'icon_completed.png'
 STR_ICON_GUITAR          = 'guitar_icon.png'
+STR_ICON_RANK_X          = 'icon_rank_@.gif'
 
 HTML_LABEL_CATNAME       = '@name@'              # only used in section!
 
@@ -78,7 +80,6 @@ def _ParseCommonHtml(page, subtags = {}):
             finalstr += page[lastpos:]
             break
     
-    print finalstr
     return finalstr
 
 #-------------------------------------------------------------------------------
@@ -89,7 +90,9 @@ def ParseSongHtml(page, song, subtags = {}):
     """
     
     # TODO: Create conditional IF tags
-    # TODO: Create generic parser that renders song independent stuff
+    
+    # match all static types, in a dynamic lookup table
+    tmp = _ParseCommonHtml(page)
     
     # song date
     if not song._dateUnknown:
@@ -154,6 +157,9 @@ def ParseSongHtml(page, song, subtags = {}):
     else:
         str_icon = STR_ICON_TODO
       
+    # rank icon
+    str_icon_rank = STR_ICON_RANK_X.replace('@', repr(song._difficulty))
+      
     # categories, use repetative mechanism
     if HTML_LABEL_CATEGORIES in subtags:
         reptup = subtags[HTML_LABEL_CATEGORIES]
@@ -168,30 +174,46 @@ def ParseSongHtml(page, song, subtags = {}):
         else:
             tempstr += reptup[2] + reptup[1].replace(HTML_LABEL_CATNAME, c._name) 
     categories_str = categories_str + tempstr + reptup[3]             
-        
-    # match all static types, in a dynamic lookup table
-    # WARNING: TAGS ARE NOT RE COMPATIBLE USING STRING.REPLACE
-    tmp = _ParseCommonHtml(page)
+            
+    tags = { HTML_LABEL_SONG:          song._title, 
+             HTML_LABEL_ARTIST:        song._artist,
+             HTML_LABEL_SHORTDATE:     sdate_str,
+             HTML_LABEL_LONGDATE:      ldate_str,
+             HTML_LABEL_TUNINGTEXT:    song.GetTuningText(),
+             HTML_LABEL_TUNINGNAME:    song.GetTuningName(),
+             HTML_LABEL_COLORPROGRESS: progress_str, 
+             HTML_LABEL_PERCPROGRESS:  percprogress_str, 
+             HTML_LABEL_SONGINFO:      str_songinfo,
+             HTML_LABEL_LYRICS:        str_songlyrics,
+             HTML_LABEL_TIMESTARTED:   started_str,
+             HTML_LABEL_TIMEADDED:     added_str,
+             HTML_LABEL_TIMECOMPLETED: completed_str,
+             HTML_LABEL_TIMEPOSTPONED: postponed_str,
+             HTML_LABEL_ID:            repr(song._id),
+             HTML_LABEL_CATEGORIES:    categories_str,
+             HTML_SONG_ICON:           str_icon,
+             HTML_LABEL_RANK:          str_icon_rank}
     
-    stypes = [ (HTML_LABEL_SONG, song._title), 
-               (HTML_LABEL_ARTIST, song._artist),
-               (HTML_LABEL_SHORTDATE, sdate_str),
-               (HTML_LABEL_LONGDATE, ldate_str),
-               (HTML_LABEL_TUNINGTEXT, song.GetTuningText()),
-               (HTML_LABEL_TUNINGNAME, song.GetTuningName()),
-               (HTML_LABEL_COLORPROGRESS, progress_str), 
-               (HTML_LABEL_PERCPROGRESS, percprogress_str), 
-               (HTML_LABEL_SONGINFO, str_songinfo),
-               (HTML_LABEL_LYRICS, str_songlyrics),
-               (HTML_LABEL_TIMESTARTED, started_str),
-               (HTML_LABEL_TIMEADDED, added_str),
-               (HTML_LABEL_TIMECOMPLETED, completed_str),
-               (HTML_LABEL_TIMEPOSTPONED, postponed_str),
-               (HTML_LABEL_ID, repr(song._id)) ]
-    for label, str in stypes:
-        tmp = tmp.replace(label, str) 
-    
+    finalstr = ''
+    lastpos = 0
+    regexp = re.compile("@[A-Za-z_]+@")
+    while 1:
+        t = regexp.search(tmp, lastpos)
+        if t:
+            # collect part until matched token
+            finalstr += tmp[lastpos:t.start()]
+            lastpos = t.start() + len(t.group())
+            try:
+                # replace token with lookup tag
+                # this can blow, do not execute code after this
+                finalstr += tags[t.group()] 
+            except KeyError:
+                # we will leave unmatched token in text
+                finalstr += t.group()
+        else:
+            finalstr += tmp[lastpos:]
+            break    
     # done!
-    return tmp
+    return finalstr
     
        

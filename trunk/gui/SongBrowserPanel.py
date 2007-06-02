@@ -57,10 +57,10 @@ songs_practicing = """
 <font size="16"><img src="@icon_path@@icon_practicing@"/>&nbsp;Songs Currently Practicing</font><br><br>
 <font size="+1" face="Arial, Lucida Grande, sans-serif">
 <table border=0 bgcolor="#eeeef6" width="95%">
-  <tr><td width="20%"><b><font size="+1">Started</font></b></td>
-      <td width="30%"><b><font size="+1">Artist</font></b></td>
-      <td width="35%"><b><font size="+1">Title</font></b></td>
-      <td width="15%"><b><font size="+1">Progress</font></b></td></tr>
+  <tr><td valign="top" width="20%"><b><font size="+1">Started</font></b></td>
+      <td valign="top" width="30%"><b><font size="+1">Artist</font></b></td>
+      <td valign="top" width="35%"><b><font size="+1">Title</font></b></td>
+      <td valign="top" width="15%"><b><font size="+1">Progress</font></b></td></tr>
   @song_row@
 </table>
 </font>
@@ -71,9 +71,9 @@ songs_todo = """
 <font size="16"><img src="@icon_path@@icon_todo@"/>&nbsp;Songs Still To Play</font><br><br>
 <font size="+1" face="Arial, Lucida Grande, sans-serif">
 <table border=0 bgcolor="#eeeef6" width="95%">
-  <tr><td width="20%"><b><font size="+1">Added</font></b></td>
-      <td width="30%"><b><font size="+1">Artist</font></b></td>
-      <td width="50%"><b><font size="+1">Title</font></b></td></tr>
+  <tr><td valign="top" width="20%"><b><font size="+1">Added</font></b></td>
+      <td valign="top" width="30%"><b><font size="+1">Artist</font></b></td>
+      <td valign="top" width="50%"><b><font size="+1">Title</font></b></td></tr>
   @song_todo_row@
 </table>
 </font>
@@ -88,10 +88,10 @@ songs_completed = """
 <font size="16"><img src="@icon_path@@icon_completed@" />&nbsp;Songs Completed</font><br><br>
 <font size="+1" face="Arial, Lucida Grande, sans-serif">
 <table border=0 bgcolor="#eeeef6" width="95%">
-  <tr><td width="20%"><b><font size="+1">Date</font></b></td>
-      <td width="30%"><b><font size="+1">Artist</font></b></td>
-      <td width="35%"><b><font size="+1">Title</font></b></td>
-      <td width="15%"><b><font size="+1">Progress</font></b></td></tr>
+  <tr><td valign="top" width="20%"><b><font size="+1">Date</font></b></td>
+      <td valign="top" width="30%"><b><font size="+1">Artist</font></b></td>
+      <td valign="top" width="35%"><b><font size="+1">Title</font></b></td>
+      <td valign="top" width="15%"><b><font size="+1">Progress</font></b></td></tr>
   @song_completed_row@
 </table>
 </font>
@@ -106,10 +106,10 @@ songs_postponed = """
 <font size="16"><img src="@icon_path@@icon_postponed@"/>&nbsp;Songs Not Practicing</font><br><br>
 <font size="+1" face="Arial, Lucida Grande, sans-serif">
 <table border=0 bgcolor="#eeeef6" width="95%">
-  <tr><td width="20%"><b><font size="+1">Date</font></b></td>
-      <td width="30%"><b><font size="+1">Artist</font></b></td>
-      <td width="35%"><b><font size="+1">Title</font></b></td>
-      <td width="15%"><b><font size="+1">Progress</font></b></td></tr>
+  <tr><td valign="top" width="20%"><b><font size="+1">Date</font></b></td>
+      <td valign="top" width="30%"><b><font size="+1">Artist</font></b></td>
+      <td valign="top" width="35%"><b><font size="+1">Title</font></b></td>
+      <td valign="top" width="15%"><b><font size="+1">Progress</font></b></td></tr>
   @song_postponed_row@
 </table>
 </font>
@@ -127,20 +127,20 @@ song_row = """
 songinfo = """<html><body>
 <table border=0 cellspacing=0 cellpadding=0>
 <tr><td><img src="@icon_path@@guitar_icon@" /></td><td><i><font size="16" color="#0000ff">@song@</font><br>
-<font size="+2" color="#0000ff">By @artist@</font></i></td></tr>
+<font size="+3" color="#0000ff">By @artist@</font></i></td></tr>
 </table>
 <br><br>
-<font size="+1" face="Arial, Lucida Grande, sans-serif">
+<font size="+1">
 <table border=0 bgcolor="#eeeef6">
-  <tr><td><b>Song Date</b></td><td>@ldate@</td></tr>
-  <tr><td><b>Categories</b></td><td>@categories@</td></tr>
-  <tr><td><b>Tuning</b></td><td>@tuning_text@ (@tuning_name@)</td></tr>
-  <tr><td><b>Progress</b></td><td><b>@cprogress@</b>&nbsp;@song_status_icon@&nbsp;(@percprogress@%)</td></tr>
-  <tr><td><b>Added In Database</b></td><td>@time_added@</td></tr>
-  <tr><td><b>Started Practicing</b></td><td>@time_started@</td></tr>
-  <tr><td><b>Completed Practicing</b></td><td>@time_completed@</td></tr>
+  <tr><td valign="top"><b>Song Date</b></td><td>@ldate@</td></tr>
+  <tr><td valign="top"><b>Categories</b></td><td>@categories@</td></tr>
+  <tr><td valign="top"><b>Tuning</b></td><td>@tuning_text@ (@tuning_name@)</td></tr>
+  <tr><td valign="top"><b>Progress</b></td><td><b>@cprogress@</b>&nbsp;<img src="@icon_path@@song_status_icon@" />&nbsp;(@percprogress@%)</td></tr>
+  <tr><td valign="top"><b>Difficulty</b></td><td><img src="@icon_path@@song_rank@" /></td></tr>
+  <tr><td valign="top"><b>Added In Database</b></td><td>@time_added@</td></tr>
+  <tr><td valign="top"><b>Started Practicing</b></td><td>@time_started@</td></tr>
+  <tr><td valign="top"><b>Completed Practicing</b></td><td>@time_completed@</td></tr>
 </table>
-<br><br>Change status to: @status_bar@
 </font>
 <br><br><font size="+2">Attachments</font><br><br>
 </body></html>
@@ -315,15 +315,11 @@ class SongBrowserPanel(wx.Panel):
         if len(songs) > 0:
             songrows = ''
             for s in songs:
-                songrows = songrows + HtmlInfoGen.GenerateHtmlFromSong(songrow[1], s) + '\n'
+                songrows = songrows + htmlparse.ParseSongHtml(songrow[1], s) + '\n'
             pg = section[1].replace(songrow[0], songrows)
             pg = page.replace(section[0], pg)
             # render some icons
-            # TODO: put in seperate song page parser!
-            pg = pg.replace("@icon_practicing@", os.path.join(appcfg.imagesdir, 'icon_in_progress.png'))
-            pg = pg.replace("@icon_todo@", os.path.join(appcfg.imagesdir, 'icon_todo.png'))
-            pg = pg.replace("@icon_completed@", os.path.join(appcfg.imagesdir, 'icon_completed.png'))
-            pg = pg.replace("@icon_postponed@", os.path.join(appcfg.imagesdir, 'icon_not_practicing.png'))
+            pg = htmlparse._ParseCommonHtml(pg)
             return pg
         else:
             # no songs, we replace the contents with an empty page
@@ -332,16 +328,12 @@ class SongBrowserPanel(wx.Panel):
     # --------------------------------------------------------------------------
     def __RenderSongPage(self, song):
         """ We render the homepage containing all song statuses divided in sections """
-        #parsedata = { htmlpage.HTML_NAVIGATIONBAR : ('Change status to: ', ', ', '',
-        #                                             { songs.SS_STARTED: '@icon_practicing@ In Progress',
-        #                                               songs.SS_POSTPONED: '@icon_practicing@ Postponed',
-        #                                                }
-        
-        pg = htmlparse.ParseSongHtml(songinfo, song ) 
-                                    # { htmlparse.HTML_LABEL_CATEGORIES:  ('<ul>', 
-                                    #                                      '<li>@name@</li>',
-                                    #                                      '\n', 
-                                    #                                      '</ul>' ) } )
+        taginfo = { htmlparse.HTML_LABEL_CATEGORIES:  ('', 
+                                                       '@name@',
+                                                       '<br>', 
+                                                       '' ) }        
+        pg = htmlparse.ParseSongHtml(songinfo, song,  taginfo)
+
         self.__songBrowser.SetPage(pg)
         self._currPage = song._id
 

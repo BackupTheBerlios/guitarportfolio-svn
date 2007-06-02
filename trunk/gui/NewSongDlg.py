@@ -25,7 +25,6 @@ class NewSongDlg(wx.Dialog):
         self.__difficulty  = xrc.XRCCTRL(self, "ID_DIFFICULTY")
         self.__dateUnknown = xrc.XRCCTRL(self, "ID_DATE_UNKNOWN")
         self.__yearOnly = xrc.XRCCTRL(self, "ID_YEAR_ONLY")
-        self.__songStatus = xrc.XRCCTRL(self, "ID_SONG_STATUS")
         self.__tuningPre = xrc.XRCCTRL(self, "ID_STANDARD")
         self.__tuningSelect = xrc.XRCCTRL(self, "ID_TUNING_SELECT")
         self.__tuningText = xrc.XRCCTRL(self, "ID_TUNING_TEXT")
@@ -36,7 +35,6 @@ class NewSongDlg(wx.Dialog):
         
         self.__capoSelect.SetSelection(-1)
         self.__difficulty.SetSelection(1)
-        self.__songStatus.SetSelection(3)
         self.__tuningPre.SetValue(1)
         self.__workDir.SetSelection(-1)
                 
@@ -77,7 +75,6 @@ class NewSongDlg(wx.Dialog):
         song._title = self.__title.GetValue()
         song._barCount = self.__barCount.GetValue()
         song._difficulty = self.__difficulty.GetSelection()
-        song._status = self.__songStatus.GetSelection()
         dt = self.__songDate.GetValue()
         song._time = datetime.datetime(dt.GetYear(), dt.GetMonth() + 1, dt.GetDay())
         idx = self.__tuningSelect.GetSelection()
@@ -98,7 +95,6 @@ class NewSongDlg(wx.Dialog):
         self.__title.SetValue(song._title)
         self.__barCount.SetValue(song._barCount)
         self.__difficulty.SetSelection(song._difficulty)
-        self.__songStatus.SetSelection(song._status)
 
         dt = song._time
         self.__songDate.SetValue(wx.DateTimeFromDMY(dt.day, dt.month - 1, dt.year))

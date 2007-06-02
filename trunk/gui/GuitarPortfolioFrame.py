@@ -43,11 +43,32 @@ class GuitarPortfolioFrame(wx.Frame):
         mnu.AppendItem(self.__menuEditSong)
         self.__menuDeleteSong = wx.MenuItem(mnu, wx.NewId(), "&Delete\tCtrl+D", "", wx.ITEM_NORMAL)
         mnu.AppendItem(self.__menuDeleteSong)
+        
+        # status submenu
+        
+        self.__menu_status_lookup = {}
+        items = [ ("&In progress", songs.SS_STARTED), 
+                  ("&Not Practicing", songs.SS_POSTPONED),
+                  ("&Completed!", songs.SS_COMPLETED) ]
+        
+        smnu = wx.Menu()
+        for i in items:
+            mi = wx.MenuItem(smnu, wx.NewId(), i[0], "", wx.ITEM_NORMAL)
+            smnu.AppendItem(mi)
+            self.__menu_status_lookup[mi.GetId()] = i[1]
+            self.Bind(wx.EVT_MENU, self.__OnChangeStatus, mi)        
+        
+        mnu.AppendSubMenu(smnu, "Set &Status To")
+        self.__menuSongStatus = smnu
+
+        self.__menuEditReset = wx.MenuItem(mnu, wx.NewId(), "Reset &History", "", wx.ITEM_NORMAL)
+        mnu.AppendItem(self.__menuEditReset)    
+
         mnu.AppendSeparator()
         self.__menuEditCategories = wx.MenuItem(mnu, wx.NewId(), "Edit &Categories ...\tCtrl+Shift+C", "", wx.ITEM_NORMAL)
         mnu.AppendItem(self.__menuEditCategories)
-        self.__menuBar.Append(mnu, "&Songs")
-
+        self.__menuBar.Append(mnu, "&Song")
+        
         # window layout
         mnu = wx.Menu()
         self.__menuRestoreLayout = wx.MenuItem(mnu, wx.NewId(), "&Restore Default Layout", "", wx.ITEM_NORMAL)
@@ -118,6 +139,8 @@ class GuitarPortfolioFrame(wx.Frame):
         Publisher().subscribe(self.__OnSongAdded, signals.SONG_DB_ADDED)
         Publisher().subscribe(self.__OnSongDeleted, signals.SONG_DB_DELETED)
         Publisher().subscribe(self.__OnSongUpdated, signals.SONG_DB_UPDATED)
+        Publisher().subscribe(self.__OnSongSelected, signals.APP_CLEAR)
+        Publisher().subscribe(self.__OnSongSelected, signals.SONG_VIEW_SELECTED)
         Publisher().subscribe(self.__OnSongPopulate, signals.SONG_VIEW_AFTER_SELECT)
         Publisher().subscribe(self.__OnQueryAddSong, signals.SONG_QUERY_ADD)
         Publisher().subscribe(self.__OnQueryDeleteSong, signals.SONG_QUERY_DELETE)
@@ -169,9 +192,7 @@ class GuitarPortfolioFrame(wx.Frame):
     def __OnSongSelected(self, message):
         """ A song is selected. When we have NONE as song, we disable the 
             menus that should not be pressed when there is no song """
-        self.__menuEditSong.Enable(message.data <> None)
-        self.__menuDeleteSong.Enable(message.data <> None)
-        self.__menuEditCategories.Enable(message.data <> None)
+        self.__SyncMenuItems()
 
     #---------------------------------------------------------------------------
     def __OnQueryAddSong(self, message = None):
@@ -244,8 +265,21 @@ class GuitarPortfolioFrame(wx.Frame):
                 sp = db.songs_peer.SongPeer(db.engine.GetDb())
                 sp.Update(s, all = True)                
 
-
             dlg.Destroy()
+
+    #---------------------------------------------------------------------------
+    def __OnChangeStatus(self, event):
+        """ Set the status of the song
+            NOTE: This should eventually be done by a log mechanism """
+        song = songfilter.Get()._selectedSong
+        if song <> None:
+            # if our status differs, force an update
+            if song._status <> self.__menu_status_lookup[event.GetId()]:
+                song._status = self.__menu_status_lookup[event.GetId()]
+                
+                # update in DB
+                sp = db.songs_peer.SongPeer(db.engine.GetDb())
+                sp.Update(song)        
 
     #---------------------------------------------------------------------------
     def __OnShowOptions(self, event): # wxGlade: GuitarPortfolioFrame.<event_handler>
@@ -349,6 +383,7 @@ class GuitarPortfolioFrame(wx.Frame):
     def __OnSongUpdated(self, message):
         # update a song in the view filter
         self._filter.UpdateSong(message.data)        
+        self.__SyncMenuItems()
 
     #---------------------------------------------------------------------------
     def __OnSongPopulate(self, message):
@@ -382,6 +417,28 @@ class GuitarPortfolioFrame(wx.Frame):
         self.__aui.GetPane("songspanel").Show(True)
         self.__aui.GetPane("filterpanel").Show(True)
         self.__aui.Update()
+
+    #---------------------------------------------------------------------------
+    def __SyncMenuItems(self):
+        song = songfilter.Get()._selectedSong
+        self.__menuEditSong.Enable(song <> None)
+        self.__menuDeleteSong.Enable(song <> None)
+        self.__menuEditCategories.Enable(song <> None)
+        self.__menuEditCategories.Enable(song <> None)
+        self.__menuEditReset.Enable(False)
+        # enable status based upon previous status
+        if song:
+            for id in self.__menu_status_lookup.iterkeys():
+                if self.__menu_status_lookup[id] == songs.SS_POSTPONED:
+                    self.__menuSongStatus.Enable(id, song._status == songs.SS_STARTED)
+                elif self.__menu_status_lookup[id] == songs.SS_STARTED:
+                    self.__menuSongStatus.Enable(id, song._status == songs.SS_COMPLETED or \
+                                                     song._status == songs.SS_POSTPONED)
+                elif self.__menu_status_lookup[id] == songs.SS_COMPLETED:
+                    self.__menuSongStatus.Enable(id, song._status == songs.SS_STARTED)
+        else:
+            for id in self.__menu_status_lookup.iterkeys():
+                self.__menuSongStatus.Enable(id, False)        
 
 # end of class GuitarPortfolioFrame
 
