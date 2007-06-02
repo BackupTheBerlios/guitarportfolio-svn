@@ -384,8 +384,6 @@ class GuitarPortfolioFrame(wx.Frame):
     def __OnSongUpdated(self, message):
         # update a song in the view filter
         self._filter.UpdateSong(message.data)        
-        # refresh the links
-        linkmgt.Get().Load(appcfg.GetAbsWorkPathFromSong(ss))
         self.__SyncMenuItems()
 
     #---------------------------------------------------------------------------
@@ -396,8 +394,6 @@ class GuitarPortfolioFrame(wx.Frame):
         if ss:
             tlp = db.songs_peer.SongTabListPeer(db.engine.GetDb())
             tlp.Restore(ss)
-        # restore the links
-        linkmgt.Get().Load(appcfg.GetAbsWorkPathFromSong(ss))
 
     #---------------------------------------------------------------------------
     def __OnTabAdded(self, message):

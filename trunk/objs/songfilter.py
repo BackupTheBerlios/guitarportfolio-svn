@@ -1,5 +1,6 @@
 from wx.lib.pubsub import Publisher
-from objs import signals, songs, objlist
+from objs import signals, songs, objlist, linkmgt
+from gui import appcfg
 
 # definitions
 ADD    = 0
@@ -50,6 +51,10 @@ class SongFilter:
             all views """
         if self._list.has_item(song):
             self.__SyncWithCriteriaList(song, action = UPDATE)
+            # if we are still the selected song, repopulate links
+            if song == self._selectedSong:
+                # refresh the links
+                linkmgt.Get().Load(appcfg.GetAbsWorkPathFromSong(song))                
 
     # --------------------------------------------------------------------------
     def SelectSong(self, song_id):
@@ -67,6 +72,8 @@ class SongFilter:
                 
                 # assign new, and notify everyone
                 self._selectedSong = song
+                # restore the links
+                linkmgt.Get().Load(appcfg.GetAbsWorkPathFromSong(song))
                 Publisher().sendMessage(signals.SONG_VIEW_SELECTED, song)
                 Publisher().sendMessage(signals.SONG_VIEW_AFTER_SELECT)
                 return True
