@@ -1,6 +1,5 @@
 from wx.lib.pubsub import Publisher
 from objs import signals, songs, objlist, linkmgt
-from gui import appcfg
 
 # definitions
 ADD    = 0
@@ -71,9 +70,10 @@ class SongFilter:
                     ss.tabs.prune()
                 
                 # assign new, and notify everyone
+                self._selectedSong = None
+                Publisher().sendMessage(signals.SONG_VIEW_PRESELECT, song)
                 self._selectedSong = song
                 # restore the links
-                linkmgt.Get().Load(appcfg.GetAbsWorkPathFromSong(song))
                 Publisher().sendMessage(signals.SONG_VIEW_SELECTED, song)
                 Publisher().sendMessage(signals.SONG_VIEW_AFTER_SELECT)
                 return True

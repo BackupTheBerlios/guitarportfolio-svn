@@ -146,6 +146,7 @@ class GuitarPortfolioFrame(wx.Frame):
         Publisher().subscribe(self.__OnQueryDeleteSong, signals.SONG_QUERY_DELETE)
         Publisher().subscribe(self.__OnQueryEditSong, signals.SONG_QUERY_MODIFY)
         Publisher().subscribe(self.__OnTabAdded, signals.SONG_DB_TAB_ADDED)
+        Publisher().subscribe(self.__OnSongPreselect, signals.SONG_VIEW_PRESELECT)
 
         # dependent on the layout settings, we restore the old perspective, or save the default
         cfg = appcfg.Get()
@@ -188,6 +189,17 @@ class GuitarPortfolioFrame(wx.Frame):
         # callback to ourselves
         self.__OnQueryAddSong()
 
+    #---------------------------------------------------------------------------
+    def __OnSongPreselect(self, message):
+        """ Song pre-selected. Only populate stuff that has nothing to do with the 
+            immediate song, or do not rely on songfilter.Get._selectedSong because it 
+            is not yet set """
+        song = message.data
+        if song:
+            linkmgt.Get().Load(appcfg.GetAbsWorkPathFromSong(song))
+        else:
+            linkmgt.Get().Clear()
+        
     #---------------------------------------------------------------------------
     def __OnSongSelected(self, message):
         """ A song is selected. When we have NONE as song, we disable the 

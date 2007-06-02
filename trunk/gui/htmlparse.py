@@ -1,7 +1,7 @@
 import re
 import os.path
 
-from objs import songs
+from objs import songs, linkmgt
 import appcfg
 
 # SONG RELATED HTML TAGS
@@ -25,6 +25,7 @@ HTML_SONG_ICON           = '@song_status_icon@'
 HTML_LABEL_RANK          = '@song_rank@'
 HTML_LABEL_BARCOUNT      = '@bar_count@'
 HTML_LABEL_CAPOTEXT      = '@capo_text@'
+HTML_LABEL_LINKS         = '@song_links_row@'        
 
 # COMMON HTML TAGS
 HTML_ICON_PRACTICING     = '@icon_practicing@'
@@ -43,6 +44,9 @@ STR_ICON_GUITAR          = 'guitar_icon.png'
 STR_ICON_RANK_X          = 'icon_rank_@.gif'
 
 HTML_LABEL_CATNAME       = '@name@'              # only used in section!
+
+def _ParseLinkRow(page, link):
+    return page
 
 #-------------------------------------------------------------------------------
 def _ParseCommonHtml(page, subtags = {}):
@@ -172,6 +176,18 @@ def ParseSongHtml(page, song, subtags = {}):
     else:
         reptup = ('', '@name@', ', ', '')
 
+    # construct links if present
+    # TODO: The whole link table should be placed conditionally inside the 
+    # subtag, so that if there are no links, the row can be removed.
+    str_links = ''
+    if HTML_LABEL_LINKS in subtags:
+        linkstr = subtags[HTML_LABEL_LINKS]
+        if linkmgt.Get().links.count() > 0:
+            for l in linkmgt.Get().links:
+                str_links += _ParseLinkRow(linkstr[0], l)
+        else:
+            str_links = _ParseLinkRow(linkstr[0], None)
+
     tempstr = ''
     categories_str = reptup[0]
     for c in song.categories:
@@ -200,7 +216,8 @@ def ParseSongHtml(page, song, subtags = {}):
              HTML_SONG_ICON:           str_icon,
              HTML_LABEL_RANK:          str_icon_rank,
              HTML_LABEL_BARCOUNT:      str_bar_count,      
-             HTML_LABEL_CAPOTEXT:      songs.GetCapoString(song._capoOnFret) }
+             HTML_LABEL_CAPOTEXT:      songs.GetCapoString(song._capoOnFret),
+             HTML_LABEL_LINKS:         str_links }
     
     finalstr = ''
     lastpos = 0

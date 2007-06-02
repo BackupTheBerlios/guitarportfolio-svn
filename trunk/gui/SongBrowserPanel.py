@@ -145,7 +145,17 @@ songinfo = """<html><body>
 </table>
 </font>
 <br><br><font size="+2">Attachments</font><br><br>
+<font size="+1">
+<table border=0 bgcolor="#eeeef6">
+  <tr><td><b>Name</b></td><td><b>Type</b></td><td><b>Description</b></td></tr>
+  @song_links_row@
+</table>
+</font>
 </body></html>
+"""
+
+link_row_info = """
+  <tr><td>@link_name@</td><td>@link_type@</td><td>@link_description@</td></tr>\n
 """
 
 class SongBrowserPanel(wx.Panel):
@@ -333,8 +343,11 @@ class SongBrowserPanel(wx.Panel):
         taginfo = { htmlparse.HTML_LABEL_CATEGORIES:  ('', 
                                                        '@name@',
                                                        '<br>', 
-                                                       '' ) }        
-        pg = htmlparse.ParseSongHtml(songinfo, song,  taginfo)
+                                                       '' ), 
+                    htmlparse.HTML_LABEL_LINKS:       (link_row_info) 
+                  }        
+
+        pg = htmlparse.ParseSongHtml(songinfo, song, taginfo)
 
         self.__songBrowser.SetPage(pg)
         self._currPage = song._id

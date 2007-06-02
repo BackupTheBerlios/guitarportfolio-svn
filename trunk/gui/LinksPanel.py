@@ -40,8 +40,6 @@ class LinksPanel(wx.Panel):
         Publisher().subscribe(self.__OnSongSelected, signals.SONG_VIEW_SELECTED)
         Publisher().subscribe(self.__OnSongUpdated, signals.SONG_VIEW_UPDATED)
         Publisher().subscribe(self.__OnConfigUpdated, signals.CFG_UPDATED)
-        Publisher().subscribe(self.__OnLinksPopulated, signals.LINKMGR_POPULATED)
-        Publisher().subscribe(self.__OnLinksClear, signals.LINKMGR_CLEAR)
         
         self.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.__OnExecuteLink, self._links)
 
@@ -54,9 +52,13 @@ class LinksPanel(wx.Panel):
             sync the icon to verify if the path already exists or not """
         
         self._song = message.data
-        
         self.__create.Enable(self._song <> None)        
         self.__SyncWorkDirState()
+        
+        if self._song:
+            self.__PopulateLinks()
+        else:
+            self._links.DeleteAllItems()
         
     # --------------------------------------------------------------------------
     def __OnSongUpdated(self, message):
@@ -93,14 +95,6 @@ class LinksPanel(wx.Panel):
             
         return False
          
-    # --------------------------------------------------------------------------
-    def __OnLinksPopulated(self, message):
-        self.__PopulateLinks()
-        
-    # --------------------------------------------------------------------------
-    def __OnLinksClear(self, message):
-        self._links.DeleteAllItems()
-        
     # --------------------------------------------------------------------------
     def __SyncButtonState(self, valid_path):
         """ Enable / Disable a group of buttons when this is needed """

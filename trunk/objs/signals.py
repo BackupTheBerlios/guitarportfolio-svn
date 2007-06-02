@@ -31,6 +31,7 @@ SONG_VIEW_DELETED      = ('song', 'view', 'deleted')        # song deleted from 
 SONG_VIEW_SELECTED     = ('song', 'view', 'selected')       # song selected 
 SONG_VIEW_TAB_ADDED    = ('song', 'tab', 'added')           # tab added to selected song
 SONG_VIEW_AFTER_SELECT = ('song', 'view', 'after', 'select')
+SONG_VIEW_PRESELECT    = ('song', 'view', 'pre', 'select')
 
 LINKMGR_CLEAR          = ('linkmgr', 'clear')               # links cleared
 LINKMGR_POPULATED      = ('linkmgr', 'links', 'populated')  # populated the links
