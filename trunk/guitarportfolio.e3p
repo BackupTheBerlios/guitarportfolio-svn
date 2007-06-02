@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Project SYSTEM "Project-3.9.dtd">
 <!-- Project file for project guitarportfolio -->
-<!-- Saved: 2007-06-01, 21:40:55 -->
+<!-- Saved: 2007-06-02, 15:00:11 -->
 <!-- Copyright (C) 2007 ,  -->
 <Project version="3.9">
   <ProgLanguage mixed="0">Python</ProgLanguage>
@@ -286,6 +286,10 @@
       <Dir>gui</Dir>
       <Name>htmlparse.py</Name>
     </Source>
+    <Source>
+      <Dir>gui</Dir>
+      <Name>htmlmarkup.py</Name>
+    </Source>
   </Sources>
   <Forms>
   </Forms>
@@ -302,10 +306,10 @@
     <VcsType>None</VcsType>
   </Vcs>
   <FiletypeAssociations>
-    <FiletypeAssociation pattern="*.py" type="SOURCES" />
     <FiletypeAssociation pattern="*.ui.h" type="FORMS" />
-    <FiletypeAssociation pattern="*.idl" type="INTERFACES" />
     <FiletypeAssociation pattern="*.ui" type="FORMS" />
+    <FiletypeAssociation pattern="*.idl" type="INTERFACES" />
+    <FiletypeAssociation pattern="*.py" type="SOURCES" />
     <FiletypeAssociation pattern="*.ptl" type="SOURCES" />
   </FiletypeAssociations>
 </Project>

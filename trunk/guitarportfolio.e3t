@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Tasks SYSTEM "Tasks-3.8.dtd">
 <!-- Tasks file for project guitarportfolio -->
-<!-- Saved: 2007-06-01, 23:38:01 -->
+<!-- Saved: 2007-06-02, 15:00:11 -->
 <Tasks version="3.8">
   <Task priority="1" completed="0" bugfix="0">
     <Description>TODO: Make sure song information can also be substituted in the tab</Description>
@@ -17,17 +17,6 @@
   <Task priority="0" completed="0" bugfix="0">
     <Description>BUG: Categories cannot be added when song is not yet in DB</Description>
     <Created>2007-05-29, 15:34:59</Created>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Artists which are mistyped (lower / upper) should not appear twice</Description>
-    <Created>2007-05-29, 20:08:47</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>NewSongDlg.py</Name>
-      </Filename>
-      <Linenumber>53</Linenumber>
-    </Resource>
   </Task>
   <Task priority="1" completed="0" bugfix="0">
     <Description>TODO: Not certain if this will work, if a query is sent after a remove from</Description>
@@ -74,28 +63,6 @@
     </Resource>
   </Task>
   <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Maybe the selected song needs to be sent as object to modify insead of</Description>
-    <Created>2007-05-30, 14:10:18</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>SongsPanel.py</Name>
-      </Filename>
-      <Linenumber>173</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Maybe the selected song needs to be sent as object to delete insead of</Description>
-    <Created>2007-05-30, 14:10:18</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>SongsPanel.py</Name>
-      </Filename>
-      <Linenumber>181</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
     <Description>TODO: we need to insert some demo code!</Description>
     <Created>2007-05-30, 14:32:49</Created>
     <Resource>
@@ -126,17 +93,6 @@
         <Name>HtmlInfoGen.py</Name>
       </Filename>
       <Linenumber>4</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Small problem, the category relations can be</Description>
-    <Created>2007-05-30, 20:46:26</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>GuitarPortfolioFrame.py</Name>
-      </Filename>
-      <Linenumber>208</Linenumber>
     </Resource>
   </Task>
   <Task priority="1" completed="0" bugfix="0">
@@ -173,8 +129,52 @@
     </Resource>
   </Task>
   <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Maybe the selected song needs to be sent as object to modify insead of</Description>
+    <Created>2007-06-02, 13:04:50</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>SongsPanel.py</Name>
+      </Filename>
+      <Linenumber>178</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Maybe the selected song needs to be sent as object to delete insead of</Description>
+    <Created>2007-06-02, 13:04:50</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>SongsPanel.py</Name>
+      </Filename>
+      <Linenumber>186</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Artists which are mistyped (lower / upper) should not appear twice</Description>
+    <Created>2007-06-02, 14:41:19</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>NewSongDlg.py</Name>
+      </Filename>
+      <Linenumber>56</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Small problem, the category relations can be</Description>
+    <Created>2007-06-02, 14:44:35</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>GuitarPortfolioFrame.py</Name>
+      </Filename>
+      <Linenumber>229</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
     <Description>TODO: Put the text inside the DB!</Description>
-    <Created>2007-06-01, 23:28:52</Created>
+    <Created>2007-06-02, 14:54:05</Created>
     <Resource>
       <Filename>
         <Dir>gui</Dir>
@@ -185,7 +185,7 @@
   </Task>
   <Task priority="1" completed="0" bugfix="0">
     <Description>TODO: Substitute version number / appname in HTML text</Description>
-    <Created>2007-06-01, 23:28:52</Created>
+    <Created>2007-06-02, 14:54:05</Created>
     <Resource>
       <Filename>
         <Dir>gui</Dir>
@@ -196,7 +196,7 @@
   </Task>
   <Task priority="1" completed="0" bugfix="0">
     <Description>TODO: Put inside the DB!</Description>
-    <Created>2007-06-01, 23:28:52</Created>
+    <Created>2007-06-02, 14:54:05</Created>
     <Resource>
       <Filename>
         <Dir>gui</Dir>
@@ -207,57 +207,35 @@
   </Task>
   <Task priority="1" completed="0" bugfix="0">
     <Description>TODO: Sort the items in the choice</Description>
-    <Created>2007-06-01, 23:28:52</Created>
+    <Created>2007-06-02, 14:54:05</Created>
     <Resource>
       <Filename>
         <Dir>gui</Dir>
         <Name>SongBrowserPanel.py</Name>
       </Filename>
-      <Linenumber>191</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: put in seperate song page parser!</Description>
-    <Created>2007-06-01, 23:28:52</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>SongBrowserPanel.py</Name>
-      </Filename>
-      <Linenumber>322</Linenumber>
+      <Linenumber>193</Linenumber>
     </Resource>
   </Task>
   <Task priority="1" completed="0" bugfix="0">
     <Description>TODO:        STR_ICON_TODO,</Description>
-    <Created>2007-06-01, 23:35:52</Created>
+    <Created>2007-06-02, 14:58:09</Created>
     <Resource>
       <Filename>
         <Dir>gui</Dir>
         <Name>htmlparse.py</Name>
       </Filename>
-      <Linenumber>55</Linenumber>
+      <Linenumber>59</Linenumber>
     </Resource>
   </Task>
   <Task priority="1" completed="0" bugfix="0">
     <Description>TODO: Create conditional IF tags</Description>
-    <Created>2007-06-01, 23:35:52</Created>
+    <Created>2007-06-02, 14:58:09</Created>
     <Resource>
       <Filename>
         <Dir>gui</Dir>
         <Name>htmlparse.py</Name>
       </Filename>
-      <Linenumber>91</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Create generic parser that renders song independent stuff</Description>
-    <Created>2007-06-01, 23:35:52</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>htmlparse.py</Name>
-      </Filename>
-      <Linenumber>92</Linenumber>
+      <Linenumber>94</Linenumber>
     </Resource>
   </Task>
 </Tasks>

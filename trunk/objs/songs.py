@@ -47,7 +47,7 @@ def GetCapoString(fret_nr):
         capo number is used """
     if fret_nr > 0:
         return 'Fret %d' % fret_nr
-    return 'None'
+    return 'No Capo'
            
 """
     Song object. 

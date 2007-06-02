@@ -135,6 +135,8 @@ songinfo = """<html><body>
   <tr><td valign="top"><b>Song Date</b></td><td>@ldate@</td></tr>
   <tr><td valign="top"><b>Categories</b></td><td>@categories@</td></tr>
   <tr><td valign="top"><b>Tuning</b></td><td>@tuning_text@ (@tuning_name@)</td></tr>
+  <tr><td valign="top"><b>Capo On</b></td><td>@capo_text@</td></tr>
+  <tr><td valign="top"><b>Number of bars</b></td><td>@bar_count@</td></tr>
   <tr><td valign="top"><b>Progress</b></td><td><b>@cprogress@</b>&nbsp;<img src="@icon_path@@song_status_icon@" />&nbsp;(@percprogress@%)</td></tr>
   <tr><td valign="top"><b>Difficulty</b></td><td><img src="@icon_path@@song_rank@" /></td></tr>
   <tr><td valign="top"><b>Added In Database</b></td><td>@time_added@</td></tr>

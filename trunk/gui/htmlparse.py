@@ -23,6 +23,8 @@ HTML_LABEL_TIMEPOSTPONED = '@time_postponed@'
 HTML_LABEL_ID            = '@song_id@'
 HTML_SONG_ICON           = '@song_status_icon@'
 HTML_LABEL_RANK          = '@song_rank@'
+HTML_LABEL_BARCOUNT      = '@bar_count@'
+HTML_LABEL_CAPOTEXT      = '@capo_text@'
 
 # COMMON HTML TAGS
 HTML_ICON_PRACTICING     = '@icon_practicing@'
@@ -159,6 +161,11 @@ def ParseSongHtml(page, song, subtags = {}):
     # rank icon
     str_icon_rank = STR_ICON_RANK_X.replace('@', repr(song._difficulty))
       
+    if song._barCount > 0:
+        str_bar_count = repr(song._barCount) + ' Bars'
+    else:
+        str_bar_count = 'Not Specified'
+      
     # categories, use repetative mechanism
     if HTML_LABEL_CATEGORIES in subtags:
         reptup = subtags[HTML_LABEL_CATEGORIES]
@@ -191,7 +198,9 @@ def ParseSongHtml(page, song, subtags = {}):
              HTML_LABEL_ID:            repr(song._id),
              HTML_LABEL_CATEGORIES:    categories_str,
              HTML_SONG_ICON:           str_icon,
-             HTML_LABEL_RANK:          str_icon_rank}
+             HTML_LABEL_RANK:          str_icon_rank,
+             HTML_LABEL_BARCOUNT:      str_bar_count,      
+             HTML_LABEL_CAPOTEXT:      songs.GetCapoString(song._capoOnFret) }
     
     finalstr = ''
     lastpos = 0
