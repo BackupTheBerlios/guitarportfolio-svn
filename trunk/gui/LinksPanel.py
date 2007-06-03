@@ -141,26 +141,7 @@ class LinksPanel(wx.Panel):
     # --------------------------------------------------------------------------
     def __OnExecuteLink(self, event):
         l = linkmgt.Get().links.find_id(event.GetData())
-        if l:
-            path = linkmgt.Get().GetLinkPath(l)
-            if path:
-                # TODO: Windows only right now!
-                if "wxMSW" in wx.PlatformInfo:
-                    os.startfile(path)
-                else:
-                    exec_cmd = appcfg.Get().Read(appcfg.CFG_LINUX_EXEC_CMD)
-                    if exec_cmd:
-                        cmd = exec_cmd + ' ' + path.replace(' ', '\\ ')
-                        if os.system(cmd) <> 0:
-                            wx.MessageBox('Could not execute the following command:\n' + \
-                                          '\'%s\'\n\n' % (cmd,) + \
-                                          'Make sure the command is correct and a mime-type is associated with the extension', 
-                                          'Cannot execute', wx.ICON_ERROR | wx.OK)
-                            
-                    else:
-                        wx.MessageBox('Please specify the shell execute command in the options', 
-                                      'Cannot execute', wx.ICON_ERROR | wx.OK)
-
+        linkfile.executelink(l)
     # --------------------------------------------------------------------------
     def __OnRefresh(self, event): 
         """ Refresh button is pressed, check if the directory is valid

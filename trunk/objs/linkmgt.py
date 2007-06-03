@@ -14,8 +14,6 @@ _types_lookup = [ ( 'VIDEO',      [ '.avi',  '.mpg', '.mp4', '.mov', '.vlc' ] ),
                   ( 'TEXT / TAB', [ '.txt' ] ),
                   ( 'TAB FILE',   [ '.tab' ] ) ]
 
-
-
 """
     The link object holding information per file in the work dir, of a reference
     to another file, or an internet URL, etc.

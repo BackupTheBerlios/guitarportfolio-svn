@@ -27,6 +27,13 @@ HTML_LABEL_BARCOUNT      = '@bar_count@'
 HTML_LABEL_CAPOTEXT      = '@capo_text@'
 HTML_LABEL_LINKS         = '@song_links_row@'        
 
+# LINKS HTML TAGS
+HTML_LINK_NAME           = '@link_name@'
+HTML_LINK_TYPE           = '@link_type@'
+HTML_LINK_DESC           = '@link_description@'
+HTML_LINK_PATH           = '@link_path@'
+HTML_LINK_CREATEPATH     = '@create_links_path@'
+
 # COMMON HTML TAGS
 HTML_ICON_PRACTICING     = '@icon_practicing@'
 HTML_ICON_TODO           = '@icon_todo@'
@@ -45,26 +52,11 @@ STR_ICON_RANK_X          = 'icon_rank_@.gif'
 
 HTML_LABEL_CATNAME       = '@name@'              # only used in section!
 
-def _ParseLinkRow(page, link):
-    return page
+# TODO: Make lambda functions of tags
+# TODO: Make as much as possible, static lookup tables (with lamda) and a song property that is set in the moduke
 
 #-------------------------------------------------------------------------------
-def _ParseCommonHtml(page, subtags = {}):
-    """ Parse only common html tags that can be filled in and are not based upon
-        the current song or other information """
-
-    # get images dir
-    str_icon_path = appcfg.imagesdir
-    if str_icon_path[-1:] != os.sep:
-        str_icon_path += os.sep
-
-    tags = { HTML_ICON_PATH:        str_icon_path,
-             HTML_ICON_PRACTICING:  STR_ICON_PRACTICING,
-             HTML_ICON_TODO:        STR_ICON_TODO,
-             HTML_ICON_COMPLETED:   STR_ICON_COMPLETED,
-             HTML_ICON_POSTPONED:   STR_ICON_POSTPONED,
-             HTML_GUITAR_ICON:      STR_ICON_GUITAR }
-    
+def _DoParseHtmlTags(page, tags):
     finalstr = ''
     lastpos = 0
     regexp = re.compile("@[A-Za-z_]+@")
@@ -86,7 +78,47 @@ def _ParseCommonHtml(page, subtags = {}):
             finalstr += page[lastpos:]
             break
     
-    return finalstr
+    return finalstr      
+
+#-------------------------------------------------------------------------------
+def _ParseLinkRow(page, link):
+    if link:
+        str_link_name = link._name
+        str_link_type = link._type
+        str_link_desc = 'None'
+        str_link_path = '<a href="#link:' + repr(link._id) + '">' + \
+                        link._name + "</a>"
+    else:
+        str_link_name = 'No Attachments'
+        str_link_type = 'N/A'
+        str_link_desc = 'None'
+        str_link_path =  str_link_name
+
+    tags = { HTML_LINK_NAME: str_link_name, 
+             HTML_LINK_TYPE: str_link_type, 
+             HTML_LINK_DESC: str_link_desc,
+             HTML_LINK_PATH: str_link_path}
+
+    return _DoParseHtmlTags(page, tags)
+
+#-------------------------------------------------------------------------------
+def _ParseCommonHtml(page, subtags = {}):
+    """ Parse only common html tags that can be filled in and are not based upon
+        the current song or other information """
+
+    # get images dir
+    str_icon_path = appcfg.imagesdir
+    if str_icon_path[-1:] != os.sep:
+        str_icon_path += os.sep
+
+    tags = { HTML_ICON_PATH:        str_icon_path,
+             HTML_ICON_PRACTICING:  STR_ICON_PRACTICING,
+             HTML_ICON_TODO:        STR_ICON_TODO,
+             HTML_ICON_COMPLETED:   STR_ICON_COMPLETED,
+             HTML_ICON_POSTPONED:   STR_ICON_POSTPONED,
+             HTML_GUITAR_ICON:      STR_ICON_GUITAR }
+    
+    return _DoParseHtmlTags(page, tags)
 
 #-------------------------------------------------------------------------------
 def ParseSongHtml(page, song, subtags = {}):
@@ -169,7 +201,14 @@ def ParseSongHtml(page, song, subtags = {}):
         str_bar_count = repr(song._barCount) + ' Bars'
     else:
         str_bar_count = 'Not Specified'
-      
+
+    # if there is a links path, do not display the create html code
+    str_link_create = ''
+    path = appcfg.GetAbsWorkPathFromSong(song)
+    if not os.path.exists(path):
+        if HTML_LINK_CREATEPATH in subtags:
+            str_link_create = _ParseCommonHtml(subtags[HTML_LINK_CREATEPATH])
+        
     # categories, use repetative mechanism
     if HTML_LABEL_CATEGORIES in subtags:
         reptup = subtags[HTML_LABEL_CATEGORIES]
@@ -217,28 +256,9 @@ def ParseSongHtml(page, song, subtags = {}):
              HTML_LABEL_RANK:          str_icon_rank,
              HTML_LABEL_BARCOUNT:      str_bar_count,      
              HTML_LABEL_CAPOTEXT:      songs.GetCapoString(song._capoOnFret),
-             HTML_LABEL_LINKS:         str_links }
+             HTML_LABEL_LINKS:         str_links,
+             HTML_LINK_CREATEPATH:     str_link_create }
     
-    finalstr = ''
-    lastpos = 0
-    regexp = re.compile("@[A-Za-z_]+@")
-    while 1:
-        t = regexp.search(tmp, lastpos)
-        if t:
-            # collect part until matched token
-            finalstr += tmp[lastpos:t.start()]
-            lastpos = t.start() + len(t.group())
-            try:
-                # replace token with lookup tag
-                # this can blow, do not execute code after this
-                finalstr += tags[t.group()] 
-            except KeyError:
-                # we will leave unmatched token in text
-                finalstr += t.group()
-        else:
-            finalstr += tmp[lastpos:]
-            break    
-    # done!
-    return finalstr
+    return _DoParseHtmlTags(tmp, tags)
     
        

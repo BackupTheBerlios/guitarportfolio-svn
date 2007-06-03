@@ -9,9 +9,9 @@ import wx.html as html
 import time
 
 from wx.lib.pubsub import Publisher
-from objs import signals, songs, songfilter
+from objs import signals, songs, songfilter, linkmgt
 from images import icon_home, icon_browse_next, icon_browse_prev
-import HtmlInfoGen, xmlres, appcfg, htmlparse
+import HtmlInfoGen, xmlres, appcfg, htmlparse, linkfile
 
 # TODO: Put the text inside the DB!
 startupinfo = """
@@ -146,6 +146,7 @@ songinfo = """<html><body>
 </font>
 <br><br><font size="+2">Attachments</font><br><br>
 <font size="+1">
+@create_links_path@
 <table border=0 bgcolor="#eeeef6">
   <tr><td><b>Name</b></td><td><b>Type</b></td><td><b>Description</b></td></tr>
   @song_links_row@
@@ -155,7 +156,7 @@ songinfo = """<html><body>
 """
 
 link_row_info = """
-  <tr><td>@link_name@</td><td>@link_type@</td><td>@link_description@</td></tr>\n
+  <tr><td>@link_path@</td><td>@link_type@</td><td>@link_description@</td></tr>\n
 """
 
 class SongBrowserPanel(wx.Panel):
@@ -344,7 +345,9 @@ class SongBrowserPanel(wx.Panel):
                                                        '@name@',
                                                        '<br>', 
                                                        '' ), 
-                    htmlparse.HTML_LABEL_LINKS:       (link_row_info) 
+                    htmlparse.HTML_LABEL_LINKS:       (link_row_info,),
+                    htmlparse.HTML_LINK_CREATEPATH:   ('Attachments directory invalid: <a href = "#cmd:createlinks">' + \
+                                                       'create directory</a><br><br>')
                   }        
 
         pg = htmlparse.ParseSongHtml(songinfo, song, taginfo)
@@ -360,6 +363,12 @@ class SongBrowserPanel(wx.Panel):
             song_nr = tag[6:]
             if song_nr:
                 songfilter.Get().SelectSong(int(song_nr))
+        # check for execution of a link
+        elif tag.startswith('#link:'):
+            link_nr = tag[6:]
+            if link_nr:
+                link = linkmgt.Get().links.find_id(int(link_nr))
+                linkfile.executelink(link)
         
     #---------------------------------------------------------------------------
     def __OnBrowseHome(self, event):
