@@ -1,5 +1,6 @@
 from wx.lib.pubsub import Publisher
 from objs import signals, songs, objlist, linkmgt
+from gui import appcfg
 
 # definitions
 ADD    = 0

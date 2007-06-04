@@ -25,7 +25,7 @@ HTML_SONG_ICON           = '@song_status_icon@'
 HTML_LABEL_RANK          = '@song_rank@'
 HTML_LABEL_BARCOUNT      = '@bar_count@'
 HTML_LABEL_CAPOTEXT      = '@capo_text@'
-HTML_LABEL_LINKS         = '@song_links_row@'        
+HTML_LABEL_LINKS         = '@song_links@'        
 
 # LINKS HTML TAGS
 HTML_LINK_NAME           = '@link_name@'
@@ -49,6 +49,12 @@ STR_ICON_PRACTICING      = 'icon_in_progress.png'
 STR_ICON_COMPLETED       = 'icon_completed.png'
 STR_ICON_GUITAR          = 'guitar_icon.png'
 STR_ICON_RANK_X          = 'icon_rank_@.gif'
+
+# SONG SECTION PARTS
+HTML_SECTION_PRACTICING  = "@songs_practicing@"
+HTML_SECTION_POSTPONED   = "@songs_postponed@"
+HTML_SECTION_TODO        = "@songs_todo@"
+HTML_SECTION_COMPLETED   = "@songs_completed@"
 
 HTML_LABEL_CATNAME       = '@name@'              # only used in section!
 
@@ -172,8 +178,6 @@ def __getSongBarCount(tags, song):
 # ------------------------------------------------------------------------------
 def __getSongLinks(tags, song):
     # construct links if present
-    # TODO: The whole link table should be placed conditionally inside the 
-    # subtag, so that if there are no links, the row can be removed.
     str_links = ''
     
     if tags != None:
@@ -184,11 +188,10 @@ def __getSongLinks(tags, song):
     if HTML_LABEL_LINKS in stags:
         linkstr = tags[HTML_LABEL_LINKS]
         if linkmgt.Get().links.count() > 0:
+            str_links = linkstr[0]
             for l in linkmgt.Get().links:
-                str_links += _DoParseHtmlTags(linkstr[0], link_tags, stags,  l)
-        else:
-            empty_link = None
-            str_links = _DoParseHtmlTags(linkstr[0], link_tags, stags, empty_link)
+                str_links += _DoParseHtmlTags(linkstr[1], link_tags, stags,  l)
+            str_links += linkstr[2]
     return str_links
     
 # ------------------------------------------------------------------------------
@@ -196,9 +199,13 @@ def __getSongCreatePath(tags, song):
     # if there is a links path, do not display the create html code
     str_link_create = ''
     path = appcfg.GetAbsWorkPathFromSong(song)
-    if not os.path.exists(path):
-        if HTML_LINK_CREATEPATH in tags:
-            str_link_create = tags[HTML_LINK_CREATEPATH]
+    if HTML_LINK_CREATEPATH in tags:
+        paths = tags[HTML_LINK_CREATEPATH]
+        if not os.path.exists(path):
+            str_link_create = paths[0]
+        else:
+            str_link_create = paths[1]
+            
     return str_link_create
 
 # ------------------------------------------------------------------------------
@@ -209,7 +216,24 @@ def __getLinkPath(tags, link):
     else:
         str_link_path =  'None'
     return str_link_path
-    
+
+# ------------------------------------------------------------------------------
+def __getSongStatusSection(tags, section_tag):
+    # get proper section to do
+    songrows = ''
+    if section_tag in tags:
+        htmltags = tags[section_tag]
+
+        # we work bottom up, first gather all song rows, and replace this later on
+        songs = htmltags[0]
+        if len(songs) > 0:
+            songrows = htmltags[1]
+            for s in songs:
+                songrows = songrows + ParseSongHtml(htmltags[2], s) + '\n'
+            songrows = songrows + htmltags[3]
+
+    return songrows
+
 common_tags = { HTML_ICON_PATH:            __getIconPath,
                 HTML_ICON_PRACTICING:      lambda tags : STR_ICON_PRACTICING,
                 HTML_ICON_TODO:            lambda tags : STR_ICON_TODO,
@@ -246,6 +270,15 @@ link_tags    = { HTML_LINK_NAME:           lambda tags, link : link._name if lin
                  HTML_LINK_DESC:           lambda tags, link : 'None',
                  HTML_LINK_PATH:           __getLinkPath }
 
+song_status_tags = { HTML_SECTION_PRACTICING: lambda tags : \
+                                              __getSongStatusSection(tags, HTML_SECTION_PRACTICING), 
+                     HTML_SECTION_POSTPONED:  lambda tags : \
+                                              __getSongStatusSection(tags, HTML_SECTION_POSTPONED),
+                     HTML_SECTION_TODO:       lambda tags : \
+                                              __getSongStatusSection(tags, HTML_SECTION_TODO),   
+                     HTML_SECTION_COMPLETED:  lambda tags : \
+                                              __getSongStatusSection(tags, HTML_SECTION_COMPLETED) }
+
 #-------------------------------------------------------------------------------
 def ParseCommonHtml(page):
     """ Convenience function for parsing only the common tags on a HTML template """
@@ -256,12 +289,9 @@ def _DoParseHtmlTags(page, htmltags, subtags = None, *args):
     finalstr = ''
     lastpos = 0
     regexp = re.compile("@[A-Za-z_]+@")
+
+    stags = subtags if subtags != None else {}    
     
-    if subtags != None:
-        stags = subtags
-    else:
-        stags = {}
-        
     while 1:
         t = regexp.search(page, lastpos)
         if t:
@@ -288,16 +318,16 @@ def ParseSongHtml(page, song, subtags = None):
         and possibly bottom up parsing of sub tags when needed.
         subtags are defined based upon their needed structure
     """
-    
-    if subtags != None:
-        stags = subtags
-    else:
-        stags = {}
-    
-    # parse song tags
+
+    # parse song tags then parse common tags
+    stags = subtags if subtags != None else {}
     tmp = _DoParseHtmlTags(page, song_tags, stags, song)
-    
-    # parse common tags
     return _DoParseHtmlTags(tmp, common_tags, stags)
     
-         
+#-------------------------------------------------------------------------------
+def ParseSongsByStatus(page, subtags):
+    """ Parse the main page using the songs tags, every sub section can render the page 
+        individually """
+    # first parse the song list tags then the common ones
+    tmp = _DoParseHtmlTags(page, song_status_tags, subtags)
+    return _DoParseHtmlTags(tmp, common_tags, subtags)    
