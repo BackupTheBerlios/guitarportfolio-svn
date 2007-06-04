@@ -130,19 +130,19 @@ songinfo = """<html><body>
 <br><br>
 <font size="+1">
 <table border=0 bgcolor="#eeeef6">
-  <tr><td valign="top"><b>Song Date</b></td><td>@ldate@</td></tr>
-  <tr><td valign="top"><b>Categories</b></td><td>@categories@</td></tr>
-  <tr><td valign="top"><b>Tuning</b></td><td>@tuning_text@ (@tuning_name@)</td></tr>
-  <tr><td valign="top"><b>Capo On</b></td><td>@capo_text@</td></tr>
-  <tr><td valign="top"><b>Number of bars</b></td><td>@bar_count@</td></tr>
-  <tr><td valign="top"><b>Progress</b></td><td><b>@cprogress@</b>&nbsp;<img src="@icon_path@@song_status_icon@" />&nbsp;(@percprogress@%)</td></tr>
-  <tr><td valign="top"><b>Difficulty</b></td><td><img src="@icon_path@@song_rank@" /></td></tr>
-  <tr><td valign="top"><b>Added In Database</b></td><td>@time_added@</td></tr>
-  <tr><td valign="top"><b>Started Practicing</b></td><td>@time_started@</td></tr>
-  <tr><td valign="top"><b>Completed Practicing</b></td><td>@time_completed@</td></tr>
+  <tr><td valign="top"><b>Song Date:</b></td><td>@ldate@</td></tr>
+  <tr><td valign="top"><b>Categories:</b></td><td>@categories@</td></tr>
+  <tr><td valign="top"><b>Tuning:</b></td><td>@tuning_text@ (@tuning_name@)</td></tr>
+  <tr><td valign="top"><b>Capo On:</b></td><td>@capo_text@</td></tr>
+  <tr><td valign="top"><b>Number Of Bars:</b></td><td>@bar_count@</td></tr>
+  <tr><td valign="top"><b>Progress:</b></td><td><b>@cprogress@</b>&nbsp;<img src="@icon_path@@song_status_icon@" />&nbsp;(@percprogress@%)</td></tr>
+  <tr><td valign="top"><b>Difficulty:</b></td><td><img src="@icon_path@@song_rank@" /></td></tr>
+  <tr><td valign="top"><b>Added In Database:</b></td><td>@time_added@</td></tr>
+  <tr><td valign="top"><b>Started Practicing:</b></td><td>@time_started@</td></tr>
+  <tr><td valign="top"><b>Completed Practicing:</b></td><td>@time_completed@</td></tr>
 </table>
 </font>
-@create_links_path@
+@song_status_change@
 @song_links@
 </body></html>
 """
@@ -150,10 +150,11 @@ songinfo = """<html><body>
 # ==============================================================================
 
 song_links_begin = """
-<br><br><font size="+2">Attachments</font><br><br>
+<br><br><font size="+3"><img src="@icon_path@attach_icon.gif"/>&nbsp;<i>Attachments</i></font><br><br>
 <font size="+1">
 <table border=0 bgcolor="#eeeef6">
-  <tr><td><b>Name</b></td><td><b>Type</b></td><td><b>Description</b></td></tr>
+  <tr bgcolor="#c8c8cf"><td colspan="3" rowspan="1"><img src="@icon_path@folder_go.png"/><b>&nbsp;@song_path@</b></td></tr>
+  <tr><td><b><br>Name</b></td><td><b><br>Type</b></td><td><b><br>Description</b></td></tr>
 """
 song_links_row = """  
   <tr><td>@link_path@</td><td>@link_type@</td><td>@link_description@</td></tr>\n
@@ -178,10 +179,33 @@ categories_end = """
 
 # ==============================================================================
 
+#links_path_not_ok = """
+#<font size="+1"><br><br>Attachments directory invalid: 
+#<a href = "#cmd:createlinks">create directory</a><br></font>
+#"""
 links_path_not_ok = """
-<font size="+1"><br><br>Attachments directory invalid: 
-<a href = "#cmd:createlinks">create directory</a><br></font>
+\n
 """
 links_path_ok = """
 \n
+"""
+
+# ==============================================================================
+change_status_start = """
+<font size="+1"><br><br>Change status to: 
+"""
+change_status_in_progress = """
+<a href="#cmd:status_practicing">In Progress&nbsp;<img src="@icon_path@@icon_practicing@"/></a>
+"""
+change_status_in_postponed = """
+<a href="#cmd:status_postponed">Not Practicing&nbsp;<img src="@icon_path@@icon_postponed@"/></a>
+"""
+change_status_in_completed = """
+<a href="#cmd:status_completed">Completed&nbsp;<img src="@icon_path@@icon_completed@"/></a>
+"""
+change_status_append = """
+, 
+"""
+change_status_end = """
+</font>
 """

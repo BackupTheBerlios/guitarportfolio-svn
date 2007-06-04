@@ -7,6 +7,8 @@ import time
 
 from wx.lib.pubsub import Publisher
 from objs import signals, songs, songfilter, linkmgt
+import db
+import db.songs_peer
 from images import icon_home, icon_browse_next, icon_browse_prev
 import HtmlInfoGen, xmlres, appcfg, htmlparse, linkfile, htmlmarkup
 
@@ -181,7 +183,13 @@ class SongBrowserPanel(wx.Panel):
                                                        htmlmarkup.song_links_row,
                                                        htmlmarkup.song_links_end),
                     htmlparse.HTML_LINK_CREATEPATH:   (htmlmarkup.links_path_not_ok,
-                                                       htmlmarkup.links_path_ok)
+                                                       htmlmarkup.links_path_ok),
+                    htmlparse.HTML_LABEL_STATCHANGE:  ({ songs.SS_STARTED:   htmlmarkup.change_status_in_progress,
+                                                         songs.SS_POSTPONED: htmlmarkup.change_status_in_postponed,
+                                                         songs.SS_COMPLETED: htmlmarkup.change_status_in_completed },
+                                                       htmlmarkup.change_status_start,
+                                                       htmlmarkup.change_status_append,
+                                                       htmlmarkup.change_status_end )
                   }        
 
         pg = htmlparse.ParseSongHtml(htmlmarkup.songinfo, song, taginfo)
@@ -203,6 +211,29 @@ class SongBrowserPanel(wx.Panel):
             if link_nr:
                 link = linkmgt.Get().links.find_id(int(link_nr))
                 linkfile.executelink(link)
+        # check for execution of a command
+        elif tag.startswith('#cmd:'):
+            cmd = tag[5:]
+            commands = { "status_practicing": lambda : self.__DoSetSongStatus(songs.SS_STARTED),
+                         "status_postponed":  lambda : self.__DoSetSongStatus(songs.SS_POSTPONED),
+                         "status_completed":  lambda : self.__DoSetSongStatus(songs.SS_COMPLETED)
+                       }
+            
+            try:
+                exec_func = commands[cmd]
+                exec_func()
+            except KeyError:
+                wx.MessageBox("Command '%s' not implemented!" % (cmd,), 'Error', wx.ICON_ERROR | wx.OK)
+        
+    #---------------------------------------------------------------------------
+    def __DoSetSongStatus(self, status):
+        song = songfilter.Get()._selectedSong
+        if song:
+            if song._status <> status:
+                # update in DB
+                song._status = status
+                sp = db.songs_peer.SongPeer(db.engine.GetDb())
+                sp.Update(song)                
         
     #---------------------------------------------------------------------------
     def __OnBrowseHome(self, event):

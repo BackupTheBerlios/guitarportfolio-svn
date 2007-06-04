@@ -447,7 +447,8 @@ class GuitarPortfolioFrame(wx.Frame):
                     self.__menuSongStatus.Enable(id, song._status == songs.SS_STARTED)
                 elif self.__menu_status_lookup[id] == songs.SS_STARTED:
                     self.__menuSongStatus.Enable(id, song._status == songs.SS_COMPLETED or \
-                                                     song._status == songs.SS_POSTPONED)
+                                                     song._status == songs.SS_POSTPONED or \
+                                                     song._status == songs.SS_NOT_STARTED)
                 elif self.__menu_status_lookup[id] == songs.SS_COMPLETED:
                     self.__menuSongStatus.Enable(id, song._status == songs.SS_STARTED)
         else:

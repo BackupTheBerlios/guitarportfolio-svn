@@ -1,7 +1,7 @@
 import re
 import os.path
 
-from objs import songs, linkmgt
+from objs import songs, linkmgt, songfilter
 import appcfg
  
 # SONG RELATED HTML TAGS
@@ -25,7 +25,9 @@ HTML_SONG_ICON           = '@song_status_icon@'
 HTML_LABEL_RANK          = '@song_rank@'
 HTML_LABEL_BARCOUNT      = '@bar_count@'
 HTML_LABEL_CAPOTEXT      = '@capo_text@'
-HTML_LABEL_LINKS         = '@song_links@'        
+HTML_LABEL_LINKS         = '@song_links@'
+HTML_LABEL_STATCHANGE    = "@song_status_change@"
+HTML_LABEL_SONGPATH      = '@song_path@'
 
 # LINKS HTML TAGS
 HTML_LINK_NAME           = '@link_name@'
@@ -234,12 +236,42 @@ def __getSongStatusSection(tags, section_tag):
 
     return songrows
 
+# ------------------------------------------------------------------------------
+def __getCurrentSongPath(tags):
+    song = songfilter.Get()._selectedSong
+    if song:
+        result = appcfg.GetAbsWorkPathFromSong(song)
+    else:
+        result = ''
+    return result
+
+# ------------------------------------------------------------------------------
+def __getStatusCommands(tags, song):
+    result = ''
+    if HTML_LABEL_STATCHANGE in tags:
+        stats = tags[HTML_LABEL_STATCHANGE]
+        song_stats = stats[0]
+        result += stats[1]
+        if song._status == songs.SS_NOT_STARTED or \
+           song._status == songs.SS_POSTPONED or \
+           song._status == songs.SS_COMPLETED:
+            result += song_stats[songs.SS_STARTED]
+        elif song._status == songs.SS_STARTED:
+            result += song_stats[songs.SS_POSTPONED] + \
+                      stats[2] + \
+                      song_stats[songs.SS_COMPLETED]
+        result += stats[3]
+    
+    return result
+        
 common_tags = { HTML_ICON_PATH:            __getIconPath,
                 HTML_ICON_PRACTICING:      lambda tags : STR_ICON_PRACTICING,
                 HTML_ICON_TODO:            lambda tags : STR_ICON_TODO,
                 HTML_ICON_COMPLETED:       lambda tags : STR_ICON_COMPLETED,
                 HTML_ICON_POSTPONED:       lambda tags : STR_ICON_POSTPONED,
-                HTML_GUITAR_ICON:          lambda tags : STR_ICON_GUITAR }
+                HTML_GUITAR_ICON:          lambda tags : STR_ICON_GUITAR,
+                HTML_LABEL_SONGPATH:       __getCurrentSongPath
+              }
 
 song_tags   =  { HTML_LABEL_SONG:          lambda tags, song : song._title, 
                  HTML_LABEL_ARTIST:        lambda tags, song : song._artist,
@@ -255,6 +287,7 @@ song_tags   =  { HTML_LABEL_SONG:          lambda tags, song : song._title,
                  HTML_LABEL_TIMEADDED:     lambda tags, song : song._timeAdded.strftime('%d %B %Y'),
                  HTML_LABEL_TIMECOMPLETED: __getSongTimeCompleted,
                  HTML_LABEL_TIMEPOSTPONED: __getSongTimePostponed,
+                 HTML_LABEL_STATCHANGE:    __getStatusCommands,
                  HTML_LABEL_ID:            lambda tags, song : repr(song._id),
                  HTML_LABEL_CATEGORIES:    __getSongCategories,
                  HTML_SONG_ICON:           __getSongIcon,
@@ -262,13 +295,13 @@ song_tags   =  { HTML_LABEL_SONG:          lambda tags, song : song._title,
                  HTML_LABEL_BARCOUNT:      __getSongBarCount,      
                  HTML_LABEL_CAPOTEXT:      lambda tags, song : songs.GetCapoString(song._capoOnFret),
                  HTML_LABEL_LINKS:         __getSongLinks,
-                 HTML_LINK_CREATEPATH:     __getSongCreatePath 
+                 HTML_LINK_CREATEPATH:     __getSongCreatePath
                 }
 
 link_tags    = { HTML_LINK_NAME:           lambda tags, link : link._name if link else 'None', 
                  HTML_LINK_TYPE:           lambda tags, link : link._type if link else 'N/A', 
                  HTML_LINK_DESC:           lambda tags, link : 'None',
-                 HTML_LINK_PATH:           __getLinkPath }
+                 HTML_LINK_PATH:           __getLinkPath}
 
 song_status_tags = { HTML_SECTION_PRACTICING: lambda tags : \
                                               __getSongStatusSection(tags, HTML_SECTION_PRACTICING), 
@@ -302,7 +335,8 @@ def _DoParseHtmlTags(page, htmltags, subtags = None, *args):
                 # replace  token with lookup function tag
                 # this can blow, do not execute code after this
                 get_str = htmltags[t.group()]
-                finalstr += get_str(stags, *args) 
+                finalstr += get_str(stags, *args)
+                
             except KeyError:
                 # we will leave unmatched token in text
                 finalstr += t.group()

@@ -61,13 +61,16 @@ class LinkMgr(object):
         if os.path.exists(workdir):
             # gather files, sort and process
             self._workPath = workdir
-            items = dircache.listdir(workdir)
-            for f in items:
-                if os.path.isfile(os.path.join(workdir, f)):
-                    l = Link(f, self._lastLinkID)
-                    self.links.append(l)
-                    self._lastLinkID += 1
-            Publisher().sendMessage(signals.LINKMGR_POPULATED)
+            try:
+                items = dircache.listdir(workdir)
+                for f in items:
+                    if os.path.isfile(os.path.join(workdir, f)):
+                        l = Link(f, self._lastLinkID)
+                        self.links.append(l)
+                        self._lastLinkID += 1
+                Publisher().sendMessage(signals.LINKMGR_POPULATED)
+            except OSError:
+                return False
         else:
             return False
 
