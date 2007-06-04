@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Tasks SYSTEM "Tasks-3.8.dtd">
 <!-- Tasks file for project guitarportfolio -->
-<!-- Saved: 2007-06-03, 14:24:46 -->
+<!-- Saved: 2007-06-04, 10:08:29 -->
 <Tasks version="3.8">
   <Task priority="1" completed="0" bugfix="0">
     <Description>TODO: Make sure song information can also be substituted in the tab</Description>
@@ -162,61 +162,6 @@
     </Resource>
   </Task>
   <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Make lambda functions of tags</Description>
-    <Created>2007-06-03, 14:11:52</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>htmlparse.py</Name>
-      </Filename>
-      <Linenumber>55</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Make as much as possible, static lookup tables (with lamda) and a song property that is set in the moduke</Description>
-    <Created>2007-06-03, 14:11:52</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>htmlparse.py</Name>
-      </Filename>
-      <Linenumber>56</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO:        STR_ICON_TODO,</Description>
-    <Created>2007-06-03, 14:11:52</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>htmlparse.py</Name>
-      </Filename>
-      <Linenumber>116</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Create conditional IF tags</Description>
-    <Created>2007-06-03, 14:11:52</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>htmlparse.py</Name>
-      </Filename>
-      <Linenumber>130</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: The whole link table should be placed conditionally inside the</Description>
-    <Created>2007-06-03, 14:11:52</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>htmlparse.py</Name>
-      </Filename>
-      <Linenumber>219</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
     <Description>TODO: Put the text inside the DB!</Description>
     <Created>2007-06-03, 14:15:07</Created>
     <Resource>
@@ -258,6 +203,61 @@
         <Name>SongBrowserPanel.py</Name>
       </Filename>
       <Linenumber>204</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Make lambda functions of tags</Description>
+    <Created>2007-06-03, 19:34:58</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>htmlparse.py</Name>
+      </Filename>
+      <Linenumber>55</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Make as much as possible, static lookup tables (with lamda) and a song property that is set in the moduke</Description>
+    <Created>2007-06-03, 19:34:58</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>htmlparse.py</Name>
+      </Filename>
+      <Linenumber>56</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO:        STR_ICON_TODO,</Description>
+    <Created>2007-06-03, 19:34:58</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>htmlparse.py</Name>
+      </Filename>
+      <Linenumber>116</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Create conditional IF tags</Description>
+    <Created>2007-06-03, 19:34:58</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>htmlparse.py</Name>
+      </Filename>
+      <Linenumber>130</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: The whole link table should be placed conditionally inside the</Description>
+    <Created>2007-06-03, 19:34:58</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>htmlparse.py</Name>
+      </Filename>
+      <Linenumber>219</Linenumber>
     </Resource>
   </Task>
 </Tasks>

@@ -332,7 +332,7 @@ class SongBrowserPanel(wx.Panel):
             pg = section[1].replace(songrow[0], songrows)
             pg = page.replace(section[0], pg)
             # render some icons
-            pg = htmlparse._ParseCommonHtml(pg)
+            pg = htmlparse.ParseCommonHtml(pg)
             return pg
         else:
             # no songs, we replace the contents with an empty page
