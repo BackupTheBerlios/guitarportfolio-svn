@@ -6,7 +6,7 @@ import wx.xrc as xrc
 import db.engine
 import db.songs_peer
 
-from objs import tuning_mgr
+from objs import tuning_mgr, songs
 
 import appcfg, xmlres
 import CategoriesDlg
@@ -37,6 +37,7 @@ class NewSongDlg(wx.Dialog):
         self.__customTuning = xrc.XRCCTRL(self, "ID_CUSTOM_TEXT")
         self.__workDir = xrc.XRCCTRL(self, "ID_WORK_SUBDIR")
         self.__workDirExample = xrc.XRCCTRL(self, "ID_EXAMPLE_TEXT")
+        self.__songType = xrc.XRCCTRL(self, "ID_SONG_RIFF")
         
         self.__capoSelect.SetSelection(-1)
         self.__difficulty.SetSelection(1)
@@ -92,6 +93,7 @@ class NewSongDlg(wx.Dialog):
         song._yearOnly = self.__yearOnly.GetValue()
         song._capoOnFret = self.__capoSelect.GetSelection()
         song._relativePath = self.__workDir.GetValue()
+        song._songType = songs.ST_TUTORIAL if self.__songType.GetValue() else songs.ST_NORMAL
                         
     # --------------------------------------------------------------------------
     def LoadFromSong(self, song):
@@ -125,6 +127,7 @@ class NewSongDlg(wx.Dialog):
         self.__yearOnly.Enable(not song._dateUnknown)
         self.__capoSelect.SetSelection(song._capoOnFret)
         self.__workDir.SetValue(song._relativePath)
+        self.__songType.SetValue(song._songType == songs.ST_TUTORIAL)
         self.__SyncExamplePath()
 
     # --------------------------------------------------------------------------

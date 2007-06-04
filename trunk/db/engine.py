@@ -47,7 +47,8 @@ create_sql = """
                            time_added TEXT,             /* time when song is added */ 
                            time_started TEXT,           /* time song is started TODO -> STARTED */
                            time_completed TEXT,         /* time when song is set from STARTED -> COMPLETED */
-                           time_postponed TEXT);        /* time when song is set from ?? -> POSTPONED */ 
+                           time_postponed TEXT,         /* time when song is set from ?? -> POSTPONED */ 
+                           song_type INTEGER);          /* song type, snippet or normal */
 
         create table songcats (song_id INTEGER,         /* id of song where category is linked to */
                                category_id INTEGER);    /* id of the category associated with the song */

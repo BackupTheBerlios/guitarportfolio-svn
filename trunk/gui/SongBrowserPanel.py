@@ -109,20 +109,24 @@ class SongBrowserPanel(wx.Panel):
     # --------------------------------------------------------------------------
     def __OnSongSelected(self, message):
         """ Another song is selected, sync our list """
-        # render the song info page
-        self.__RenderSongPage(message.data)
+        if message.data:
+            # render the song info page
+            self.__RenderSongPage(message.data)
         
-        # if we already stand on the song, we do nothing
-        sl = self.__songList
-        idx = sl.GetSelection()
-        if idx <> wx.NOT_FOUND:
-            if message.data == self.__songList.GetClientData(idx):
-                return
-
-        for i in xrange(0, sl.GetCount()):
-            if sl.GetClientData(i) == message.data:
-                sl.SetSelection(i)
-                return
+            # if we already stand on the song, we do nothing
+            sl = self.__songList
+            idx = sl.GetSelection()
+            if idx <> wx.NOT_FOUND:
+                if message.data == self.__songList.GetClientData(idx):
+                    return
+    
+            for i in xrange(0, sl.GetCount()):
+                if sl.GetClientData(i) == message.data:
+                    sl.SetSelection(i)
+                    return
+        else:
+            self.__RenderHomepage()
+            self.__songList.SetSelection(-1)
 
     # --------------------------------------------------------------------------
     def __SongsRestored(self, message):
@@ -135,7 +139,7 @@ class SongBrowserPanel(wx.Panel):
     def __RenderHomepage(self):
         """ We render the homepage containing all song statuses divided in sections """
         if not self.__songList.GetCount():
-            self.__songBrowser.SetPage(startupinfo)
+            self.__songBrowser.SetPage(htmlmarkup.startupinfo)
             return
         
         stats = { songs.SS_STARTED:     [],

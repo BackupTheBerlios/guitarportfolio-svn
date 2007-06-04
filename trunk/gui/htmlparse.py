@@ -28,6 +28,7 @@ HTML_LABEL_CAPOTEXT      = '@capo_text@'
 HTML_LABEL_LINKS         = '@song_links@'
 HTML_LABEL_STATCHANGE    = "@song_status_change@"
 HTML_LABEL_SONGPATH      = '@song_path@'
+HTML_SONG_TYPE_ICON      = '@song_type_icon@'
 
 # LINKS HTML TAGS
 HTML_LINK_NAME           = '@link_name@'
@@ -50,6 +51,7 @@ STR_ICON_POSTPONED       = 'icon_not_practicing.png'
 STR_ICON_PRACTICING      = 'icon_in_progress.png'
 STR_ICON_COMPLETED       = 'icon_completed.png'
 STR_ICON_GUITAR          = 'guitar_icon.png'
+STR_ICON_TUTORIAL        = 'tutorial_icon.png'
 STR_ICON_RANK_X          = 'icon_rank_@.gif'
 
 # SONG SECTION PARTS
@@ -295,7 +297,9 @@ song_tags   =  { HTML_LABEL_SONG:          lambda tags, song : song._title,
                  HTML_LABEL_BARCOUNT:      __getSongBarCount,      
                  HTML_LABEL_CAPOTEXT:      lambda tags, song : songs.GetCapoString(song._capoOnFret),
                  HTML_LABEL_LINKS:         __getSongLinks,
-                 HTML_LINK_CREATEPATH:     __getSongCreatePath
+                 HTML_LINK_CREATEPATH:     __getSongCreatePath,
+                 HTML_SONG_TYPE_ICON:      lambda tags, song : STR_ICON_GUITAR if song._songType == songs.ST_NORMAL \
+                                                                               else STR_ICON_TUTORIAL
                 }
 
 link_tags    = { HTML_LINK_NAME:           lambda tags, link : link._name if link else 'None', 

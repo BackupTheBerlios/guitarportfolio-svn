@@ -124,7 +124,7 @@ songs_postponed_end = """
 
 songinfo = """<html><body>
 <table border=0 cellspacing=0 cellpadding=0>
-<tr><td><img src="@icon_path@@guitar_icon@" /></td><td><i><font size="16" color="#0000ff">@song@</font><br>
+<tr><td><img src="@icon_path@@song_type_icon@" /></td><td>&nbsp;<i><font size="16" color="#0000ff">@song@</font><br>
 <font size="+3" color="#0000ff">By @artist@</font></i></td></tr>
 </table>
 <br><br>

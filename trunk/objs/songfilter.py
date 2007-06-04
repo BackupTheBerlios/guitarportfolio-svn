@@ -25,7 +25,8 @@ class SongFilter:
         self._critCategories = []
         self._selectedSong = None    
         self._critCategoryAND = False 
-        self._critDifficultyLO = False    
+        self._critDifficultyLO = False
+        self._showSongTutorials = False   
 
     # TODO! Subscribe to signals.SONG_DB_DELETED, SONG_DB_UPDATED, SONG_DB_ADDED
     # if a song is deleted from the DB, make sure it is removed from the criteria list as well
@@ -122,6 +123,11 @@ class SongFilter:
         self.__ResyncAllSongs()
 
     # --------------------------------------------------------------------------
+    def OnlySnowTutorials(self, value):
+        self._showSongTutorials = value
+        self.__ResyncAllSongs()
+        
+    # --------------------------------------------------------------------------
     def GetUsedCategories(self):
         """ Returns a list of categories that are used by 
             the songs. This is easy for a search filter 
@@ -181,6 +187,11 @@ class SongFilter:
                     if c not in song.categories:
                         visible = False
                         break                
+        
+        # test song type
+        if visible:
+            if self._showSongTutorials and song._songType == songs.ST_NORMAL:
+                visible = False
         
         # always if not visible, but present, remove
         if not visible and present:

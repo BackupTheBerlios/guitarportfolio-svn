@@ -19,6 +19,9 @@ SS_POSTPONED   = 1
 SS_COMPLETED   = 2
 SS_NOT_STARTED = 3
 
+ST_NORMAL      = 0  # normal song
+ST_TUTORIAL    = 1  # riff / snippet
+
 # song difficulty
 SD_EASY         = 0
 SD_NORMAL       = 1
@@ -77,8 +80,8 @@ class Song(db.base.Object):
         self._timeAdded = datetime.datetime.now()
         self._timeCompleted = datetime.datetime.now()
         self._timePostponed = datetime.datetime.now()
+        self._songType = ST_NORMAL
         
-
     #--------------------------------------------------------------------------
     def GetProgressPerc(self):
         assert self._percAccuracy <= 10 and self._percAccuracy >= 0

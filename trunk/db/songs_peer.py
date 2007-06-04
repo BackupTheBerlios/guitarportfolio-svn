@@ -140,7 +140,7 @@ class SongPeer(db.base.Peer):
                'tuning_alt, date_unknown, year_only, completed_perc, ' + \
                'accuracy_perc, capo_number, relpath, tuning_id, ' + \
                'time_added, time_started, time_completed, ' + \
-               'time_postponed from song where id = ?' 
+               'time_postponed, song_type from song where id = ?' 
         r = self._ExecuteRestore(obj, sql)
       
         tuning_id = -1
@@ -176,6 +176,7 @@ class SongPeer(db.base.Peer):
                 obj._timeCompleted = datetime.datetime.strptime(r[18], '%Y %m %d')
             if r[19] <> None:
                 obj._timePostponed = datetime.datetime.strptime(r[19], '%Y %m %d')
+            obj._songType = songs.ST_NORMAL if r[20] == 0 else songs.ST_TUTORIAL
         else:
             self._RestoreError('Cannot restore song with id %d' % (obj._id,))
 
@@ -222,8 +223,8 @@ class SongPeer(db.base.Peer):
             sql = 'insert into song (name, artist, songdate, barcount, difficulty, ' + \
                    'status, lyrics, information, tuning_alt, date_unknown, year_only, ' + \
                    'tuning_id, completed_perc, accuracy_perc, capo_number, relpath, ' + \
-                   'time_added, time_started, time_completed, time_postponed) ' + \
-                   'values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
+                   'time_added, time_started, time_completed, time_postponed, song_type) ' + \
+                   'values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
             sig = signals.SONG_DB_INSERTED
 
         else:
@@ -233,7 +234,7 @@ class SongPeer(db.base.Peer):
                   'year_only = ?, tuning_id = ?, completed_perc = ?, ' + \
                   'accuracy_perc = ?, capo_number = ?, relpath = ?, ' + \
                   'time_added = ?, time_started = ?, time_completed = ?, ' + \
-                  'time_postponed = ? where id = ?'
+                  'time_postponed = ?, song_type = ? where id = ?'
             sig = signals.SONG_DB_UPDATED
 
         data = (obj._title, 
@@ -255,7 +256,8 @@ class SongPeer(db.base.Peer):
                 obj._timeAdded.strftime('%Y %m %d'),
                 obj._timeStarted.strftime('%Y %m %d'),
                 obj._timeCompleted.strftime('%Y %m %d'),
-                obj._timePostponed.strftime('%Y %m %d')) 
+                obj._timePostponed.strftime('%Y %m %d'),
+                0 if obj._songType == songs.ST_NORMAL else 1) 
         self._ExecuteUpdate(obj, sql, data)
 
         if all:

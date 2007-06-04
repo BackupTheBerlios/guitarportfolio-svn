@@ -20,13 +20,15 @@ class SongFilterPanel(wx.Panel):
         self.__strictDifficulty = xrc.XRCCTRL( self, "ID_SHOW_LOWER_DIFFICULTY" )
         self.__cats = xrc.XRCCTRL( self, "ID_CATEGORIES" )
         self.__categoriesAndFilter = xrc.XRCCTRL(self, "ID_CAT_ANDFILTER")
+        self.__onlyShowTutorials = xrc.XRCCTRL(self, "ID_SHOW_TUTORIALS")
 
         # bind events
         self.Bind(wx.EVT_CHOICE, self.__OnFilterSongs, self.__progressFilter)
         self.Bind(wx.EVT_CHOICE, self.__OnSelectDifficulty, self.__difficulty)
         self.Bind(wx.EVT_CHECKBOX, self.__OnShowMatchingLowerDifficulty, self.__strictDifficulty)
         self.Bind(wx.EVT_CHECKBOX, self.__OnShowCategoriesAND, self.__categoriesAndFilter)
-        self.Bind(wx.EVT_CHECKLISTBOX, self.__OnItemChecked, self.__cats)        
+        self.Bind(wx.EVT_CHECKLISTBOX, self.__OnItemChecked, self.__cats)       
+        self.Bind(wx.EVT_CHECKBOX, self.__OnShowTutorialsOnly, self.__onlyShowTutorials) 
         
         # bind signals
         Publisher().subscribe(self.__OnChangeCats, signals.SONG_DB_CAT_UPDATED)
@@ -102,6 +104,12 @@ class SongFilterPanel(wx.Panel):
         appcfg.Get().WriteInt(appcfg.CFG_CATEGORIESAND, 1 if chk else 0)
 
     #---------------------------------------------------------------------------
+    def __OnShowTutorialsOnly(self, event):
+        chk = self.__onlyShowTutorials.GetValue()
+        songfilter.Get().OnlySnowTutorials(chk)
+        appcfg.Get().WriteInt(appcfg.CFG_SHOWONLYTUTS, 1 if chk else 0)
+        
+    #---------------------------------------------------------------------------
     def __OnAppReady(self, message):
         """ App is ready with data, we can initialize our last viewstate """
         cfg = appcfg.Get()
@@ -122,6 +130,9 @@ class SongFilterPanel(wx.Panel):
             # lower difficulty
             self.__strictDifficulty.SetValue(True if cfg.ReadInt(appcfg.CFG_LOWERDIFFICULTY, 0) <> 0 else False)
             self.__OnShowMatchingLowerDifficulty(event = None)
+            # only show tutorials
+            self.__onlyShowTutorials.SetValue(True if cfg.ReadInt(appcfg.CFG_SHOWONLYTUTS, 0) <> 0 else False)
+            self.__OnShowTutorialsOnly(event = None)
         
         self.__PopulateCategories()
 
