@@ -9,17 +9,10 @@ import time
 
 from wx.lib.pubsub import Publisher
 from objs import signals, songs, songfilter
-import HtmlInfoGen
+import htmlparse
 
-startupinfo = """
-<html><body>
-No song information available
-</body></html>
-"""
-
-songinfo = """<html><body>
-@songinfo@
-</body></html>
+songinfo = """
+No song info available
 """
 
 class CurrSongInfoPanel(wx.Panel):
@@ -32,7 +25,7 @@ class CurrSongInfoPanel(wx.Panel):
         if "gtk2" in wx.PlatformInfo:
             self.__songInfo.SetStandardFonts()
             
-        self.__songInfo.SetPage(startupinfo)
+        self.__songInfo.SetPage(htmlparse.WikiParse(songinfo))
                 
         Publisher().subscribe(self.__OnSelectSong, signals.SONG_VIEW_SELECTED)
         Publisher().subscribe(self.__OnSelectSong, signals.SONG_VIEW_UPDATED)
@@ -42,10 +35,7 @@ class CurrSongInfoPanel(wx.Panel):
         """ Select signal when a new song is selected by SongList, we react on it """
         # replace all items and display text
         if message.data == None:
-            self.__songInfo.SetPage(startupinfo)
+            self.__songInfo.SetPage(htmlparse.WikiParse(startupinfo))
         else:
             if songfilter.Get()._selectedSong == message.data:                   
-                self.__songInfo.SetPage(HtmlInfoGen.GenerateHtmlFromSong(template = songinfo, 
-                                                                         song = message.data))
-
-
+                self.__songInfo.SetPage(htmlparse.WikiParse(message.data._information))

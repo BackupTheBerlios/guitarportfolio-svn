@@ -150,10 +150,10 @@ songinfo = """<html><body>
 # ==============================================================================
 
 song_links_begin = """
-<br><br><font size="+3"><img src="@icon_path@attach_icon.gif"/>&nbsp;<i>Attachments</i></font><br><br>
+<br><br><font size="+3"><img src="@icon_path@attach_icon.png"/><i>Attachments</i></font><br><br>
 <font size="+1">
-<table border=0 bgcolor="#eeeef6">
-  <tr bgcolor="#c8c8cf"><td colspan="3" rowspan="1"><img src="@icon_path@folder_go.png"/><b>&nbsp;@song_path@</b></td></tr>
+<table border=0 bgcolor="#DDDDED">
+  <tr bgcolor="#eeeef6"><td colspan="3" rowspan="1"><img src="@icon_path@folder_go.png"/><b>&nbsp;@song_path@</b></td></tr>
   <tr><td><b><br>Name</b></td><td><b><br>Type</b></td><td><b><br>Description</b></td></tr>
 """
 song_links_row = """  

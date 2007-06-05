@@ -56,15 +56,13 @@ create_sql = """
         create table category (id INTEGER PRIMARY KEY, 
                                name TEXT);               /* name of category */
 
-
-
         create table logentry (id INTEGER PRIMARY KEY,
-                               song_id INTEGER,         /* id of song where log item belongs to */
+                               song_id INTEGER,         /* ID of song */
                                log_date TEXT,           /* date of log entry */
                                log_text TEXT,           /* entered text (if any) */ 
                                log_type INTEGER,        /* type of log (added study time, change accuracy, percentage, etc) */
                                log_value INTEGER);      /* value that is changed */  
-                                        
+                                                                       
         create table tuning (id INTEGER PRIMARY KEY,
                              tuning_name TEXT,          /* name of tuning */
                              tuning_text TEXT);         /* tuning text */

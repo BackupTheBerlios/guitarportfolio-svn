@@ -8,7 +8,7 @@ import wx.xrc as xrc
 
 from objs import signals, songs
 import HtmlInfoGen
-import xmlres
+import xmlres, htmlparse
 
 # begin wxGlade: dependencies
 # end wxGlade
@@ -39,9 +39,9 @@ class LyricInfoPanel(wx.Panel):
     def __OnSelectSong(self, message):
         """ Select signal when a new song is selected by SongList, we react on it """
         # replace all items and display text
-        if message.data:
-            self.__lyricsInfo.SetPage(HtmlInfoGen.GenerateHtmlFromSong(template = lyricinfo, 
-                                      song = message.data))
+        song = message.data
+        if song:
+            self.__lyricsInfo.SetPage(htmlparse.WikiParse(song._lyrics))
         else:                   
             self.__lyricsInfo.SetPage('')
 

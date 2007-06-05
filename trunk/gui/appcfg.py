@@ -23,6 +23,17 @@ CFG_LAYOUT_LAST_H   = 'window/last_height'          # last height when closing w
 CFG_LAYOUT_LAST_W   = 'window/last_width'           # last width when closing window
 CFG_LINUX_EXEC_CMD  = 'os/linux/shellexec'          # exec command 
 
+# TODO: Needs better description!
+description = "Guitar Portfolio is an application that manages the songs you are playing on the guitar. " + \
+              "It will help you to keep track of the progress, times practiced and attachments belonging to the song.\n" 
+
+site_url = ("http://guitarportfolio.berlios.de/", "Guitar Portfolio Project Page")
+
+licensetext = """
+Based upon GNU GENERAL PUBLIC LICENSE, Version 2, June 1991
+For full text, please visit http://www.gnu.org/licenses/gpl.txt
+"""
+
 # defaults
 DEF_RELPATH         = '{artist}\{title}'            # default path mask to take when no relpath exists
 

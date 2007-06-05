@@ -3,6 +3,7 @@ import os.path
 import wx
 import wx.aui
 from wx.lib.pubsub import Publisher
+from wx.lib.wordwrap import wordwrap
 
 import db
 import db.engine
@@ -11,7 +12,7 @@ import db.songs_peer
 from objs import signals, songs, category_mgr, tuning_mgr, songfilter, linkmgt
 from gui import SongsPanel, EditorNotebook, CurrInfoNotebook, NewSongDlg, \
                 CategoriesDlg, SongFilterPanel, OptionsDlg, WelcomeDlg, xmlres
-from images import icon_main_window
+from images import icon_main_window, guitarportfolio_icon
 
 import appcfg
 
@@ -31,7 +32,7 @@ class GuitarPortfolioFrame(wx.Frame):
         self.__menuOptions = wx.MenuItem(mnu, wx.NewId(), "&Preferences ...", "", wx.ITEM_NORMAL)
         mnu.AppendItem(self.__menuOptions)
         mnu.AppendSeparator()
-        self.__menuExit = wx.MenuItem(mnu, wx.NewId(), "E&xit\tCtrl+X", "", wx.ITEM_NORMAL)
+        self.__menuExit = wx.MenuItem(mnu, wx.NewId(), "E&xit", "", wx.ITEM_NORMAL)
         mnu.AppendItem(self.__menuExit)
         self.__menuBar.Append(mnu, "&File")
 
@@ -45,7 +46,6 @@ class GuitarPortfolioFrame(wx.Frame):
         mnu.AppendItem(self.__menuDeleteSong)
         
         # status submenu
-        
         self.__menu_status_lookup = {}
         items = [ ("&In progress", songs.SS_STARTED), 
                   ("&Not Practicing", songs.SS_POSTPONED),
@@ -69,7 +69,7 @@ class GuitarPortfolioFrame(wx.Frame):
         mnu.AppendItem(self.__menuEditCategories)
         self.__menuBar.Append(mnu, "&Song")
         
-        # window layout
+        # window layout menu
         mnu = wx.Menu()
         self.__menuRestoreLayout = wx.MenuItem(mnu, wx.NewId(), "&Restore Default Layout", "", wx.ITEM_NORMAL)
         mnu.AppendItem(self.__menuRestoreLayout)
@@ -87,6 +87,15 @@ class GuitarPortfolioFrame(wx.Frame):
         mnu.AppendItem(self.__menuEditorMode)
         self.__menuBar.Append(mnu, "&Windows")
 
+        # help menu
+        mnu = wx.Menu()
+        self.__menuHelpVisitSite = wx.MenuItem(mnu, wx.NewId(), "&Visit Site .. ", "", wx.ITEM_NORMAL)
+        mnu.AppendItem(self.__menuHelpVisitSite)
+        mnu.AppendSeparator()
+        self.__menuHelpAbout = wx.MenuItem(mnu, wx.NewId(), "&About ...", "", wx.ITEM_NORMAL)
+        mnu.AppendItem(self.__menuHelpAbout)
+        self.__menuBar.Append(mnu, "&Help")
+        
         # set all properties
         self.SetTitle("Guitar Portfolio")
         self.Layout()
@@ -104,6 +113,8 @@ class GuitarPortfolioFrame(wx.Frame):
         self.Bind(wx.EVT_MENU, self.__OnToggleFilterWindow, self.__menuToggelSongFilter)
         self.Bind(wx.EVT_MENU, self.__OnBrowserMode, self.__menuBrowserMode)
         self.Bind(wx.EVT_MENU, self.__OnEditorMode, self.__menuEditorMode)
+        self.Bind(wx.EVT_MENU, self.__OnVisitSite, self.__menuHelpVisitSite)
+        self.Bind(wx.EVT_MENU, self.__OnAbout, self.__menuHelpAbout)
         # end wxGlade
 
         self.SetIcon(wx.IconFromBitmap(icon_main_window.getBitmap()))
@@ -431,6 +442,25 @@ class GuitarPortfolioFrame(wx.Frame):
         self.__aui.GetPane("songspanel").Show(True)
         self.__aui.GetPane("filterpanel").Show(True)
         self.__aui.Update()
+
+    #---------------------------------------------------------------------------
+    def __OnAbout(self, event):
+        """ Show the about dialog with information about the application """
+        info = wx.AboutDialogInfo()
+        info.Icon = wx.IconFromBitmap(guitarportfolio_icon.getBitmap())
+        info.Name = appcfg.APP_TITLE
+        info.Version = appcfg.APP_VERSION
+        info.Copyright = "(C) 2007 Jorgen Bodde, ImpossibleSoft"
+        info.Description = wordwrap(appcfg.description, 350, wx.ClientDC(self))
+        info.WebSite = (appcfg.site_url[0], appcfg.site_url[1])
+        info.Developers = [ "Jorgen Bodde (jorgb@xs4all.nl)" ]
+        info.License = wordwrap(appcfg.licensetext, 500, wx.ClientDC(self))
+        wx.AboutBox(info)
+    
+
+    #---------------------------------------------------------------------------
+    def __OnVisitSite(self, event):
+        pass
 
     #---------------------------------------------------------------------------
     def __SyncMenuItems(self):
