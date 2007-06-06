@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Tasks SYSTEM "Tasks-3.8.dtd">
 <!-- Tasks file for project guitarportfolio -->
-<!-- Saved: 2007-06-04, 20:57:45 -->
+<!-- Saved: 2007-06-05, 22:39:06 -->
 <Tasks version="3.8">
   <Task priority="1" completed="0" bugfix="0">
     <Description>TODO: Make sure song information can also be substituted in the tab</Description>
@@ -96,39 +96,6 @@
     </Resource>
   </Task>
   <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Small problem, the category relations can be</Description>
-    <Created>2007-06-04, 20:06:31</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>GuitarPortfolioFrame.py</Name>
-      </Filename>
-      <Linenumber>241</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO:            lambda tags : STR_ICON_TODO,</Description>
-    <Created>2007-06-04, 20:13:41</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>htmlparse.py</Name>
-      </Filename>
-      <Linenumber>271</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO:       lambda tags : \</Description>
-    <Created>2007-06-04, 20:13:41</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>htmlparse.py</Name>
-      </Filename>
-      <Linenumber>314</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
     <Description>TODO: Put the text inside the DB!</Description>
     <Created>2007-06-04, 20:16:27</Created>
     <Resource>
@@ -159,28 +126,6 @@
         <Name>htmlmarkup.py</Name>
       </Filename>
       <Linenumber>4</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Maybe the selected song needs to be sent as object to modify insead of</Description>
-    <Created>2007-06-04, 20:35:39</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>SongsPanel.py</Name>
-      </Filename>
-      <Linenumber>178</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Maybe the selected song needs to be sent as object to delete insead of</Description>
-    <Created>2007-06-04, 20:35:39</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>SongsPanel.py</Name>
-      </Filename>
-      <Linenumber>186</Linenumber>
     </Resource>
   </Task>
   <Task priority="1" completed="0" bugfix="0">
@@ -236,6 +181,72 @@
         <Name>songfilter.py</Name>
       </Filename>
       <Linenumber>223</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Maybe the selected song needs to be sent as object to modify insead of</Description>
+    <Created>2007-06-05, 21:22:07</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>SongsPanel.py</Name>
+      </Filename>
+      <Linenumber>178</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Maybe the selected song needs to be sent as object to delete insead of</Description>
+    <Created>2007-06-05, 21:22:07</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>SongsPanel.py</Name>
+      </Filename>
+      <Linenumber>186</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Small problem, the category relations can be</Description>
+    <Created>2007-06-05, 21:45:12</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>GuitarPortfolioFrame.py</Name>
+      </Filename>
+      <Linenumber>252</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Needs better description!</Description>
+    <Created>2007-06-05, 22:09:18</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>appcfg.py</Name>
+      </Filename>
+      <Linenumber>26</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO:            lambda tags : STR_ICON_TODO,</Description>
+    <Created>2007-06-05, 22:22:36</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>htmlparse.py</Name>
+      </Filename>
+      <Linenumber>271</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO:       lambda tags : \</Description>
+    <Created>2007-06-05, 22:22:36</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>htmlparse.py</Name>
+      </Filename>
+      <Linenumber>314</Linenumber>
     </Resource>
   </Task>
 </Tasks>

@@ -32,6 +32,14 @@ class GuitarTabEditPanel(wx.Panel):
         Publisher().subscribe(self.__OnSongSelected, signals.APP_CLEAR)
         Publisher().subscribe(self.__OnTabAdded, signals.TAB_DB_INSERTED)
 
+        # change font to modern look on Windows
+        if 'wxMSW' in wx.PlatformInfo:
+            fnt = self.__tabText.GetFont()
+            fnt.Family = wx.FONTFAMILY_MODERN
+            fnt.FaceName = "Courier New"
+            self.__tabText.SetFont(fnt)
+        # TODO: we might need to force this on Linux as well
+        
     #---------------------------------------------------------------------------
     def __OnSongSelected(self, message):
         """ We received an select signal for the song """

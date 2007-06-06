@@ -8,15 +8,10 @@ import wx.xrc as xrc
 
 from objs import signals, songs
 import HtmlInfoGen
-import xmlres, htmlparse
+import xmlres, wikiparser
 
 # begin wxGlade: dependencies
 # end wxGlade
-
-lyricinfo = """<html><body>
-<pre>@lyrics@</pre>
-</body></html>
-"""
 
 class LyricInfoPanel(wx.Panel):
     def __init__(self, parent, id = -1):
@@ -40,8 +35,9 @@ class LyricInfoPanel(wx.Panel):
         """ Select signal when a new song is selected by SongList, we react on it """
         # replace all items and display text
         song = message.data
+        parser = wikiparser.WikiParser()
         if song:
-            self.__lyricsInfo.SetPage(htmlparse.WikiParse(song._lyrics))
+            self.__lyricsInfo.SetPage(parser.Parse(song._lyrics))
         else:                   
             self.__lyricsInfo.SetPage('')
 

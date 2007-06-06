@@ -7,7 +7,7 @@ from wx.lib.pubsub import Publisher
 
 import wx.xrc as xrc
 from objs import signals, songs
-import HtmlInfoGen, xmlres
+import xmlres
 
 # begin wxGlade: dependencies
 # end wxGlade
@@ -44,8 +44,7 @@ class GuitarTabPanel(wx.Panel):
         if tab == None:
             self.__tabWindow.SetPage('No Tabs')
         else:
-            page = tabinfo.replace('@currenttab@', tab._text)
-            self.__tabWindow.SetPage(page)
+            self.__tabWindow.SetPage(tabinfo.replace('@currenttab@', tab._text))
 
     # --------------------------------------------------------------------------
     def __OnSongSelected(self, message):

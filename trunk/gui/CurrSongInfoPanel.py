@@ -9,7 +9,7 @@ import time
 
 from wx.lib.pubsub import Publisher
 from objs import signals, songs, songfilter
-import htmlparse
+import wikiparser
 
 songinfo = """
 No song info available
@@ -25,7 +25,7 @@ class CurrSongInfoPanel(wx.Panel):
         if "gtk2" in wx.PlatformInfo:
             self.__songInfo.SetStandardFonts()
             
-        self.__songInfo.SetPage(htmlparse.WikiParse(songinfo))
+        self.__songInfo.SetPage(wikiparser.WikiParser().Parse(songinfo))
                 
         Publisher().subscribe(self.__OnSelectSong, signals.SONG_VIEW_SELECTED)
         Publisher().subscribe(self.__OnSelectSong, signals.SONG_VIEW_UPDATED)
@@ -34,8 +34,9 @@ class CurrSongInfoPanel(wx.Panel):
     def __OnSelectSong(self, message):
         """ Select signal when a new song is selected by SongList, we react on it """
         # replace all items and display text
+        parser = wikiparser.WikiParser()
         if message.data == None:
-            self.__songInfo.SetPage(htmlparse.WikiParse(startupinfo))
+            self.__songInfo.SetPage(parser.Parse(songinfo))
         else:
             if songfilter.Get()._selectedSong == message.data:                   
-                self.__songInfo.SetPage(htmlparse.WikiParse(message.data._information))
+                self.__songInfo.SetPage(parser.Parse(message.data._information))
