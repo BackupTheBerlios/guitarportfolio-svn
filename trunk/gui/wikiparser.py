@@ -3,6 +3,113 @@ import os.path
 import appcfg
 from objs import songfilter
 
+def maketable(page):
+    """ Create table from || ... || syntax which is very convenient
+        in simple markups to create a HTML table without much fuss 
+        
+        Example:
+        
+        || this is a || table ||
+        || neat      || huh   ||
+        
+        Becomes:
+        
+        <table>
+          <tr>
+            <td>this is a</td>
+            <td>table</td>
+          </tr>
+          <tr>
+            <td>neat</td>
+            <td>huh</td>
+          </tr>
+        </table>
+    """
+         
+    table_rex = re.compile("((\|\|.+\|\|)+(.+\|\|){0,1}[\n]{1})+")
+
+    finalstr = ''
+    lastpos = 0
+    while 1:
+        t = table_rex.search(page, lastpos)
+        if t:
+            start, end = t.span()
+            # get part before match
+            finalstr += page[lastpos:start]
+            lastpos = end
+            # process the table
+            finalstr += __convertTableToHTML(t.group())                
+        else:
+            finalstr += page[lastpos:]
+            break
+    
+    return finalstr      
+    
+# ------------------------------------------------------------------------------
+def __convertTableToHTML(raw_table):
+    """ Processes the raw contents of the table to HTML """
+    
+    tr_data = []
+    
+    # first get all rows in a seperate list (\n delimited)
+    rows = raw_table.splitlines()
+    
+    # break the lines in TD and TR sections
+    for raw_row in rows:
+        td_data = []
+        row_data = raw_row.split("||")
+        for column in row_data:
+            if column:
+                formatting, text = __extractSpecialTags(column)
+                td_data.append((formatting, text))
+        if len(td_data) > 0:
+            tr_data.append(td_data)
+    
+    # now we have a tr_data list containing td_row lists
+    # we can start building up the table now
+    table_data = '<table>\n'
+    for trs in tr_data:
+        table_data += '<tr>\n'
+        for formatting, text in trs:
+            table_data += '<td' + formatting + '>' + text + '</td>\n'   
+            print table_data
+        table_data += '</tr>\n'
+    table_data += '</table>\n'
+    
+    return table_data 
+
+#-------------------------------------------------------------------------------
+def __extractSpecialTags(column):
+    """ Extract the special chars right at the beginning, like ||^ hello || for
+        valign to top, or ||{2} test || colspan="2", etc """
+    special_tags = { '^': ' VALIGN="TOP"',
+                     '<': ' ALIGN="LEFT"',
+                     '>': ' ALIGN="RIGHT"',
+                     '-': ' ALIGN="CENTER"',
+                     '_': ' VALIGN="BOTTOM"' }
+    
+    text = column
+    formatting = ''
+    while len(text) > 0:
+        if text[0] in special_tags:
+            formatting += special_tags[text[0]]
+            text = text[1:]
+        elif text[0] == '{':                      # colspan="x"
+            pos = text.find('}', 1)
+            if pos > 0:
+                num = text[1:pos]
+                if not num:
+                    break
+                try:
+                    colspan = int(num)
+                except ValueError:
+                    break
+                formatting += ' colspan="' + num + '"'
+                text = text[pos + 1:]
+        else:
+            break
+    return formatting, text.strip()
+
 #-------------------------------------------------------------------------------
 def __doImgSrcPictureTag(instr):
     """ Tries a number of paths to return the img source, starting from the song mask, 
@@ -49,11 +156,11 @@ def __doPreTag(winst):
 regexp_convert_tab = [ 
     (r"'''.*?'''",         lambda winst : '<i>' + winst._currtok[3: -3] + '</i>'),
     (r"\*.*?\*",           lambda winst : '<b>' + winst._currtok[1:-1] + '</b>'),
-    (r"={5}.+?={5}",       lambda winst : '<h5>' + winst._currtok[5:-5] + '</h5>'),
-    (r"={4}.+?={4}",       lambda winst : '<h4>' + winst._currtok[4:-4] + '</h4>'),
-    (r"={3}.+?={3}",       lambda winst : '<h3>' + winst._currtok[3:-3] + '</h3>'),
-    (r"={2}.+?={2}",       lambda winst : '<h2>' + winst._currtok[2:-2] + '</h2>'),
-    (r"={1}.+?={1}",       lambda winst : '<h1>' + winst._currtok[1:-1] + '</h1>'),
+    (r"(={5}.+?={5})\n",     lambda winst : '<h5>' + winst._currtok[5:-6] + '</h5>'),
+    (r"(={4}.+?={4})\n",     lambda winst : '<h4>' + winst._currtok[4:-5] + '</h4>'),
+    (r"(={3}.+?={3})\n",     lambda winst : '<h3>' + winst._currtok[3:-4] + '</h3>'),
+    (r"(={2}.+?={2})\n",     lambda winst : '<h2>' + winst._currtok[2:-3] + '</h2>'),
+    (r"(={1}.+?={1})\n",     lambda winst : '<h1>' + winst._currtok[1:-2] + '</h1>'),
     (r"image\(.+?\)",      lambda winst : __doImgSrcPictureTag(winst._currtok)),
     (r"(\{\{\{)|(\}\}\})", __doPreTag )
     ]
@@ -73,8 +180,10 @@ class WikiParser(object):
         """
         self._tag_stack = []
     
-        # convert all wiki items we can
-        workstring = page
+        # first convert all the tables
+        workstring = maketable(page)
+        
+        # do simple tags now
         for regstr, get_str in regexp_convert_tab:
             chunkstr = ''
             lastpos = 0
@@ -97,7 +206,7 @@ class WikiParser(object):
 
         # finish up the HTML, replace all '\n' with <br> to aid the user
         workstring = '<html><body><font size="+1">\n' + \
-                     workstring.replace("\n", "<br>") + \
+                     workstring + \
                      '</font></html></body>'
     
         return workstring    
