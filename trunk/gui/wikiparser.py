@@ -72,7 +72,6 @@ def __convertTableToHTML(raw_table):
         table_data += '<tr>\n'
         for formatting, text in trs:
             table_data += '<td' + formatting + '>' + text + '</td>\n'   
-            print table_data
         table_data += '</tr>\n'
     table_data += '</table>\n'
     
@@ -91,7 +90,7 @@ def __extractSpecialTags(column):
     text = column
     formatting = ''
     while len(text) > 0:
-        if text[0] in special_tags:
+        if text[0] in special_tags:               # simple tags
             formatting += special_tags[text[0]]
             text = text[1:]
         elif text[0] == '{':                      # colspan="x"
@@ -115,6 +114,23 @@ def __doImgSrcPictureTag(instr):
     """ Tries a number of paths to return the img source, starting from the song mask, 
         then the work dir itself, then the images dir of the application """
     pic = instr[6:-1]
+    
+    # check for special tags
+    # TODO: These do not work. Why???
+    properties = ''
+    while 1:
+        if pic.startswith('right;'):
+            properties += 'align="Center" '
+            pic = pic[6:]
+        elif pic.startswith('border;'):
+            properties += 'border="1" '
+            pic = pic[7:]
+        elif pic.startswith('center;'):
+            properties += 'align="Center" '
+            pic = pic[7:]
+        else:
+            break
+    
     paths = [os.path.join(appcfg.GetAbsWorkPath(), pic),
              os.path.join(appcfg.imagesdir, pic) ]
 
@@ -126,10 +142,10 @@ def __doImgSrcPictureTag(instr):
     # try all possible paths
     for p in paths:
         if os.path.isfile(p):
-            return '<img src="' + p + '" />'
+            return '<img src="' + p + '" ' + properties + ' >'
 
-    # not found!
-    return '<font color="#ff0000"><b>image(' + pic + ')</b></font>'
+    # not found, means do not show anything
+    return ''
 
 #-------------------------------------------------------------------------------
 
@@ -204,11 +220,21 @@ class WikiParser(object):
         while len(self._tag_stack) > 0:
             workstring += self._tag_stack.pop()
 
+        # append <BR>'s only in the sections that supposed to have them
+        r = re.compile("(<.+?>\s*)+")
+        lastpos = 0
+        endstring = ''
+        for c in r.finditer(workstring):
+            endstring += workstring[lastpos:c.start()].replace('\n', '<br>') + \
+                         workstring[c.start():c.end()]
+            lastpos = c.end()
+        endstring += workstring[lastpos:].replace('\n', '<br>')
+            
         # finish up the HTML, replace all '\n' with <br> to aid the user
         workstring = '<html><body><font size="+1">\n' + \
-                     workstring + \
+                     endstring + \
                      '</font></html></body>'
-    
+        print workstring
         return workstring    
     
     # --------------------------------------------------------------------------
