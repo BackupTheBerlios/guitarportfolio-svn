@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Tasks SYSTEM "Tasks-3.8.dtd">
 <!-- Tasks file for project guitarportfolio -->
-<!-- Saved: 2007-06-09, 12:02:33 -->
+<!-- Saved: 2007-06-10, 21:47:38 -->
 <Tasks version="3.8">
   <Task priority="1" completed="0" bugfix="0">
     <Description>TODO: Make sure song information can also be substituted in the tab</Description>
@@ -85,94 +85,6 @@
     </Resource>
   </Task>
   <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Put the text inside the DB!</Description>
-    <Created>2007-06-04, 20:16:27</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>htmlmarkup.py</Name>
-      </Filename>
-      <Linenumber>1</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Substitute version number / appname in HTML text</Description>
-    <Created>2007-06-04, 20:16:27</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>htmlmarkup.py</Name>
-      </Filename>
-      <Linenumber>3</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Put inside the DB!</Description>
-    <Created>2007-06-04, 20:16:27</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>htmlmarkup.py</Name>
-      </Filename>
-      <Linenumber>4</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Sort the items in the choice</Description>
-    <Created>2007-06-04, 20:48:37</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>SongBrowserPanel.py</Name>
-      </Filename>
-      <Linenumber>57</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO:       (stats[songs.SS_NOT_STARTED],</Description>
-    <Created>2007-06-04, 20:48:37</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>SongBrowserPanel.py</Name>
-      </Filename>
-      <Linenumber>162</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Maybe we need to create SONG_VIEW_DESELECT</Description>
-    <Created>2007-06-04, 20:55:55</Created>
-    <Resource>
-      <Filename>
-        <Dir>objs</Dir>
-        <Name>songfilter.py</Name>
-      </Filename>
-      <Linenumber>70</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Check signals for a big concern</Description>
-    <Created>2007-06-04, 20:55:55</Created>
-    <Resource>
-      <Filename>
-        <Dir>objs</Dir>
-        <Name>songfilter.py</Name>
-      </Filename>
-      <Linenumber>201</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Check signals for a big concern</Description>
-    <Created>2007-06-04, 20:55:55</Created>
-    <Resource>
-      <Filename>
-        <Dir>objs</Dir>
-        <Name>songfilter.py</Name>
-      </Filename>
-      <Linenumber>223</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
     <Description>TODO: Maybe the selected song needs to be sent as object to modify insead of</Description>
     <Created>2007-06-05, 21:22:07</Created>
     <Resource>
@@ -228,17 +140,6 @@
     </Resource>
   </Task>
   <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Small problem, the category relations can be</Description>
-    <Created>2007-06-09, 10:39:28</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>GuitarPortfolioFrame.py</Name>
-      </Filename>
-      <Linenumber>252</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
     <Description>TODO: Artists which are mistyped (lower / upper) should not appear twice</Description>
     <Created>2007-06-09, 10:43:55</Created>
     <Resource>
@@ -250,14 +151,113 @@
     </Resource>
   </Task>
   <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Put the text inside the DB!</Description>
+    <Created>2007-06-10, 14:01:20</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>htmlmarkup.py</Name>
+      </Filename>
+      <Linenumber>1</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Substitute version number / appname in HTML text</Description>
+    <Created>2007-06-10, 14:01:20</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>htmlmarkup.py</Name>
+      </Filename>
+      <Linenumber>3</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Put inside the DB!</Description>
+    <Created>2007-06-10, 14:01:20</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>htmlmarkup.py</Name>
+      </Filename>
+      <Linenumber>4</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Small problem, the category relations can be</Description>
+    <Created>2007-06-10, 14:30:31</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>GuitarPortfolioFrame.py</Name>
+      </Filename>
+      <Linenumber>252</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Maybe we need to create SONG_VIEW_DESELECT</Description>
+    <Created>2007-06-10, 14:32:35</Created>
+    <Resource>
+      <Filename>
+        <Dir>objs</Dir>
+        <Name>songfilter.py</Name>
+      </Filename>
+      <Linenumber>74</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Check signals for a big concern</Description>
+    <Created>2007-06-10, 14:32:35</Created>
+    <Resource>
+      <Filename>
+        <Dir>objs</Dir>
+        <Name>songfilter.py</Name>
+      </Filename>
+      <Linenumber>205</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Check signals for a big concern</Description>
+    <Created>2007-06-10, 14:32:35</Created>
+    <Resource>
+      <Filename>
+        <Dir>objs</Dir>
+        <Name>songfilter.py</Name>
+      </Filename>
+      <Linenumber>227</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
     <Description>TODO: These do not work. Why???</Description>
-    <Created>2007-06-09, 12:02:31</Created>
+    <Created>2007-06-10, 21:41:09</Created>
     <Resource>
       <Filename>
         <Dir>gui</Dir>
         <Name>wikiparser.py</Name>
       </Filename>
-      <Linenumber>119</Linenumber>
+      <Linenumber>143</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Sort the items in the choice</Description>
+    <Created>2007-06-10, 21:45:57</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>SongBrowserPanel.py</Name>
+      </Filename>
+      <Linenumber>58</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO:       (stats[songs.SS_NOT_STARTED],</Description>
+    <Created>2007-06-10, 21:45:57</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>SongBrowserPanel.py</Name>
+      </Filename>
+      <Linenumber>165</Linenumber>
     </Resource>
   </Task>
 </Tasks>

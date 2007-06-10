@@ -10,6 +10,10 @@ UPDATE = 2
 # internal do not use as status
 _CRIT_STATUS_ALL = -1 
 
+SHOW_ALL       = 0
+SHOW_TUTORIALS = 1
+SHOW_SONGS     = 2
+
 class SongFilter:
     def __init__(self):
         self._list = objlist.ObjList(class_name = songs.Song)
@@ -26,7 +30,7 @@ class SongFilter:
         self._selectedSong = None    
         self._critCategoryAND = False 
         self._critDifficultyLO = False
-        self._showSongTutorials = False   
+        self._showSongType = SHOW_ALL   
 
     # TODO! Subscribe to signals.SONG_DB_DELETED, SONG_DB_UPDATED, SONG_DB_ADDED
     # if a song is deleted from the DB, make sure it is removed from the criteria list as well
@@ -123,8 +127,8 @@ class SongFilter:
         self.__ResyncAllSongs()
 
     # --------------------------------------------------------------------------
-    def OnlySnowTutorials(self, value):
-        self._showSongTutorials = value
+    def OnlySnowType(self, value):
+        self._showSongType = value
         self.__ResyncAllSongs()
         
     # --------------------------------------------------------------------------
@@ -189,9 +193,9 @@ class SongFilter:
                         break                
         
         # test song type
-        if visible:
-            if self._showSongTutorials and song._songType == songs.ST_NORMAL:
-                visible = False
+        if visible and self._showSongType != SHOW_ALL:
+            visible = (self._showSongType == SHOW_TUTORIALS and song._songType == songs.ST_TUTORIAL) or \
+                      (self._showSongType == SHOW_SONGS and song._songType == songs.ST_NORMAL)
         
         # always if not visible, but present, remove
         if not visible and present:

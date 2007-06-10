@@ -20,7 +20,9 @@ class SongFilterPanel(wx.Panel):
         self.__strictDifficulty = xrc.XRCCTRL( self, "ID_SHOW_LOWER_DIFFICULTY" )
         self.__cats = xrc.XRCCTRL( self, "ID_CATEGORIES" )
         self.__categoriesAndFilter = xrc.XRCCTRL(self, "ID_CAT_ANDFILTER")
-        self.__onlyShowTutorials = xrc.XRCCTRL(self, "ID_SHOW_TUTORIALS")
+        self.__onlyShowTutorials = xrc.XRCCTRL(self, "ID_RADIO_TUTONLY")
+        self.__onlyShowSongs = xrc.XRCCTRL(self, "ID_RADIO_SONGONLY")
+        self.__onlyShowAll = xrc.XRCCTRL(self, "ID_RADIO_ALL")
 
         # bind events
         self.Bind(wx.EVT_CHOICE, self.__OnFilterSongs, self.__progressFilter)
@@ -28,7 +30,9 @@ class SongFilterPanel(wx.Panel):
         self.Bind(wx.EVT_CHECKBOX, self.__OnShowMatchingLowerDifficulty, self.__strictDifficulty)
         self.Bind(wx.EVT_CHECKBOX, self.__OnShowCategoriesAND, self.__categoriesAndFilter)
         self.Bind(wx.EVT_CHECKLISTBOX, self.__OnItemChecked, self.__cats)       
-        self.Bind(wx.EVT_CHECKBOX, self.__OnShowTutorialsOnly, self.__onlyShowTutorials) 
+        self.Bind(wx.EVT_RADIOBUTTON, self.__OnOnlyShow, self.__onlyShowTutorials) 
+        self.Bind(wx.EVT_RADIOBUTTON, self.__OnOnlyShow, self.__onlyShowSongs) 
+        self.Bind(wx.EVT_RADIOBUTTON, self.__OnOnlyShow, self.__onlyShowAll) 
         
         # bind signals
         Publisher().subscribe(self.__OnChangeCats, signals.SONG_DB_CAT_UPDATED)
@@ -104,10 +108,15 @@ class SongFilterPanel(wx.Panel):
         appcfg.Get().WriteInt(appcfg.CFG_CATEGORIESAND, 1 if chk else 0)
 
     #---------------------------------------------------------------------------
-    def __OnShowTutorialsOnly(self, event):
-        chk = self.__onlyShowTutorials.GetValue()
-        songfilter.Get().OnlySnowTutorials(chk)
-        appcfg.Get().WriteInt(appcfg.CFG_SHOWONLYTUTS, 1 if chk else 0)
+    def __OnOnlyShow(self, event):
+        val = songfilter.SHOW_ALL
+        if self.__onlyShowTutorials.GetValue():
+            val = songfilter.SHOW_TUTORIALS
+        elif self.__onlyShowSongs.GetValue():
+            val = songfilter.SHOW_SONGS
+        
+        songfilter.Get().OnlySnowType(val)
+        appcfg.Get().WriteInt(appcfg.CFG_SHOWONLYTUTS, val)
         
     #---------------------------------------------------------------------------
     def __OnAppReady(self, message):
@@ -130,9 +139,15 @@ class SongFilterPanel(wx.Panel):
             # lower difficulty
             self.__strictDifficulty.SetValue(True if cfg.ReadInt(appcfg.CFG_LOWERDIFFICULTY, 0) <> 0 else False)
             self.__OnShowMatchingLowerDifficulty(event = None)
-            # only show tutorials
-            self.__onlyShowTutorials.SetValue(True if cfg.ReadInt(appcfg.CFG_SHOWONLYTUTS, 0) <> 0 else False)
-            self.__OnShowTutorialsOnly(event = None)
+            # show tutorials, songs or both
+            val = cfg.ReadInt(appcfg.CFG_SHOWONLYTUTS, songfilter.SHOW_ALL)
+            if val == songfilter.SHOW_SONGS:
+                self.__onlyShowSongs.SetValue(True)
+            elif val == songfilter.SHOW_TUTORIALS:
+                self.__onlyShowTutorials.SetValue(True)
+            else:
+                self.__onlyShowAll.SetValue(True)
+            self.__OnOnlyShow(event = None)
         
         self.__PopulateCategories()
 

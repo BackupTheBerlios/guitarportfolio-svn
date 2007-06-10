@@ -110,6 +110,30 @@ def __extractSpecialTags(column):
     return formatting, text.strip()
 
 #-------------------------------------------------------------------------------
+def parse_urls(instr):
+    """ Search regexp and replace files and links with the proper A HREF tag
+        the files are scanned in the current work directory of the song. If that does not 
+        exist the global directory is used. If that does not exist either, tough luck 
+        
+        format:  attachment(somefile.txt) --> will become clickable and executable attachment
+                 http://www.something.org --> will become an URL that opens a browser window
+        """
+
+    # found on: http://www.truerwords.net/articles/ut/urlactivation.html
+    urlreg = "(^|[ \t\r\n])((ftp|http|https|gopher|mailto|news|nntp|telnet|wais|file|prospero|aim|webcal):" + \
+             "(([A-Za-z0-9$_.+!*(),;/?:@&~=-])|%[A-Fa-f0-9]{2}){2,}(#([a-zA-Z0-9][a-zA-Z0-9$_.+!*(),;/?:@&~=%-]*))?([A-Za-z0-9$_+!*();/?:~-]))"
+
+    r = re.compile(urlreg)
+    lastpos = 0
+    endstring = ''
+    for c in r.finditer(instr):
+        endstring += instr[lastpos:c.start()] + \
+                     '<a href="' + c.group().strip() + '">' + c.group().strip() + '</a>'
+        lastpos = c.end()
+    endstring += instr[lastpos:]
+    return endstring
+
+#-------------------------------------------------------------------------------
 def __doImgSrcPictureTag(instr):
     """ Tries a number of paths to return the img source, starting from the song mask, 
         then the work dir itself, then the images dir of the application """
@@ -200,6 +224,9 @@ class WikiParser(object):
         # first convert all the tables
         workstring = maketable(page)
         
+        # parse all urls 
+        workstring = parse_urls(workstring)
+        
         # do simple tags now
         for regstr, get_str in regexp_convert_tab:
             chunkstr = ''
@@ -240,7 +267,6 @@ class WikiParser(object):
         workstring = '<html><body><font size="+1">\n' + \
                      endstring + \
                      '</font></html></body>'
-        print workstring
         return workstring    
     
     # --------------------------------------------------------------------------

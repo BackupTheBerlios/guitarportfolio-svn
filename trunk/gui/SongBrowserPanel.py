@@ -207,6 +207,7 @@ class SongBrowserPanel(wx.Panel):
     #---------------------------------------------------------------------------
     def __OnLinkClicked(self, event):
         tag = event.GetLinkInfo().GetHref()
+        print tag
         # check if we need to select a song
         if tag.startswith('#song:'):
             song_nr = tag[6:]
@@ -231,6 +232,9 @@ class SongBrowserPanel(wx.Panel):
                 exec_func()
             except KeyError:
                 wx.MessageBox("Command '%s' not implemented!" % (cmd,), 'Error', wx.ICON_ERROR | wx.OK)
+        else:
+            # attempt gnome start execution
+            linkfile.executelink(tag)
         
     #---------------------------------------------------------------------------
     def __DoSetSongStatus(self, status):
