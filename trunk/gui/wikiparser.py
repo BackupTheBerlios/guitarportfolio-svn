@@ -171,12 +171,13 @@ def __doPreTag(winst):
 
 regexp_convert_tab = [ 
     (r"'''.*?'''",         lambda winst : '<i>' + winst._currtok[3: -3] + '</i>'),
+    (r"__.*?__",           lambda winst : '<u>' + winst._currtok[2: -2] + '</u>'),
     (r"\*.*?\*",           lambda winst : '<b>' + winst._currtok[1:-1] + '</b>'),
-    (r"(={5}.+?={5})\n",     lambda winst : '<h5>' + winst._currtok[5:-6] + '</h5>'),
-    (r"(={4}.+?={4})\n",     lambda winst : '<h4>' + winst._currtok[4:-5] + '</h4>'),
-    (r"(={3}.+?={3})\n",     lambda winst : '<h3>' + winst._currtok[3:-4] + '</h3>'),
-    (r"(={2}.+?={2})\n",     lambda winst : '<h2>' + winst._currtok[2:-3] + '</h2>'),
-    (r"(={1}.+?={1})\n",     lambda winst : '<h1>' + winst._currtok[1:-2] + '</h1>'),
+    (r"(={5}.+?={5})\n",   lambda winst : '<h5>' + winst._currtok[5:-6] + '</h5>'),
+    (r"(={4}.+?={4})\n",   lambda winst : '<h4>' + winst._currtok[4:-5] + '</h4>'),
+    (r"(={3}.+?={3})\n",   lambda winst : '<h3>' + winst._currtok[3:-4] + '</h3>'),
+    (r"(={2}.+?={2})\n",   lambda winst : '<h2>' + winst._currtok[2:-3] + '</h2>'),
+    (r"(={1}.+?={1})\n",   lambda winst : '<h1>' + winst._currtok[1:-2] + '</h1>'),
     (r"image\(.+?\)",      lambda winst : __doImgSrcPictureTag(winst._currtok)),
     (r"(\{\{\{)|(\}\}\})", __doPreTag )
     ]
@@ -225,8 +226,13 @@ class WikiParser(object):
         lastpos = 0
         endstring = ''
         for c in r.finditer(workstring):
+            lpos = workstring.rfind('>', c.start(), c.end())
             endstring += workstring[lastpos:c.start()].replace('\n', '<br>') + \
-                         workstring[c.start():c.end()]
+                         workstring[c.start():lpos]
+            if lpos < c.end():
+                # we need to do this, because the last piece of whitespaces actually
+                # belong to the text and not the html, so we transform that as well
+                endstring += workstring[lpos:c.end()].replace('\n', '<br>')
             lastpos = c.end()
         endstring += workstring[lastpos:].replace('\n', '<br>')
             

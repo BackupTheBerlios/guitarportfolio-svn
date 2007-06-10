@@ -38,7 +38,7 @@ class GuitarPortfolioFrame(wx.Frame):
 
         # songs menu
         mnu = wx.Menu()
-        self.__menuAddNewSong = wx.MenuItem(mnu, wx.NewId(), "&Add New ...\tCtrl+A", "", wx.ITEM_NORMAL)
+        self.__menuAddNewSong = wx.MenuItem(mnu, wx.NewId(), "&Add New ...\tCtrl+N", "", wx.ITEM_NORMAL)
         mnu.AppendItem(self.__menuAddNewSong)
         self.__menuEditSong = wx.MenuItem(mnu, wx.NewId(), "&Edit ...\tCtrl+E", "", wx.ITEM_NORMAL)
         mnu.AppendItem(self.__menuEditSong)

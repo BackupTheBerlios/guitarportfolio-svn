@@ -75,6 +75,8 @@ class NewSongDlg(wx.Dialog):
 
         self.__song = None
 
+        self.__artist.SetFocus()
+
     # --------------------------------------------------------------------------
     def SaveToSong(self, song):
         song._artist = self.__artist.GetValue()

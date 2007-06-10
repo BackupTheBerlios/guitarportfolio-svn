@@ -10,7 +10,7 @@ from objs import signals, songs, songfilter, linkmgt
 import db
 import db.songs_peer
 from images import icon_home, icon_browse_next, icon_browse_prev
-import HtmlInfoGen, xmlres, appcfg, htmlparse, linkfile, htmlmarkup
+import xmlres, appcfg, htmlparse, linkfile, htmlmarkup, wikiparser
 
 class SongBrowserPanel(wx.Panel):
     def __init__(self, parent, id = -1):
@@ -50,7 +50,8 @@ class SongBrowserPanel(wx.Panel):
         self.__browseForward.SetBitmapLabel(icon_browse_next.getBitmap())
         
         # set the start page
-        self.__songBrowser.SetPage(htmlmarkup.startupinfo)
+        wp = wikiparser.WikiParser()
+        self.__songBrowser.SetPage(wp.Parse(htmlmarkup.startupinfo))
         
     # --------------------------------------------------------------------------
     def __AddSong(self, message):
@@ -95,7 +96,8 @@ class SongBrowserPanel(wx.Panel):
     def __ClearSongs(self, message):
         """ Clear list, we are changing databases """
         self.__songList.Clear()
-        self.__songBrowser.SetPage(htmlmarkup.startupinfo)
+        wp = wikiparser.WikiParser()
+        self.__songBrowser.SetPage(wp.Parse(htmlmarkup.startupinfo))
         
     # --------------------------------------------------------------------------
     def __OnSongSelect(self, event): 
@@ -139,7 +141,8 @@ class SongBrowserPanel(wx.Panel):
     def __RenderHomepage(self):
         """ We render the homepage containing all song statuses divided in sections """
         if not self.__songList.GetCount():
-            self.__songBrowser.SetPage(htmlmarkup.startupinfo)
+            wp = wikiparser.WikiParser()
+            self.__songBrowser.SetPage(wp.Parse(htmlmarkup.startupinfo))
             return
         
         stats = { songs.SS_STARTED:     [],

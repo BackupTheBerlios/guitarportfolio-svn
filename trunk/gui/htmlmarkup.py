@@ -4,30 +4,63 @@
 # TODO: Put inside the DB!
 
 startupinfo = """
-<html><body>
-<font size="16">GuitarPortfolio v1.0</font><br>
-Created by Jorgen Bodde<br><br>
-
-GuitarPortfolio is a songs collection manager application that can keep track of the songs you are 
-practicing and the progress you are making. Some features are;<br><br>
+== Welcome To GuitarPortfolio ==
+GuitarPortfolio is an application that can keep track of the songs you are playing on the guitar, or are going to play. It's purpose is to provide a centralized repository on which you can add the songs you like to play with the following '''__extensive__''' information:
 
 <ul>
-<li>Storing song background information</li>
-<li>Storing links to sites or external files</li>
-<li>Storing attachments inside the database like MP3's, AVI's or PDF's</li>
-<li>Storing multiple music tabs</li>
-<li>Keeping track of your progress bar by bar</li>
-<li>A study log, with time tracking to see when you studied what songs</li>
-<li>And much more!</li>
-</ul><br><br>
+<li>Artist, Title of Song</li>
+<li>Song Information page</li>
+<li>One or more guitar tabs</li>
+<li>Date Song is released  (year, full date or unknown)</li>
+<li>Song difficulty classification (easy, normal ... impossible)</li>
+<li>Progress tracking (% accuracy, % completed, practice time, etc)</li>
+<li>Which capo position the song is played on</li>
+<li>Classification in categories for easy search</li>
+<li>Distinction between tutorials / riffs and real songs</li>
+<li>Attachments, to start up PDF's or Mp3's with a click</li>
+<li>A log for progress and user notes for practice history</li>
+</ul>
 
-The reason why this application is written, is to maintain a list of songs I am already able to play, 
-and songs which are still a bit hard, but when time progresses could get into my reach. For example,
-whenever you hear a nice song on the radio, you can place an entry in GuitarPortfolio and when you have 
-the time, play it or investigate it. <br><br>
+==== The main flow of GuitarPorfolio ====
+__*Storing songs you wish to play in the future*__<br>
+image(icon_todo.png)&nbsp;For example, you hear a neat song on the radio or a great lick you wish to practice. You create a new song in GuitarPortfolio and store information along with it, such as a tab found on the net, or links to a site, and even as attachment, the mp3 or a movie on your harddrive to accompany you when playing. '''Is the song still too difficult?''' Rate it as 'Intermediate' or 'Advanced' so that you will not see the songs that you are not able to play yet in your selection list.
 
-Have fun playing!
-</body></html>
+__*Starting the practice*__<br>
+image(icon_in_progress.png)&nbsp;When you're in the mood for a new song, browse through the list of songs and pick one marked as '''TODO''' image(icon_todo.png)&nbsp;and change it's status to '''IN PROGRESS'''. This enables the logging system, marks the date you started and will make it easier for you to find it back in your list of songs you are working on. You can use the log to check for progress, total time studied, notes and changes in your % accuracy and % completion of the song. 
+
+__*Tired of practicing?*__<br>
+image(icon_not_practicing.png)&nbsp;You can postpone a song you are not practicing anymore. It does not mean you are done with it. It simply means you stopped with it for a while. Sometimes you wish to continue once you mastered a new level, or a sudden shift of interest brings new songs.
+
+__*Done playing the song?*__<br>
+image(icon_completed.png)&nbsp;Once you mastered a song, mark it as completed for the record. The date is recorded that you last worked on it, so that in years from now you can still see when you studied a particular song, and what problems you had with it. Are you in the mood of playing it again or perfecting it? Change the status back to image(icon_in_progress.png)&nbsp; and you can work on it once again. The completed date will not change anymore, the log however will provide a trace of your progress.
+==== Other features of GuitarPortfolio ====
+
+*__Categories__*
+GuitarPortfolio provides *categories* which act as labels. You can attach one or more labels to the song, marking a specific styles the song has. If you wish to study songs with such a style, the song filter panel will allow you to narrow down the song selection list 
+
+*__Wiki HTML Editing__*
+The song information and lyrics can be edited using a simple wiki markup language, which will be easier then writing plain HTML. Images and tables can be embedded in the information view, this will allow you to create a fancy page containing all information you need. You can store pictures in the artist / song's data directory or in the global data directory to use the images in HTML, keeping everything together.
+
+*__Browser Mode__*
+GuitarPortfolio can be set in Browser mode which will allow you to use as much as the mouse only to navigate through your songs, making it easier to obtain the information you need to work on your song. Switching to editor mode will allow you to modify the song's information
+
+*__Database Storage__*
+If for some odd reason GuitarPortfolio crashes unexpectedly, no data is lost. A database backend is used to store all information and it is stored upon change so restarting GuitarPortfolio after a crash, will show exactly the same data. Ofcourse if crashes occur, please report this to me (jorgb@xs4all.nl)
+
+*__Cross Platform!__*
+Ohh yeah, do you wish to switch to Linux / MacOS, or do you switch often? GuitarPortfolio is written in wxPython and therefor runs on; 
+<ul>
+<li>Windows</li>
+<li>Linux</li>
+<li>HP-UX</li>
+<li>MacOS</li>
+<li>...</li>
+</ul>
+<br>
+The database should be accessible from any platform without converting it. Setting the global data directory in the preferences should also make sure all your song information and attachments are accessible under any platform. 
+
+*Have fun!*
+- Jorgen Bodde
 """
 
 # ==============================================================================
