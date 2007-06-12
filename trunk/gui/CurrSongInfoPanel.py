@@ -9,11 +9,21 @@ import time
 
 from wx.lib.pubsub import Publisher
 from objs import signals, songs, songfilter
-import wikiparser
+import wikiparser, linkfile
 
 songinfo = """
 No song info available
 """
+
+# TODO: The Wiki HTML parser should be a generic component, so that other 
+# HTML windows will also react the same on the markup and links that can 
+# be executed. Generic functionality should include:
+# - Encapsulation of the WikiParser
+# - Clicking on external links should open them in a browser
+# - Clicking on internal links should select a song when needed
+# - Also the generic song functionality should be inside the browser component
+# - Back and forward handling should remember pages visited but based upon song
+#   or wiki name.
 
 class CurrSongInfoPanel(wx.Panel):
     def __init__(self, parent, id = -1):
@@ -24,6 +34,8 @@ class CurrSongInfoPanel(wx.Panel):
         self.__songInfo = xrc.XRCCTRL(self, "ID_SONGINFO")
         if "gtk2" in wx.PlatformInfo:
             self.__songInfo.SetStandardFonts()
+
+        self.Bind(html.EVT_HTML_LINK_CLICKED, self.__OnLinkClicked, self.__songInfo)
             
         self.__songInfo.SetPage(wikiparser.WikiParser().Parse(songinfo))
                 
@@ -40,3 +52,13 @@ class CurrSongInfoPanel(wx.Panel):
         else:
             if songfilter.Get()._selectedSong == message.data:                   
                 self.__songInfo.SetPage(parser.Parse(message.data._information))
+
+    #---------------------------------------------------------------------------
+    def __OnLinkClicked(self, event):
+        """ Execute the HTML link in an external browser window """
+        tag = event.GetLinkInfo().GetHref()
+        
+        if linkfile.is_valid_external_link(tag):
+            print "Executing link: " + tag
+            linkfile.execute_uri(tag)
+        

@@ -218,7 +218,8 @@ class SongBrowserPanel(wx.Panel):
             link_nr = tag[6:]
             if link_nr:
                 link = linkmgt.Get().links.find_id(int(link_nr))
-                linkfile.executelink(link)
+                if link:
+                    linkfile.executelink(link)
         # check for execution of a command
         elif tag.startswith('#cmd:'):
             cmd = tag[5:]
@@ -232,9 +233,7 @@ class SongBrowserPanel(wx.Panel):
                 exec_func()
             except KeyError:
                 wx.MessageBox("Command '%s' not implemented!" % (cmd,), 'Error', wx.ICON_ERROR | wx.OK)
-        else:
-            # attempt gnome start execution
-            linkfile.executelink(tag)
+
         
     #---------------------------------------------------------------------------
     def __DoSetSongStatus(self, status):

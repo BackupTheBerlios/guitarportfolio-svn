@@ -3,6 +3,8 @@ import os.path
 import appcfg
 from objs import songfilter
 
+
+        
 def maketable(page):
     """ Create table from || ... || syntax which is very convenient
         in simple markups to create a HTML table without much fuss 
