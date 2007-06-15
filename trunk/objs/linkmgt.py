@@ -3,6 +3,7 @@ import dircache
 import os.path
 from wx.lib.pubsub import Publisher
 from objs import signals, objlist
+import xml.parsers.expat
 
 # a comprehensive list of types where extensions are translated to 
 # a description, e.g. .AVI extension becomes VIDEO
@@ -14,6 +15,9 @@ _types_lookup = [ ( 'VIDEO',      [ '.avi',  '.mpg', '.mp4', '.mov', '.vlc' ] ),
                   ( 'TEXT / TAB', [ '.txt' ] ),
                   ( 'TAB FILE',   [ '.tab' ] ) ]
 
+# file that holds extra information for all attachments
+XML_ATTACHMENT_FILE = 'attachments.xml'
+
 """
     The link object holding information per file in the work dir, of a reference
     to another file, or an internet URL, etc.
@@ -23,6 +27,9 @@ class Link(object):
         self._name = name
         self._id = id
         self._type = ''
+        self._ignored = False
+        self._comment = ''
+        self._in_xml = False
 
         # set type, based upon a dictionary
         root, ext = os.path.splitext(name)
@@ -64,13 +71,26 @@ class LinkMgr(object):
             try:
                 items = dircache.listdir(workdir)
                 for f in items:
-                    if os.path.isfile(os.path.join(workdir, f)):
+                    if os.path.isfile(os.path.join(workdir, f)) and not (f == XML_ATTACHMENT_FILE):
                         l = Link(f, self._lastLinkID)
                         self.links.append(l)
                         self._lastLinkID += 1
                 Publisher().sendMessage(signals.LINKMGR_POPULATED)
             except OSError:
                 return False
+        
+            # now go and parse the XML file that goes with it for 
+            # further information, and extend the links 
+            self.__parsed_link = None
+            xmlfile = os.path.join(workdir, XML_ATTACHMENT_FILE)
+            p = xml.parsers.expat.ParserCreate()
+            p.StartElementHandler = self.__OnParseElement
+            p.CharacterDataHandler = self.__OnParseElementData
+            try:
+                f = open(xmlfile)
+                p.ParseFile(f)
+            except IOError:
+                pass
         else:
             return False
 
@@ -88,6 +108,36 @@ class LinkMgr(object):
             result = os.path.join(self._workPath, link._name)
         return result
 
+    # --------------------------------------------------------------------------
+    def __OnParseElement(self, name, attrs):
+        self.__parsed_link = None  
+        if name.lower() == 'file':
+            self.__parsed_link = None  
+            # a file node, look up our link, and 
+            # set the properties, if any present
+            if 'name' in attrs:
+                lname = attrs['name']
+                for l in self.links:
+                    if l._name.lower() == lname.lower():
+                        self.__parsed_link = l
+                        break
+            
+            link = self.__parsed_link
+            if link:
+                link._in_xml = True
+                
+                # ignore flag, to leave link out of list of attachments
+                if 'ignore' in attrs:
+                    ignore = attrs['ignore']
+                    link._ignore = (ignore.lower() == "yes" or ignore == "1")
+
+                # comment section of attachments
+                if 'comment' in attrs:                    
+                    link._comment = attrs['comment']
+                                        
+    # --------------------------------------------------------------------------
+    def __OnParseElementData(self, data):
+        pass
 # ==============================================================================
 
 __obj = None

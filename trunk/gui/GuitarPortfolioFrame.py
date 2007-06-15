@@ -11,7 +11,8 @@ import db.songs_peer
 
 from objs import signals, songs, category_mgr, tuning_mgr, songfilter, linkmgt
 from gui import SongsPanel, EditorNotebook, CurrInfoNotebook, NewSongDlg, \
-                CategoriesDlg, SongFilterPanel, OptionsDlg, WelcomeDlg, xmlres
+                CategoriesDlg, SongFilterPanel, OptionsDlg, WelcomeDlg, \
+                AttachmentManageDlg, xmlres
 from images import icon_main_window, guitarportfolio_icon
 
 import appcfg
@@ -87,6 +88,19 @@ class GuitarPortfolioFrame(wx.Frame):
         mnu.AppendItem(self.__menuEditorMode)
         self.__menuBar.Append(mnu, "&Windows")
 
+        # attachments menu
+        mnu = wx.Menu()
+        self.__menuCreateAttachDir = wx.MenuItem(mnu, wx.NewId(), "&Create Folder ...", "", wx.ITEM_NORMAL)
+        mnu.AppendItem(self.__menuCreateAttachDir)
+        mnu.AppendSeparator()
+        self.__menuAddAttachments = wx.MenuItem(mnu, wx.NewId(), "&Add ...", "", wx.ITEM_NORMAL)
+        mnu.AppendItem(self.__menuAddAttachments)
+        self.__menuEditAttachments = wx.MenuItem(mnu, wx.NewId(), "&Edit ...", "", wx.ITEM_NORMAL)
+        mnu.AppendItem(self.__menuEditAttachments)
+        self.__menuRefreshAttachments = wx.MenuItem(mnu, wx.NewId(), "&Refresh", "", wx.ITEM_NORMAL)
+        mnu.AppendItem(self.__menuRefreshAttachments)
+        self.__menuBar.Append(mnu, "&Attachments")
+        
         # help menu
         mnu = wx.Menu()
         self.__menuHelpVisitSite = wx.MenuItem(mnu, wx.NewId(), "&Visit Site .. ", "", wx.ITEM_NORMAL)
@@ -115,7 +129,11 @@ class GuitarPortfolioFrame(wx.Frame):
         self.Bind(wx.EVT_MENU, self.__OnEditorMode, self.__menuEditorMode)
         self.Bind(wx.EVT_MENU, self.__OnVisitSite, self.__menuHelpVisitSite)
         self.Bind(wx.EVT_MENU, self.__OnAbout, self.__menuHelpAbout)
-        # end wxGlade
+
+        self.Bind(wx.EVT_MENU, self.__OnCreateAttachmentsDir, self.__menuCreateAttachDir)
+        self.Bind(wx.EVT_MENU, self.__OnAddAttachments, self.__menuAddAttachments)
+        self.Bind(wx.EVT_MENU, self.__OnEditAttachments, self.__menuEditAttachments)
+        self.Bind(wx.EVT_MENU, self.__OnRefreshAttachments, self.__menuRefreshAttachments)
 
         self.SetIcon(wx.IconFromBitmap(icon_main_window.getBitmap()))
         self.Bind(wx.EVT_CLOSE, self.__OnClose)
@@ -464,12 +482,29 @@ class GuitarPortfolioFrame(wx.Frame):
 
     #---------------------------------------------------------------------------
     def __SyncMenuItems(self):
+        """ Synchronize disabled / enabled state of some of the menu items so 
+            that the user is not tempted to click anything that does nothing 
+            anyway. 
+        """
+        
         song = songfilter.Get()._selectedSong
         self.__menuEditSong.Enable(song <> None)
         self.__menuDeleteSong.Enable(song <> None)
         self.__menuEditCategories.Enable(song <> None)
         self.__menuEditCategories.Enable(song <> None)
         self.__menuEditReset.Enable(False)
+
+        # check if we have a valid song work directory, and 
+        # enable all menu items that go with it
+        validWorkDir = False
+        if song:
+            validWorkDir = os.path.exists(appcfg.GetAbsWorkPathFromSong(song))
+
+        self.__menuCreateAttachDir.Enable(song <> None and not validWorkDir)
+        self.__menuAddAttachments.Enable(validWorkDir)
+        self.__menuEditAttachments.Enable(validWorkDir)
+        self.__menuRefreshAttachments.Enable(validWorkDir)
+
         # enable status based upon previous status
         if song:
             for id in self.__menu_status_lookup.iterkeys():
@@ -483,8 +518,26 @@ class GuitarPortfolioFrame(wx.Frame):
                     self.__menuSongStatus.Enable(id, song._status == songs.SS_STARTED)
         else:
             for id in self.__menu_status_lookup.iterkeys():
-                self.__menuSongStatus.Enable(id, False)        
+                self.__menuSongStatus.Enable(id, False) 
+        
+    #---------------------------------------------------------------------------
+    def __OnCreateAttachmentsDir(self, event):
+        pass
+    #---------------------------------------------------------------------------
+    def __OnAddAttachments(self, event):
+        pass
 
+    #---------------------------------------------------------------------------
+    def __OnEditAttachments(self, event):
+        dlg = AttachmentManageDlg.AttachmentManageDlg(self)
+        dlg.ShowModal()
+        dlg.Destroy()
+
+    #---------------------------------------------------------------------------
+    def __OnRefreshAttachments(self, event):
+        pass
+        
+             
 # end of class GuitarPortfolioFrame
 
 

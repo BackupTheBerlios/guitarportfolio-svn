@@ -110,7 +110,7 @@ class LinksPanel(wx.Panel):
         for l in linkmgt.Get().links:
             index = self._links.InsertStringItem(sys.maxint, l._name)
             self._links.SetStringItem(index, 1, l._type)
-            self._links.SetStringItem(index, 2, '')
+            self._links.SetStringItem(index, 2, l._comment)
             self._links.SetItemData(index, l._id)
             # TODO: Set icon in front of link            
 
