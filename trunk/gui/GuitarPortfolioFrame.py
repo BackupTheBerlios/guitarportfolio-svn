@@ -541,6 +541,7 @@ class GuitarPortfolioFrame(wx.Frame):
         dlg = AttachmentManageDlg.AttachmentManageDlg(self)
         dlg.SetData()
         dlg.ShowModal()
+        linkmgt.Get().Save()
         dlg.Destroy()        
           
 # end of class GuitarPortfolioFrame

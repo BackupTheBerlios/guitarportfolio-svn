@@ -6,6 +6,7 @@ import fnmatch
 from wx.lib.pubsub import Publisher
 from objs import signals, objlist
 import xml.parsers.expat
+import xml.dom.minidom
 
 # a comprehensive list of types where extensions are translated to 
 # a description, e.g. .AVI extension becomes VIDEO
@@ -113,6 +114,31 @@ class LinkMgr(object):
                 pass
         else:
             return False
+
+    # --------------------------------------------------------------------------
+    def Save(self):
+        # create XML document
+        doc = xml.dom.minidom.Document() 
+        root = doc.createElement('guitarportfolio')
+        doc.appendChild(root)
+        
+        attachments = doc.createElement('attachments')
+        root.appendChild(attachments)
+        
+        # write links that need to be written
+        for l in self.links:
+            if l._in_xml:
+                attm = doc.createElement('file')
+                attm.setAttribute('name', l._name)
+                attm.setAttribute('ignore', "yes" if l._ignored else "no")
+                if l._comment:
+                    attm.setAttribute('comment', l._comment)
+                if l._runcmd:
+                    attm.setAttribute('runcmd', l._runcmd)
+                attachments.appendChild(attm)
+                            
+        # return the XML doc again
+        print doc.toprettyxml()           
 
     # --------------------------------------------------------------------------
     def Clear(self):
