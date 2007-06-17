@@ -35,6 +35,7 @@ SONG_VIEW_PRESELECT    = ('song', 'view', 'pre', 'select')
 
 LINKMGR_CLEAR          = ('linkmgr', 'clear')               # links cleared
 LINKMGR_POPULATED      = ('linkmgr', 'links', 'populated')  # populated the links
+LINKMGR_QUERY_EDIT     = ('linkmgr', 'edit')
 
 # TODO: Not certain if this will work, if a query is sent after a remove from
 # the view, and that song is also removed after the re-evaluating, it will come

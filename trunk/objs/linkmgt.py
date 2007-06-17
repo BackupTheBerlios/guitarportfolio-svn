@@ -1,6 +1,8 @@
 
 import dircache
 import os.path
+import fnmatch
+
 from wx.lib.pubsub import Publisher
 from objs import signals, objlist
 import xml.parsers.expat
@@ -14,6 +16,10 @@ _types_lookup = [ ( 'VIDEO',      [ '.avi',  '.mpg', '.mp4', '.mov', '.vlc' ] ),
                   ( 'PDF TEXT',   [ '.pdf' ] ),
                   ( 'TEXT / TAB', [ '.txt' ] ),
                   ( 'TAB FILE',   [ '.tab' ] ) ]
+
+# remove files from auto attachment discover engine that match these extensions 
+# TODO: Should be placed in an config module
+_ignore_masks = [ '*.bak', '*.~*', '*.*~' ]
 
 # file that holds extra information for all attachments
 XML_ATTACHMENT_FILE = 'attachments.xml'
@@ -29,6 +35,7 @@ class Link(object):
         self._type = ''
         self._ignored = False
         self._comment = ''
+        self._runcmd = ''
         self._in_xml = False
 
         # set type, based upon a dictionary
@@ -42,7 +49,12 @@ class Link(object):
                 self._type = ext
         else:
             self._type = 'UNKNOWN'
-
+            
+    def __setattr__(self, name, value):
+        # always set this flag
+        self.__dict__["_in_xml"] = True
+        self.__dict__[name] = value
+        
 # ==============================================================================
 
 """
@@ -72,9 +84,17 @@ class LinkMgr(object):
                 items = dircache.listdir(workdir)
                 for f in items:
                     if os.path.isfile(os.path.join(workdir, f)) and not (f == XML_ATTACHMENT_FILE):
-                        l = Link(f, self._lastLinkID)
-                        self.links.append(l)
-                        self._lastLinkID += 1
+                        # check for match
+                        okfile = True
+                        for tf in _ignore_masks:
+                            if fnmatch.fnmatch(f, tf):
+                                okfile = False
+                                break
+                        if okfile:
+                            l = Link(f, self._lastLinkID)
+                            self.links.append(l)
+                            self._lastLinkID += 1
+                            l._in_xml = False   # reset the flag
                 Publisher().sendMessage(signals.LINKMGR_POPULATED)
             except OSError:
                 return False
@@ -129,12 +149,17 @@ class LinkMgr(object):
                 # ignore flag, to leave link out of list of attachments
                 if 'ignore' in attrs:
                     ignore = attrs['ignore']
-                    link._ignore = (ignore.lower() == "yes" or ignore == "1")
+                    link._ignored = (ignore.lower() == "yes" or ignore == "1")
 
-                # comment section of attachments
+                # comment for the attachment
                 if 'comment' in attrs:                    
                     link._comment = attrs['comment']
-                                        
+
+                # run command for the attachment
+                if 'runcmd' in attrs:                    
+                    link._runcmd = attrs['runcmd']
+
+
     # --------------------------------------------------------------------------
     def __OnParseElementData(self, data):
         pass

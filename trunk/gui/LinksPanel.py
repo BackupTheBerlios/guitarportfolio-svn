@@ -108,11 +108,11 @@ class LinksPanel(wx.Panel):
         """ Populate the links in the link list view """
         self._links.DeleteAllItems()
         for l in linkmgt.Get().links:
-            index = self._links.InsertStringItem(sys.maxint, l._name)
-            self._links.SetStringItem(index, 1, l._type)
-            self._links.SetStringItem(index, 2, l._comment)
-            self._links.SetItemData(index, l._id)
-            # TODO: Set icon in front of link            
+            if not l._ignored:
+                index = self._links.InsertStringItem(sys.maxint, l._name)
+                self._links.SetStringItem(index, 1, l._type)
+                self._links.SetStringItem(index, 2, l._comment)
+                self._links.SetItemData(index, l._id)         
 
     # --------------------------------------------------------------------------
     def __RefreshLinks(self):
@@ -161,7 +161,7 @@ class LinksPanel(wx.Panel):
 
     # --------------------------------------------------------------------------
     def __OnManageFiles(self, event): 
-        print "Event handler `__OnManageFiles' not implemented!"
+        Publisher().sendMessage(signals.LINKMGR_QUERY_EDIT)
         event.Skip()
 
 

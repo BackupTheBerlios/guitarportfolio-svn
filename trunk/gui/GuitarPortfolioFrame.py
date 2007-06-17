@@ -176,6 +176,7 @@ class GuitarPortfolioFrame(wx.Frame):
         Publisher().subscribe(self.__OnQueryEditSong, signals.SONG_QUERY_MODIFY)
         Publisher().subscribe(self.__OnTabAdded, signals.SONG_DB_TAB_ADDED)
         Publisher().subscribe(self.__OnSongPreselect, signals.SONG_VIEW_PRESELECT)
+        Publisher().subscribe(self.__OnQueryEditAttachments, signals.LINKMGR_QUERY_EDIT)
 
         # dependent on the layout settings, we restore the old perspective, or save the default
         cfg = appcfg.Get()
@@ -529,15 +530,19 @@ class GuitarPortfolioFrame(wx.Frame):
 
     #---------------------------------------------------------------------------
     def __OnEditAttachments(self, event):
-        dlg = AttachmentManageDlg.AttachmentManageDlg(self)
-        dlg.ShowModal()
-        dlg.Destroy()
+        Publisher().sendMessage(signals.LINKMGR_QUERY_EDIT)
 
     #---------------------------------------------------------------------------
     def __OnRefreshAttachments(self, event):
         pass
         
-             
+    #---------------------------------------------------------------------------
+    def __OnQueryEditAttachments(self, message):
+        dlg = AttachmentManageDlg.AttachmentManageDlg(self)
+        dlg.SetData()
+        dlg.ShowModal()
+        dlg.Destroy()        
+          
 # end of class GuitarPortfolioFrame
 
 

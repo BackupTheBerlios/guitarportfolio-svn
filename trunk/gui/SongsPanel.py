@@ -134,35 +134,37 @@ class SongsListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
         menu.AppendItem(m3)
         menu.AppendSeparator()
         
-        # submenu for changing status
+        # submenu for changing status. only show it when we have a valid
+        # selected song to work on
         self.__statusMap = {}
         items = [ ]
         song = songfilter.Get()._selectedSong
-        if song._status == songs.SS_STARTED:
-            items.append(("&Not Practicing", songs.SS_POSTPONED))
-            items.append(("&Completed!", songs.SS_COMPLETED))
-        elif song._status == songs.SS_NOT_STARTED or \
-             song._status == songs.SS_POSTPONED or \
-             song._status == songs.SS_COMPLETED:
-            items.append(("&In Progress", songs.SS_STARTED))
+    	if song:
+            if song._status == songs.SS_STARTED:
+                items.append(("&Not Practicing", songs.SS_POSTPONED))
+                items.append(("&Completed!", songs.SS_COMPLETED))
+            elif song._status == songs.SS_NOT_STARTED or \
+                 song._status == songs.SS_POSTPONED or \
+                 song._status == songs.SS_COMPLETED:
+                items.append(("&In Progress", songs.SS_STARTED))
 
-        smenu = wx.Menu()
-        for i in items:
-            mi = wx.MenuItem(smenu, wx.NewId(), i[0], "", wx.ITEM_NORMAL)
-            smenu.AppendItem(mi)
-            self.__statusMap[mi.GetId()] = i[1]
-            self.Bind(wx.EVT_MENU, self.__OnChangeStatus, mi)
-            
-        menu.AppendMenu(wx.NewId(), "Change &Status To ..", smenu)
+            smenu = wx.Menu()
+            for i in items:
+                mi = wx.MenuItem(smenu, wx.NewId(), i[0], "", wx.ITEM_NORMAL)
+                smenu.AppendItem(mi)
+                self.__statusMap[mi.GetId()] = i[1]
+                self.Bind(wx.EVT_MENU, self.__OnChangeStatus, mi)
+                
+            menu.AppendMenu(wx.NewId(), "Change &Status To ..", smenu)
 
-        self.Bind(wx.EVT_MENU, self.__OnAddNewSong, m1)
-        self.Bind(wx.EVT_MENU, self.__OnModifySong, m2)
-        self.Bind(wx.EVT_MENU, self.__OnDeleteSong, m3)
+            self.Bind(wx.EVT_MENU, self.__OnAddNewSong, m1)
+            self.Bind(wx.EVT_MENU, self.__OnModifySong, m2)
+            self.Bind(wx.EVT_MENU, self.__OnDeleteSong, m3)
 
-        # Popup the menu.  If an item is selected then its handler
-        # will be called before PopupMenu returns.
-        self.PopupMenu(menu)
-        menu.Destroy()
+            # Popup the menu.  If an item is selected then its handler
+            # will be called before PopupMenu returns.
+            self.PopupMenu(menu)
+            menu.Destroy()
 
     # --------------------------------------------------------------------------
     def __OnAddNewSong(self, event):

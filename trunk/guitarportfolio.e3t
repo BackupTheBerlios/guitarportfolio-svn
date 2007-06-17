@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Tasks SYSTEM "Tasks-3.8.dtd">
 <!-- Tasks file for project guitarportfolio -->
-<!-- Saved: 2007-06-12, 21:24:34 -->
+<!-- Saved: 2007-06-16, 19:22:16 -->
 <Tasks version="3.8">
   <Task priority="1" completed="0" bugfix="0">
     <Description>TODO: Make sure song information can also be substituted in the tab</Description>
@@ -104,17 +104,6 @@
         <Name>SongsPanel.py</Name>
       </Filename>
       <Linenumber>186</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Needs better description!</Description>
-    <Created>2007-06-05, 22:09:18</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>appcfg.py</Name>
-      </Filename>
-      <Linenumber>26</Linenumber>
     </Resource>
   </Task>
   <Task priority="1" completed="0" bugfix="0">
@@ -291,6 +280,28 @@
         <Name>CurrSongInfoPanel.py</Name>
       </Filename>
       <Linenumber>18</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Needs better description!</Description>
+    <Created>2007-06-16, 19:13:22</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>appcfg.py</Name>
+      </Filename>
+      <Linenumber>26</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Should be placed in an config module</Description>
+    <Created>2007-06-16, 19:14:50</Created>
+    <Resource>
+      <Filename>
+        <Dir>objs</Dir>
+        <Name>linkmgt.py</Name>
+      </Filename>
+      <Linenumber>21</Linenumber>
     </Resource>
   </Task>
 </Tasks>
