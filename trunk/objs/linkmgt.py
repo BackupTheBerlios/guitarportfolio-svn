@@ -137,8 +137,14 @@ class LinkMgr(object):
                     attm.setAttribute('runcmd', l._runcmd)
                 attachments.appendChild(attm)
                             
-        # return the XML doc again
-        print doc.toprettyxml()           
+        # save the string
+        xmlfile = os.path.join(self._workPath, XML_ATTACHMENT_FILE)
+        try:
+            f = open(xmlfile, 'w')
+            f.write(doc.toprettyxml())
+            f.close()       
+        except IOError:
+            return
 
     # --------------------------------------------------------------------------
     def Clear(self):

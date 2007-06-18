@@ -541,9 +541,16 @@ class GuitarPortfolioFrame(wx.Frame):
         dlg = AttachmentManageDlg.AttachmentManageDlg(self)
         dlg.SetData()
         dlg.ShowModal()
-        linkmgt.Get().Save()
         dlg.Destroy()        
-          
+        # save the contents to the existing work directory
+        linkmgt.Get().Save()
+        # reload the attachments
+        song = songfilter.Get()._selectedSong
+        if song:
+            linkmgt.Get().Load(appcfg.GetAbsWorkPathFromSong(song))
+        else:
+            linkmgt.Get().Clear()
+                  
 # end of class GuitarPortfolioFrame
 
 
