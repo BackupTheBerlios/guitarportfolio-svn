@@ -25,9 +25,7 @@ TAB_DB_DELETED         = ('tab', 'db', 'deleted')           # tab deleted from d
 
 CATEGORY_ADDED         = ('category', 'added')
 
-SONG_VIEW_ADDED        = ('song', 'view', 'added')          # song added to view
-SONG_VIEW_UPDATED      = ('song', 'view', 'updated')        # selected song updated in view 
-SONG_VIEW_DELETED      = ('song', 'view', 'deleted')        # song deleted from view
+
 SONG_VIEW_SELECTED     = ('song', 'view', 'selected')       # song selected 
 SONG_VIEW_TAB_ADDED    = ('song', 'tab', 'added')           # tab added to selected song
 SONG_VIEW_AFTER_SELECT = ('song', 'view', 'after', 'select')

@@ -13,8 +13,6 @@ class TabPeer(db.base.Peer):
         r = self._ExecuteRestore(obj, sql)
         obj._name = r[0]
         obj._text = r[1]
-        # tell everyone we have a tab restored
-        Publisher().sendMessage(signals.TAB_DB_RESTORED, obj)
                 
     # --------------------------------------------------------------------------
     def Update(self, obj):
@@ -23,18 +21,13 @@ class TabPeer(db.base.Peer):
 
         if obj._id == -1:
             sql = 'insert into tabs (name, text) values (?, ?)'
-            sig = signals.TAB_DB_INSERTED
         else:
             sql = 'update tabs set name = ?, text = ? where id = ?'                                                                        
-            sig = signals.TAB_DB_UPDATED
         
         self._ExecuteUpdate(obj, sql, data)
-        # send update / insert message for tab
-        Publisher().sendMessage(sig, obj)
 
     # --------------------------------------------------------------------------
     def Delete(self, obj):
         sql = 'delete from tabs where id = ?'
         self._ExecuteDelete(obj, sql)
-        # send update / insert message for tab
-        Publisher().sendMessage(signals.TAB_DB_DELETED, obj)
+

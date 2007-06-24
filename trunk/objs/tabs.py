@@ -1,6 +1,3 @@
-from wx.lib.pubsub import Publisher
-
-import signals
 import db
 
 class Tab(db.base.Object):
@@ -21,7 +18,6 @@ class TabList(db.base.Object):
         if tab in self._list:
             self._list.remove(tab)
             tab.Delete(conn)
-            Publisher().sendMessage(signals.TAB_DELETED, tab)
 
     # -------------------------------------------------------------------------
     def AddTab(self, tab):

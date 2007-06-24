@@ -6,9 +6,9 @@ import wx.html as html
 from wx.lib.pubsub import Publisher
 import wx.xrc as xrc
 
-from objs import signals, songs
+from objs import songs
 import HtmlInfoGen
-import xmlres, wikiparser
+import xmlres, wikiparser, viewmgr
 
 # begin wxGlade: dependencies
 # end wxGlade
@@ -26,9 +26,9 @@ class LyricInfoPanel(wx.Panel):
         self.__lyricsInfo.SetPage('')
 
         # hook up a select signal
-        Publisher().subscribe(self.__OnSelectSong, signals.SONG_VIEW_SELECTED)
-        Publisher().subscribe(self.__OnSelectSong, signals.SONG_VIEW_UPDATED)
-        Publisher().subscribe(self.__OnSelectSong, signals.APP_CLEAR)
+        Publisher().subscribe(self.__OnSelectSong, viewmgr.SIGNAL_SONG_SELECTED)
+        Publisher().subscribe(self.__OnSelectSong, viewmgr.SIGNAL_SONG_UPDATED)
+        Publisher().subscribe(self.__OnSelectSong, viewmgr.SIGNAL_CLEAR_DATA)
         
     # --------------------------------------------------------------------------
     def __OnSelectSong(self, message):
@@ -40,5 +40,3 @@ class LyricInfoPanel(wx.Panel):
             self.__lyricsInfo.SetPage(parser.Parse(song._lyrics))
         else:                   
             self.__lyricsInfo.SetPage('')
-
-

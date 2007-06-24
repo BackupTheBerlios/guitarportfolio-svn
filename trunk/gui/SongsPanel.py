@@ -7,9 +7,10 @@ import wx.lib.mixins.listctrl as listmix
 from wx.lib.pubsub import Publisher
 
 import images
-from objs import signals, songs, songfilter
+from objs import songs, songfilter
 from db import songs_peer 
 import db.engine
+import viewmgr
 
 # begin wxGlade: dependencies
 # end wxGlade
@@ -53,18 +54,16 @@ class SongsListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
             self.Bind(wx.EVT_COMMAND_RIGHT_CLICK, self.__OnRightClick)
             
         # attach signal to get informed about songs
-        Publisher().subscribe(self.__OnSongSelected, signals.SONG_VIEW_SELECTED)  
-        Publisher().subscribe(self.__AddSong, signals.SONG_VIEW_ADDED)  
-        Publisher().subscribe(self.__UpdateSong, signals.SONG_VIEW_UPDATED)  
-        Publisher().subscribe(self.__DeleteSong, signals.SONG_VIEW_DELETED)  
-        Publisher().subscribe(self.__QuerySelectSong, signals.SONG_VIEW_QUERY)
-        Publisher().subscribe(self.__ClearSongs, signals.APP_CLEAR)
+        Publisher().subscribe(self.__OnSongSelected, viewmgr.SIGNAL_SONG_SELECTED)  
+        Publisher().subscribe(self.__AddSong, songfilter.SONG_VIEW_ADDED)  
+        Publisher().subscribe(self.__UpdateSong, songfilter.SONG_VIEW_UPDATED)  
+        Publisher().subscribe(self.__DeleteSong, songfilter.SONG_VIEW_DELETED)  
+        Publisher().subscribe(self.__ClearSongs, viewmgr.SIGNAL_CLEAR_DATA)
 
     # --------------------------------------------------------------------------
     def __OnItemSelected(self, event):
-        """ Select the song through the songfilter """
-        songfilter.Get().SelectSong(event.GetData())
-        pass
+        """ Select the song """
+        viewmgr.signalSetSong(event.GetData())
         
     # --------------------------------------------------------------------------
     def __AddSong( self, message ):
@@ -104,21 +103,6 @@ class SongsListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
         self.DeleteAllItems()        
         
     # --------------------------------------------------------------------------
-    def __QuerySelectSong(self, message):
-        """ The last song selected was probably deleted, select a new one
-            from the list, or even None if there is no song anymore """
-        if self.GetItemCount() > 0:
-            item = wx.ListItem()
-            item.SetId(0)
-            item.SetMask(wx.LIST_MASK_STATE)
-            item.SetState(wx.LIST_STATE_SELECTED)
-            self.SetItem(item)
-            songfilter.Get().SelectSong(self.GetItemData(0))
-        else:
-            songfilter.Get().SelectSong(-1)   
-        pass
-
-    # --------------------------------------------------------------------------
     def __OnRightClick(self, event):
         """ Right click to present a menu to the user, to add a new song, edit
             a song, or change quick properties """
@@ -139,7 +123,7 @@ class SongsListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
         self.__statusMap = {}
         items = [ ]
         song = songfilter.Get()._selectedSong
-    	if song:
+        if song:
             if song._status == songs.SS_STARTED:
                 items.append(("&Not Practicing", songs.SS_POSTPONED))
                 items.append(("&Completed!", songs.SS_COMPLETED))
@@ -170,25 +154,18 @@ class SongsListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
     def __OnAddNewSong(self, event):
         """ Send a query message to add a new song. This way the main frame
             will pick it up and we do not have to include the main frame in here """
-        Publisher.sendMessage(signals.SONG_QUERY_ADD)
-        pass
+        viewmgr.signalAddSong()
         
     # --------------------------------------------------------------------------
     def __OnModifySong(self, event):
         """ Send a query message to modify the clicked song. This way the main frame
             will pick it up and we do not have to include the main frame in here """
-        # TODO: Maybe the selected song needs to be sent as object to modify insead of
-        #       assuming the clicked item will select the song
-        Publisher.sendMessage(signals.SONG_QUERY_MODIFY)
-        pass
+        viewmgr.signalEditSong()
         
     # --------------------------------------------------------------------------
     def __OnDeleteSong(self, event):
         """ Send a query message to delete the clicked song. """
-        # TODO: Maybe the selected song needs to be sent as object to delete insead of
-        #       assuming the clicked item will select the song
-        Publisher.sendMessage(signals.SONG_QUERY_DELETE)
-        pass
+        viewmgr.signalDeleteSong()
 
     # --------------------------------------------------------------------------
     def __OnChangeStatus(self, event):
@@ -202,6 +179,9 @@ class SongsListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
                 # update in DB
                 sp = songs_peer.SongPeer(db.engine.GetDb())
                 sp.Update(song)
+                
+                # issue an update
+                viewmgr.signalSongUpdated(song)
                 
     # --------------------------------------------------------------------------
     def __OnSongSelected(self, message):

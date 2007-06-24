@@ -6,11 +6,11 @@ import wx.html as html
 import time
 
 from wx.lib.pubsub import Publisher
-from objs import signals, songs, songfilter, linkmgt
+from objs import songs, songfilter, linkmgt
 import db
 import db.songs_peer
 from images import icon_home, icon_browse_next, icon_browse_prev
-import xmlres, appcfg, htmlparse, linkfile, htmlmarkup, wikiparser
+import xmlres, appcfg, htmlparse, linkfile, htmlmarkup, wikiparser, viewmgr
 
 class SongBrowserPanel(wx.Panel):
     def __init__(self, parent, id = -1):
@@ -36,13 +36,12 @@ class SongBrowserPanel(wx.Panel):
         self.Bind(wx.EVT_BUTTON, self.__OnBrowseBack, self.__browseBack)
 
         # signals for song selection dropdown
-        Publisher().subscribe(self.__AddSong, signals.SONG_DB_ADDED)  
-        Publisher().subscribe(self.__UpdateSong, signals.SONG_DB_UPDATED)  
-        Publisher().subscribe(self.__DeleteSong, signals.SONG_DB_DELETED)  
-        Publisher().subscribe(self.__ClearSongs, signals.APP_CLEAR)  
-        Publisher().subscribe(self.__OnSongSelected, signals.SONG_VIEW_SELECTED)  
-
-        Publisher().subscribe(self.__SongsRestored, signals.APP_READY)  
+        Publisher().subscribe(self.__UpdateSong, viewmgr.SIGNAL_SONG_UPDATED)  
+        Publisher().subscribe(self.__DeleteSong, viewmgr.SIGNAL_SONG_DELETED)  
+        Publisher().subscribe(self.__ClearSongs, viewmgr.SIGNAL_CLEAR_DATA)  
+        Publisher().subscribe(self.__OnSongSelected, viewmgr.SIGNAL_SONG_SELECTED)  
+        Publisher().subscribe(self.__AddSongs, viewmgr.SIGNAL_DATA_RESTORED)  
+        Publisher().subscribe(self.__OnSetHomepage, viewmgr.SIGNAL_SET_HOMEPAGE)
 
         # add some nice buttons
         self.__homeButton.SetBitmapLabel(icon_home.getBitmap())
@@ -54,11 +53,11 @@ class SongBrowserPanel(wx.Panel):
         self.__songBrowser.SetPage(wp.Parse(htmlmarkup.startupinfo))
         
     # --------------------------------------------------------------------------
-    def __AddSong(self, message):
-        # TODO: Sort the items in the choice
+    def __AddSongs(self, message):
         sl = self.__songList
-        idx = sl.Append(message.data._title)
-        sl.SetClientData(idx, message.data)
+        for song in viewmgr.songs:
+            idx = sl.Append(song._title)
+            sl.SetClientData(idx, song)
         
         # if we are on the homepage, update the report
         if self._currPage == -1:
@@ -106,7 +105,7 @@ class SongBrowserPanel(wx.Panel):
         idx = self.__songList.GetSelection()
         if idx <> wx.NOT_FOUND:
             s = self.__songList.GetClientData(idx)
-            songfilter.Get().SelectSong(s._id)
+            viewmgr.signalSetSong(s)
 
     # --------------------------------------------------------------------------
     def __OnSongSelected(self, message):
@@ -130,13 +129,6 @@ class SongBrowserPanel(wx.Panel):
             self.__RenderHomepage()
             self.__songList.SetSelection(-1)
 
-    # --------------------------------------------------------------------------
-    def __SongsRestored(self, message):
-        """ ALl songs are restored, if we are on the main homepage, we update the 
-            table else we ignore """
-        if self._currPage == -1:
-            self.__RenderHomepage()
-            
     # --------------------------------------------------------------------------
     def __RenderHomepage(self):
         """ We render the homepage containing all song statuses divided in sections """
@@ -212,7 +204,10 @@ class SongBrowserPanel(wx.Panel):
         if tag.startswith('#song:'):
             song_nr = tag[6:]
             if song_nr:
-                songfilter.Get().SelectSong(int(song_nr))
+                song = songfilter.Get()._list.find_id(int(song_nr))
+                if song:
+                    viewmgr.signalSetSong(song)
+                
         # check for execution of a link
         elif tag.startswith('#link:'):
             link_nr = tag[6:]
@@ -234,50 +229,46 @@ class SongBrowserPanel(wx.Panel):
             except KeyError:
                 wx.MessageBox("Command '%s' not implemented!" % (cmd,), 'Error', wx.ICON_ERROR | wx.OK)
 
-        
     #---------------------------------------------------------------------------
     def __DoSetSongStatus(self, status):
+        """ Song status must be changed, issued by the browser component which will trigger
+            a change in status """
+        
         song = songfilter.Get()._selectedSong
         if song:
             if song._status <> status:
                 # update in DB
                 song._status = status
                 sp = db.songs_peer.SongPeer(db.engine.GetDb())
-                sp.Update(song)                
+                sp.Update(song)
+
+                # issue a song update
+                viewmgr.signalSongUpdated(song)
         
     #---------------------------------------------------------------------------
     def __OnBrowseHome(self, event):
+        """ User click to get to the homepage. This is indirectly done by the view manager """
+        viewmgr.signalSetHomepage()
+        
+    #---------------------------------------------------------------------------
+    def __OnSetHomepage(self, message):
+        """ Signal is received that we have to switch to the homepage """
+        
         self._currPage = -1
-        self.__RenderHomepage()
+        self.__RenderHomepage()        
         
     #---------------------------------------------------------------------------
     def __OnBrowseForward(self, event):
-        if self._currPage == -1:
-            # take first (if any)
-            if self.__songList.GetCount() > 0:
-                s = self.__songList.GetClientData(0)
-                songfilter.Get().SelectSong(s._id)
-                return
-        else:
-            # find the next song in the list
-            i = self.__songList.GetSelection()
-            if i < (self.__songList.GetCount() - 1) and i != -1:
-                s = self.__songList.GetClientData(i + 1)
-                songfilter.Get().SelectSong(s._id)
-                return
-                
+        """ We are going to browse forward. This means we will emit a signal that
+            will determine the best song to be selected for us """
+        
+        # emit, and all will change
+        viewmgr.signalSelectNextSong()
+
     #---------------------------------------------------------------------------
     def __OnBrowseBack(self, event):
-        if self._currPage == -1:
-            # take last (if any)
-            if self.__songList.GetCount() > 0:
-                s = self.__songList.GetClientData(self.__songList.GetCount() - 1)
-                songfilter.Get().SelectSong(s._id)
-                return
-        else:
-            # find the previous song in the list
-            i = self.__songList.GetSelection()
-            if i > 0:
-                s = self.__songList.GetClientData(i - 1)
-                songfilter.Get().SelectSong(s._id)
-                return
+        """ We are going to browse back. This means we will emit a signal that
+            will determine the best song to be selected for us """
+        
+        # emit, and all will change
+        viewmgr.signalSelectPreviousSong()

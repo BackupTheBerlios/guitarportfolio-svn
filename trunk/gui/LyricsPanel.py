@@ -3,7 +3,8 @@
 
 import wx
 from wx.lib.pubsub import Publisher
-from objs import signals, songfilter
+from objs import songfilter
+import viewmgr
 
 import db.engine
 from db import songs_peer
@@ -25,25 +26,29 @@ class LyricsPanel(wx.Panel):
 
         self.Bind(wx.EVT_BUTTON, self.__OnApply, self.__applyButton)
 
-        Publisher().subscribe(self.__OnSongSelected, signals.SONG_VIEW_SELECTED)
-        Publisher().subscribe(self.__OnSongSelected, signals.APP_CLEAR)
+        Publisher().subscribe(self.__OnSongSelected, viewmgr.SIGNAL_SONG_SELECTED)
+        Publisher().subscribe(self.__OnSongSelected, viewmgr.SIGNAL_CLEAR_DATA)
 
         self.__applySelection.SetSelection(0)
 
     # --------------------------------------------------------------------------
-    def __OnApply(self, event): # wxGlade: LyricsPanel.<event_handler>
+    def __OnApply(self, event):
         """ Revert or apply the text. Revert will restore the information from the class
             else it will store the information in the database and update all views """
+        
         s = songfilter.Get()._selectedSong        
         if s:
             if self.__applySelection.GetSelection():
-                # revert
+                # revert the lyrics
                 self.__lyrics.SetValue(s._lyrics)
             else:
                 # update only the basic fields
                 s._lyrics = self.__lyrics.GetValue()
                 sp = songs_peer.SongPeer(db.engine.GetDb())
                 sp.Update(s, all = False)
+                
+                # issue a song update to the audience
+                viewmgr.signalSongUpdated(s)
             
         # always revert to save action
         self.__applySelection.SetSelection(0)    

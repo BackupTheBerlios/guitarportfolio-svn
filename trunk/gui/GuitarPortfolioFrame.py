@@ -12,7 +12,7 @@ import db.songs_peer
 from objs import signals, songs, category_mgr, tuning_mgr, songfilter, linkmgt
 from gui import SongsPanel, EditorNotebook, CurrInfoNotebook, NewSongDlg, \
                 CategoriesDlg, SongFilterPanel, OptionsDlg, WelcomeDlg, \
-                AttachmentManageDlg, xmlres
+                AttachmentManageDlg, xmlres, viewmgr
 from images import icon_main_window, guitarportfolio_icon
 
 import appcfg
@@ -165,19 +165,13 @@ class GuitarPortfolioFrame(wx.Frame):
         self._filter = songfilter.Get()
 
         # hook up event handlers
-        Publisher().subscribe(self.__OnSongAdded, signals.SONG_DB_ADDED)
-        Publisher().subscribe(self.__OnSongDeleted, signals.SONG_DB_DELETED)
-        Publisher().subscribe(self.__OnSongUpdated, signals.SONG_DB_UPDATED)
-        Publisher().subscribe(self.__OnSongSelected, signals.APP_CLEAR)
-        Publisher().subscribe(self.__OnSongSelected, signals.SONG_VIEW_SELECTED)
-        Publisher().subscribe(self.__OnSongPopulate, signals.SONG_VIEW_AFTER_SELECT)
-        Publisher().subscribe(self.__OnQueryAddSong, signals.SONG_QUERY_ADD)
-        Publisher().subscribe(self.__OnQueryDeleteSong, signals.SONG_QUERY_DELETE)
-        Publisher().subscribe(self.__OnQueryEditSong, signals.SONG_QUERY_MODIFY)
-        Publisher().subscribe(self.__OnTabAdded, signals.SONG_DB_TAB_ADDED)
-        Publisher().subscribe(self.__OnSongPreselect, signals.SONG_VIEW_PRESELECT)
-        Publisher().subscribe(self.__OnQueryEditAttachments, signals.LINKMGR_QUERY_EDIT)
-
+        Publisher().subscribe(self.__SignalOnQueryAddSong, viewmgr.SIGNAL_ADD_SONG)
+        Publisher().subscribe(self.__SignalOnSongSelected, viewmgr.SIGNAL_SONG_SELECTED)
+        Publisher().subscribe(self.__SignalOnQueryEditSong, viewmgr.SIGNAL_EDIT_SONG)
+        Publisher().subscribe(self.__SignalOnQueryDeleteSong, viewmgr.SIGNAL_DELETE_SONG)
+        Publisher().subscribe(self.__SignalOnSongUpdated, viewmgr.SIGNAL_SONG_UPDATED)
+        Publisher().subscribe(self.__SignalOnQueryEditAttachments, viewmgr.SIGNAL_EDIT_LINKS)
+        
         # dependent on the layout settings, we restore the old perspective, or save the default
         cfg = appcfg.Get()
         pers = cfg.Read(appcfg.CFG_LAYOUT_DEFAULT, '')
@@ -196,6 +190,7 @@ class GuitarPortfolioFrame(wx.Frame):
         height = cfg.ReadInt(appcfg.CFG_LAYOUT_LAST_H, 800)
 
         self.SetSize((width, height)) 
+        self.Center()
 
         # open database (or not) when unsuccesful an event is posted to
         # show the wizard on the next OnIdle event
@@ -208,38 +203,34 @@ class GuitarPortfolioFrame(wx.Frame):
             evt = wx.CommandEvent(wx.wxEVT_COMMAND_MENU_SELECTED, self.__menuShowDatabaseWizard.GetId())
             self.AddPendingEvent(evt)
         else:
-            self.__PopulateData()
+            viewmgr.signalDbChange()
             
     #---------------------------------------------------------------------------
-    def OnExit(self, event): # wxGlade: GuitarPortfolioFrame.<event_handler>
+    def OnExit(self, event): 
         self.Close()
 
     #---------------------------------------------------------------------------
-    def __OnAddNewSong(self, event): # wxGlade: GuitarPortfolioFrame.<event_handler>
-        # callback to ourselves
-        self.__OnQueryAddSong()
-
-    #---------------------------------------------------------------------------
-    def __OnSongPreselect(self, message):
-        """ Song pre-selected. Only populate stuff that has nothing to do with the 
-            immediate song, or do not rely on songfilter.Get._selectedSong because it 
-            is not yet set """
-        song = message.data
-        if song:
-            linkmgt.Get().Load(appcfg.GetAbsWorkPathFromSong(song))
-        else:
-            linkmgt.Get().Clear()
+    def __OnAddNewSong(self, event): 
+        """ Event handler to add a new song """
         
+        # call back on a signal we catch ourselves
+        viewmgr.signalAddSong()
+                
     #---------------------------------------------------------------------------
-    def __OnSongSelected(self, message):
+    def __SignalOnSongSelected(self, message):
         """ A song is selected. When we have NONE as song, we disable the 
-            menus that should not be pressed when there is no song """
+            menus that should not be pressed when there is no song
+            Subscribed to VIEWMGR """
+        
+        # make sure our menu system will not permit user to do silly things
         self.__SyncMenuItems()
 
     #---------------------------------------------------------------------------
-    def __OnQueryAddSong(self, message = None):
+    def __SignalOnQueryAddSong(self, message = None):
         """ We received a query from somewhere to add a new song to the database
-            this is either sent from the popup menu or ourselves """
+            this is either sent from the popup menu or ourselves 
+            Subscribed to VIEWMGR """
+            
         s = songs.Song()
         s._tuning = tuning_mgr.Get().GetDefaultTuning()
 
@@ -258,11 +249,18 @@ class GuitarPortfolioFrame(wx.Frame):
             # to add the song to all lists that are interested
             sp = db.songs_peer.SongPeer(db.engine.GetDb())
             sp.Update(s, all = True)
+            
+            # invoke the add signal
+            viewmgr.signalSongAdded(s)
 
         dlg.Destroy()  
 
     #---------------------------------------------------------------------------
-    def __OnQueryEditSong(self, message = None):
+    def __SignalOnQueryEditSong(self, message = None):
+        """ The song needs to be edited, we catch a signal from the view manager
+            to allow other GUI elements to also issue this edit action 
+            Subscribed to VIEWMGR """
+        
         s = self._filter._selectedSong
         if s <> None:
             dlg = NewSongDlg.NewSongDlg(self)
@@ -275,28 +273,48 @@ class GuitarPortfolioFrame(wx.Frame):
 
                 # update the song in the database
                 sp = db.songs_peer.SongPeer(db.engine.GetDb())
-                sp.Update(s, all = True)                
+                sp.Update(s, all = True)  
+  
+                # signal everyone the song is updated
+                signalSongUpdated(s)
+
             dlg.Destroy()
 
     #---------------------------------------------------------------------------
-    def __OnEditNewSong(self, event): # wxGlade: GuitarPortfolioFrame.<event_handler>
-        self.__OnQueryEditSong()
+    def __OnEditNewSong(self, event): 
+        """ Menu handler for a song edit action. We call back on ourselves """
+        
+        # we callback on ourselves
+        viewmgr.signalEditSong()
 
     #---------------------------------------------------------------------------
-    def __OnQueryDeleteSong(self, message = None):
+    def __SignalOnQueryDeleteSong(self, message = None):
+        """ A signal to delete a song from the database, this is a callback signal to
+            allow other GUI elements to delete the song if needed 
+            Subscribed to VIEWMGR """
+        
         if self._filter._selectedSong:
             res = wx.MessageBox('Are you sure you want to remove the song from the database?\n'
                                    'All related lyrics, tabs and information will be permanently lost!', 'Warning', wx.ICON_QUESTION | wx.YES_NO)
             if res == wx.YES:
                 sp = db.songs_peer.SongPeer(db.engine.GetDb())
-                sp.Delete(self._filter._selectedSong)             
+                sp.Delete(self._filter._selectedSong)   
+      
+                # now transmit the deletion, and let the system
+                # choose a new song to display
+                viewmgr.signalSongDeleted(self._filter._selectedSong)
 
     #---------------------------------------------------------------------------
-    def __OnDeleteSong(self, event): # wxGlade: GuitarPortfolioFrame.<event_handler>
-        self.__OnQueryDeleteSong()
-
+    def __OnDeleteSong(self, event): 
+        """ Menu handler for deleting a song """
+        
+        # callback on ourselves 
+        viewmgr.signalDeleteSong()
+        
     #---------------------------------------------------------------------------
-    def __OnEditCategories(self, event): # wxGlade: GuitarPortfolioFrame.<event_handler>
+    def __OnEditCategories(self, event):
+        """ Menu handler to edit the categories belonging to the song """
+        
         s = self._filter._selectedSong
         if s <> None:    
             dlg = CategoriesDlg.CategoriesDlg(self)
@@ -313,18 +331,22 @@ class GuitarPortfolioFrame(wx.Frame):
     def __OnChangeStatus(self, event):
         """ Set the status of the song
             NOTE: This should eventually be done by a log mechanism """
+            
         song = songfilter.Get()._selectedSong
-        if song <> None:
+        if song:
             # if our status differs, force an update
             if song._status <> self.__menu_status_lookup[event.GetId()]:
                 song._status = self.__menu_status_lookup[event.GetId()]
                 
                 # update in DB
                 sp = db.songs_peer.SongPeer(db.engine.GetDb())
-                sp.Update(song)        
+                sp.Update(song)  
+          
+                # force a signal around to sync views
+                viewmgr.signalSongUpdated(song)
 
     #---------------------------------------------------------------------------
-    def __OnShowOptions(self, event): # wxGlade: GuitarPortfolioFrame.<event_handler>
+    def __OnShowOptions(self, event): 
         """ Show the options dialog, all options saving is done inside the dialog 
             itself so there is no need for catching the modalresult """
         dlg = OptionsDlg.OptionsDlg(self)
@@ -342,26 +364,26 @@ class GuitarPortfolioFrame(wx.Frame):
         event.Skip()  
 
     #---------------------------------------------------------------------------
-    def __OnRestoreLayout(self, event): # wxGlade: GuitarPortfolioFrame.<event_handler>
+    def __OnRestoreLayout(self, event): 
         self.__aui.LoadPerspective(appcfg.Get().Read(appcfg.CFG_LAYOUT_DEFAULT, ''), True)
 
     #---------------------------------------------------------------------------
-    def __OnToggleEditWindow(self, event): # wxGlade: GuitarPortfolioFrame.<event_handler>
+    def __OnToggleEditWindow(self, event): 
         self.__aui.GetPane("editpanel").Show(True)
         self.__aui.Update()
 
     #---------------------------------------------------------------------------
-    def __OnToggleSongSelector(self, event): # wxGlade: GuitarPortfolioFrame.<event_handler>
+    def __OnToggleSongSelector(self, event): 
         self.__aui.GetPane("songspanel").Show(True)
         self.__aui.Update()
 
     #---------------------------------------------------------------------------
-    def __OnToggleFilterWindow(self, event): # wxGlade: GuitarPortfolioFrame.<event_handler>
+    def __OnToggleFilterWindow(self, event): 
         self.__aui.GetPane("filterpanel").Show(True)
         self.__aui.Update()
 
     #---------------------------------------------------------------------------
-    def __OnShowDatabaseWizard(self, event): # wxGlade: GuitarPortfolioFrame.<event_handler>
+    def __OnShowDatabaseWizard(self, event): 
         """ User wants to switch DB's or upgrade, or create a DB, or create a demo db.
             This can also be auto invoked by the application to let the user select a DB """
 
@@ -374,81 +396,20 @@ class GuitarPortfolioFrame(wx.Frame):
             self.Close()
             return
 
-        self.__PopulateData()
+        viewmgr.signalDbChanged()
 
     #---------------------------------------------------------------------------
-    def __PopulateData(self):
-        """ Method that populates everything in all manager classes, and GUI windows
-            by emitting a signals.APP_CLEAR to request emptying all lists and views """
-        Publisher().sendMessage(signals.APP_CLEAR, None) # None object is crucial
-
-        songfilter.Get().Reset()
-        linkmgt.Get().Clear()
-
-        # make sure we have a valid DB
-        if not db.engine.Get().IsOpened():
-            wx.MessageBox('An error occured while reading from the database, \n' + \
-                          'please restart GuitarPortfolio and try again!', 'Error',
-                          wx.ICON_HAND | wx.OK)
-            self.Close()
-            return
-
-        # start loading
-        dbc = db.engine.GetDb()
-        category_mgr.RestoreFromDb(dbc)
-        tuning_mgr.RestoreFromDb(dbc)
-
-        # load all songs, and let the callback signals
-        # handle the adding to various views
-
-        sp = db.songs_peer.SongSetPeer(dbc)
-        songs = sp.Restore()
-
-        # go restore all relations
-        sp = db.songs_peer.SongPeer(dbc)
-        for s in songs:
-            sp.RestoreCategories(s)
-
-        # send everyone that the DB is restored and all went well
-        Publisher().sendMessage(signals.APP_READY)
-
-    #---------------------------------------------------------------------------
-    def __OnSongAdded(self, message):
-        # add a song to the view filter
-        self._filter.AddSong(message.data)        
-
-    #---------------------------------------------------------------------------
-    def __OnSongDeleted(self, message):
-        # remove a song from the view filter
-        self._filter.RemoveSong(message.data)        
-
-    #---------------------------------------------------------------------------
-    def __OnSongUpdated(self, message):
+    def __SignalOnSongUpdated(self, message):
+        """ Song is updated, we need to make sure the user cannot select menu items that make 
+            no sense. Subscribed to VIEWMGR """
+            
         # update a song in the view filter
-        self._filter.UpdateSong(message.data)        
         self.__SyncMenuItems()
-
-    #---------------------------------------------------------------------------
-    def __OnSongPopulate(self, message):
-        """ Do some tab restoring, we do this to save mem and time at start-up """
-        ss = self._filter._selectedSong
-        # restore the tabs
-        if ss:
-            tlp = db.songs_peer.SongTabListPeer(db.engine.GetDb())
-            tlp.Restore(ss)
-
-    #---------------------------------------------------------------------------
-    def __OnTabAdded(self, message):
-        """ Tab is added, we check if it belongs to the song that is selected
-            as current, and re-route the signal to signals.SONG_VIEW_TAB_ADDED """
-        song_tab = message.data
-        s = songfilter.Get()._selectedSong
-        if song_tab[0] == s and s:
-            Publisher().sendMessage(signals.SONG_VIEW_TAB_ADDED, song_tab[1])
 
     #---------------------------------------------------------------------------
     def __OnBrowserMode(self, event): # wxGlade: GuitarPortfolioFrame.<event_handler>
         """ Show only the browser parts of GuitarPortfolio """
+        
         self.__aui.GetPane("editpanel").Show(False)
         self.__aui.GetPane("songspanel").Show(False)
         self.__aui.GetPane("filterpanel").Show(False)
@@ -457,6 +418,7 @@ class GuitarPortfolioFrame(wx.Frame):
     #---------------------------------------------------------------------------
     def __OnEditorMode(self, event): # wxGlade: GuitarPortfolioFrame.<event_handler>
         """ Show the editor parts of GuitarPortfolio """
+        
         self.__aui.GetPane("editpanel").Show(True)
         self.__aui.GetPane("songspanel").Show(True)
         self.__aui.GetPane("filterpanel").Show(True)
@@ -465,6 +427,7 @@ class GuitarPortfolioFrame(wx.Frame):
     #---------------------------------------------------------------------------
     def __OnAbout(self, event):
         """ Show the about dialog with information about the application """
+        
         info = wx.AboutDialogInfo()
         info.Icon = wx.IconFromBitmap(guitarportfolio_icon.getBitmap())
         info.Name = appcfg.APP_TITLE
@@ -476,17 +439,18 @@ class GuitarPortfolioFrame(wx.Frame):
         info.License = wordwrap(appcfg.licensetext, 500, wx.ClientDC(self))
         wx.AboutBox(info)
     
-
     #---------------------------------------------------------------------------
     def __OnVisitSite(self, event):
-        pass
+        """ Execute the internet page as an external link """
+
+        # use execute_uri
+        linkfile.execute_uri('http://guitarportfolio.berlios.de')
 
     #---------------------------------------------------------------------------
     def __SyncMenuItems(self):
         """ Synchronize disabled / enabled state of some of the menu items so 
             that the user is not tempted to click anything that does nothing 
-            anyway. 
-        """
+            anyway. """
         
         song = songfilter.Get()._selectedSong
         self.__menuEditSong.Enable(song <> None)
@@ -530,27 +494,24 @@ class GuitarPortfolioFrame(wx.Frame):
 
     #---------------------------------------------------------------------------
     def __OnEditAttachments(self, event):
-        Publisher().sendMessage(signals.LINKMGR_QUERY_EDIT)
+        viewmgr.signalEditAttachments()
 
     #---------------------------------------------------------------------------
     def __OnRefreshAttachments(self, event):
         pass
         
     #---------------------------------------------------------------------------
-    def __OnQueryEditAttachments(self, message):
+    def __SignalOnQueryEditAttachments(self, message):
         dlg = AttachmentManageDlg.AttachmentManageDlg(self)
         dlg.SetData()
         dlg.ShowModal()
         dlg.Destroy()        
+        
         # save the contents to the existing work directory
         linkmgt.Get().Save()
+        
         # reload the attachments
-        song = songfilter.Get()._selectedSong
-        if song:
-            linkmgt.Get().Load(appcfg.GetAbsWorkPathFromSong(song))
-        else:
-            linkmgt.Get().Clear()
-                  
-# end of class GuitarPortfolioFrame
+        viewmgr.signalRefreshLinks()
+
 
 

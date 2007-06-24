@@ -5,8 +5,9 @@ import wx
 import wx.xrc as xrc
 from wx.lib.pubsub import Publisher
 
-from objs import songs, signals, songfilter
+from objs import songs, songfilter
 import appcfg, xmlres
+import viewmgr
 
 class SongFilterPanel(wx.Panel):
     def __init__(self, parent, id = -1):
@@ -35,16 +36,18 @@ class SongFilterPanel(wx.Panel):
         self.Bind(wx.EVT_RADIOBUTTON, self.__OnOnlyShow, self.__onlyShowAll) 
         
         # bind signals
-        Publisher().subscribe(self.__OnChangeCats, signals.SONG_DB_CAT_UPDATED)
-        Publisher().subscribe(self.__OnAppReady, signals.APP_READY)
-        Publisher().subscribe(self.__OnClear, signals.APP_CLEAR)
+        Publisher().subscribe(self.__OnChangeCats, viewmgr.SIGNAL_SONG_UPDATED)
+        Publisher().subscribe(self.__OnChangeCats, viewmgr.SIGNAL_SONG_DELETED)
+        Publisher().subscribe(self.__OnChangeCats, viewmgr.SIGNAL_SONG_ADDED)
+        Publisher().subscribe(self.__OnAppReady, viewmgr.SIGNAL_DATA_RESTORED)
+        Publisher().subscribe(self.__OnClear, viewmgr.SIGNAL_CLEAR_DATA)
 
         # init controls
         self.__progressFilter.SetSelection(0)
         self.__difficulty.SetSelection(0)
         
     #---------------------------------------------------------------------------
-    def __OnFilterSongs(self, event): # wxGlade: SongFilterPanel.<event_handler>
+    def __OnFilterSongs(self, event): 
         crits = [songfilter._CRIT_STATUS_ALL, 
                  songs.SS_STARTED, 
                  songs.SS_POSTPONED, 
@@ -55,7 +58,7 @@ class SongFilterPanel(wx.Panel):
         appcfg.Get().WriteInt(appcfg.CFG_PROGRESS, idx)
 
     #---------------------------------------------------------------------------
-    def __OnSelectDifficulty(self, event): # wxGlade: SongFilterPanel.<event_handler>
+    def __OnSelectDifficulty(self, event): 
         crits = [songfilter._CRIT_STATUS_ALL, 
                  songs.SD_EASY,
                  songs.SD_NORMAL,
@@ -75,7 +78,8 @@ class SongFilterPanel(wx.Panel):
     def __PopulateCategories(self):
         """ Fill checklisbox with only the categories being used, keep some kind
             of shadow check state because the stupid wx.CheckListCtrl hogs the 
-            client data """
+            client data. Bad design really gets my blood boiling """
+            
         self.__cats.Clear()
         self.__catsClientData = []
         cats = songfilter.Get().GetUsedCategories()

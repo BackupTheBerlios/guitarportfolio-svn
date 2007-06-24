@@ -7,7 +7,6 @@ import LinksPanel
 import LyricsPanel
 import GuitarTabEditPanel
 
-
 #----------------------------------------------------------------------
 
 class EditorNotebook(wx.Panel):

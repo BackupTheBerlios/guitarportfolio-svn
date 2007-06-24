@@ -4,7 +4,7 @@ import os.path
 import fnmatch
 
 from wx.lib.pubsub import Publisher
-from objs import signals, objlist
+from objs import objlist
 import xml.parsers.expat
 import xml.dom.minidom
 
@@ -96,7 +96,6 @@ class LinkMgr(object):
                             self.links.append(l)
                             self._lastLinkID += 1
                             l._in_xml = False   # reset the flag
-                Publisher().sendMessage(signals.LINKMGR_POPULATED)
             except OSError:
                 return False
         
@@ -148,7 +147,6 @@ class LinkMgr(object):
 
     # --------------------------------------------------------------------------
     def Clear(self):
-        Publisher().sendMessage(signals.LINKMGR_CLEAR)
         self.links.clear()
         self._lastLinkID = 0
     

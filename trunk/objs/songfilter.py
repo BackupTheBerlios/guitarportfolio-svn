@@ -1,5 +1,5 @@
 from wx.lib.pubsub import Publisher
-from objs import signals, songs, objlist, linkmgt
+from objs import songs, objlist, linkmgt
 from gui import appcfg
 
 # definitions
@@ -14,10 +14,17 @@ SHOW_ALL       = 0
 SHOW_TUTORIALS = 1
 SHOW_SONGS     = 2
 
+SONG_VIEW_ADDED        = ('song', 'view', 'added')          # song added to view
+SONG_VIEW_UPDATED      = ('song', 'view', 'updated')        # selected song updated in view 
+SONG_VIEW_DELETED      = ('song', 'view', 'deleted')        # song deleted from view
+
 class SongFilter:
     def __init__(self):
         self._list = objlist.ObjList(class_name = songs.Song)
         self.Reset()
+
+        # subscribe to the viewmanager to keep our list
+        # up to date!
 
     # --------------------------------------------------------------------------
     def Reset(self):
@@ -31,10 +38,6 @@ class SongFilter:
         self._critCategoryAND = False 
         self._critDifficultyLO = False
         self._showSongType = SHOW_ALL   
-
-    # TODO! Subscribe to signals.SONG_DB_DELETED, SONG_DB_UPDATED, SONG_DB_ADDED
-    # if a song is deleted from the DB, make sure it is removed from the criteria list as well
-    # if updated, it should be re-matched on the criteria
     
     # --------------------------------------------------------------------------
     def AddSong(self, song):
@@ -61,32 +64,6 @@ class SongFilter:
                 # refresh the links
                 linkmgt.Get().Load(appcfg.GetAbsWorkPathFromSong(song))                
 
-    # --------------------------------------------------------------------------
-    def SelectSong(self, song_id):
-        """ Select a song in the list by ID, when succesful, True is returned
-            and a signal is emitted to all listerers """
-        if song_id <> -1:                        
-            song = self._list.find_id(song_id)
-            ss = self._selectedSong
-            if song:            
-                if ss and song <> ss:
-                    # prune old selection (is this needed?)
-                    # TODO: Maybe we need to create SONG_VIEW_DESELECT
-                    # but only valid when song <> ss
-                    ss.tabs.prune()
-                
-                # assign new, and notify everyone
-                self._selectedSong = None
-                Publisher().sendMessage(signals.SONG_VIEW_PRESELECT, song)
-                self._selectedSong = song
-                # restore the links
-                Publisher().sendMessage(signals.SONG_VIEW_SELECTED, song)
-                Publisher().sendMessage(signals.SONG_VIEW_AFTER_SELECT)
-                return True
-        
-        # issue a select of nothing (reset views)
-        Publisher().sendMessage(signals.SONG_VIEW_SELECTED, None)
-        return False
         
     # --------------------------------------------------------------------------
     def ChangeStatusCriteria(self, criteria):
@@ -200,32 +177,66 @@ class SongFilter:
         # always if not visible, but present, remove
         if not visible and present:
             self._critList.remove(song)
-            Publisher().sendMessage(signals.SONG_VIEW_DELETED, song)
+            Publisher().sendMessage(SONG_VIEW_DELETED, song)
             if song == self._selectedSong:
-                # TODO: Check signals for a big concern
-                Publisher().sendMessage(signals.SONG_VIEW_QUERY)  
+                viewmgr.signalSetSong(self.GetNextVisibleSong())  
             return
 
         # try adding a song
         if action == ADD:
             if visible and not present:            
                 self._critList.append(song)
-                Publisher().sendMessage(signals.SONG_VIEW_ADDED, song)
+                Publisher().sendMessage(SONG_VIEW_ADDED, song)
         # try updating a song
         if action == UPDATE:
             if visible and not present:            
                 self._critList.append(song)
-                Publisher().sendMessage(signals.SONG_VIEW_ADDED, song)
+                Publisher().sendMessage(SONG_VIEW_ADDED, song)
             elif visible and present:
-                Publisher().sendMessage(signals.SONG_VIEW_UPDATED, song)
+                Publisher().sendMessage(SONG_VIEW_UPDATED, song)
         # try deleting a song
         if action == DELETE:
             if visible and present:
-                Publisher().sendMessage(signals.SONG_VIEW_DELETED, song)
+                Publisher().sendMessage(SONG_VIEW_DELETED, song)
                 # issue a select query when selected one is deleted
                 if song == self._selectedSong:
-                    # TODO: Check signals for a big concern
-                    Publisher().sendMessage(signals.SONG_VIEW_QUERY)  
+                    viewmgr.signalSetSong(self.GetNextVisibleSong())  
+
+    # --------------------------------------------------------------------------
+    def GetNextVisibleSong(self):
+        """ Looks at the criteria list and tries to get the next song that is still valid 
+            to be shown. If there isn't any, we return None """
+        try:
+            idx = self._critList.index(self._selectedSong)
+        except ValueError:
+            idx = -1 # force taking the first item in the list
+        
+        # retrieve the next value, if that does not exist retrieve 
+        # the first value, if all fails, return None (empty criteria)
+        if idx + 1 < len(self._critlist):
+            return self._critlist[idx + 1]
+        else:
+            if len(self._critlist) > 0:
+                return self._critlist[0]
+        return None # I give up
+
+    # --------------------------------------------------------------------------
+    def GetPreviousVisibleSong(self):
+        """ Looks at the criteria list and tries to get the previous song that is still valid 
+            to be shown. If there isn't any, we return None """
+        try:
+            idx = self._critList.index(self._selectedSong)
+        except ValueError:
+            idx = 1 # force taking the first item in the list
+        
+        # retrieve the next value, if that does not exist retrieve 
+        # the first value, if all fails, return None (empty criteria)
+        if idx - 1 > 0 and len(self._critlist) > 0:
+            return self._critlist[idx - 1]
+        else:
+            if len(self._critlist) > 0:
+                return self._critlist[len(self._critlist - 1)]
+        return None # I give up
 
 #===============================================================================
 

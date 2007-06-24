@@ -8,8 +8,8 @@ import xmlres
 import time
 
 from wx.lib.pubsub import Publisher
-from objs import signals, songs, songfilter
-import wikiparser, linkfile
+from objs import songs, songfilter
+import wikiparser, linkfile, viewmgr
 
 songinfo = """
 No song info available
@@ -37,10 +37,9 @@ class CurrSongInfoPanel(wx.Panel):
 
         self.Bind(html.EVT_HTML_LINK_CLICKED, self.__OnLinkClicked, self.__songInfo)
             
-        self.__songInfo.SetPage(wikiparser.WikiParser().Parse(songinfo))
-                
-        Publisher().subscribe(self.__OnSelectSong, signals.SONG_VIEW_SELECTED)
-        Publisher().subscribe(self.__OnSelectSong, signals.SONG_VIEW_UPDATED)
+        Publisher().subscribe(self.__OnClearSong, viewmgr.SIGNAL_CLEAR_DATA)
+        Publisher().subscribe(self.__OnSelectSong, viewmgr.SIGNAL_SONG_SELECTED)
+        Publisher().subscribe(self.__OnSelectSong, viewmgr.SIGNAL_SONG_UPDATED)
         
     # --------------------------------------------------------------------------
     def __OnSelectSong(self, message):
@@ -61,4 +60,7 @@ class CurrSongInfoPanel(wx.Panel):
         if linkfile.is_valid_external_link(tag):
             print "Executing link: " + tag
             linkfile.execute_uri(tag)
-        
+
+    #---------------------------------------------------------------------------
+    def __OnClearSong(self, message):
+        self.__songInfo.SetPage(wikiparser.WikiParser().Parse(songinfo))        

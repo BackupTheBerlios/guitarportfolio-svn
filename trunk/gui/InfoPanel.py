@@ -5,10 +5,10 @@ import wx
 import wx.xrc as xrc
 from wx.lib.pubsub import Publisher
 
-from objs import signals, songfilter
+from objs import songfilter
 from db import songs_peer
 import db.engine
-import xmlres
+import xmlres, viewmgr
 
 class InfoPanel(wx.Panel):
     def __init__(self, parent, id = -1):
@@ -22,8 +22,8 @@ class InfoPanel(wx.Panel):
 
         self.Bind(wx.EVT_BUTTON, self.__OnApply, self.__applyToDB)
 
-        Publisher().subscribe(self.__OnSongSelected, signals.SONG_VIEW_SELECTED)
-        Publisher().subscribe(self.__OnSongSelected, signals.APP_READY)
+        Publisher().subscribe(self.__OnSongSelected, viewmgr.SIGNAL_SONG_SELECTED)
+        Publisher().subscribe(self.__OnSongSelected, viewmgr.SIGNAL_CLEAR_DATA)
 
         self.__applySelection.SetSelection(0)
 
@@ -47,8 +47,13 @@ class InfoPanel(wx.Panel):
         s = songfilter.Get()._selectedSong        
         if self.__applySelection.GetSelection() == 0:
             s._information = self.__infoEdit.GetValue()
+
+            # write the song to the database
             sp = songs_peer.SongPeer(db.engine.GetDb())
             sp.Update(s)
+            
+            # issue an update signal of the song
+            viewmgr.signalSongUpdated(s)
         else:
             # revert
             self.__infoEdit.SetValue(s._information)

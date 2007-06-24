@@ -12,7 +12,7 @@ class LogSetPeer(db.base.Peer):
     
     # --------------------------------------------------------------------------
     def Restore(self, song_id, log_types = None, start_date = None, end_date = None):
-        
+si        
         # we restore this slightly out of the given framework to 
         # speed up the restore as the log items are not standard DB objects
         # and are subject to filtering as well
@@ -74,7 +74,6 @@ class SongCategoryListPeer(db.base.Peer):
                 self._ExecuteUpdate(None, sql, data)
             
             obj.categories.set_clean()
-            Publisher().sendMessage(signals.SONG_DB_CAT_UPDATED, obj)        
     
 # ==============================================================================
 
@@ -115,13 +114,10 @@ class SongTabListPeer(db.base.Peer):
             for tab in obj.tabs:
                 if tab._id not in old_tabs:
                     # we have a new tab added
-                    Publisher().sendMessage(signals.SONG_DB_TAB_ADDED, (obj, tab))
             
             # does the relation table hold a tab that is not in the song?
             for tab_id in old_tabs:
                 tab = obj.tabs.find_id(tab_id)
-                if tab:
-                    Publisher().sendMessage(signals.SONG_DB_TAB_DELETED, (obj, tab))
             
             # now update the relations table
             self.Delete(obj)
@@ -194,8 +190,6 @@ class SongPeer(db.base.Peer):
         if all:
             self.RestoreRelations(obj)
             
-        Publisher().sendMessage(signals.SONG_DB_RESTORED, obj)
-
     # --------------------------------------------------------------------------
     def RestoreRelations(self, obj):
         """ Restore all that belongs to the song but is not part of the body """
@@ -228,7 +222,6 @@ class SongPeer(db.base.Peer):
                    'tuning_id, completed_perc, accuracy_perc, capo_number, relpath, ' + \
                    'time_added, time_started, time_completed, time_postponed, song_type) ' + \
                    'values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
-            sig = signals.SONG_DB_INSERTED
 
         else:
             sql = 'update song set name = ?, artist = ?, songdate = ?, ' + \
@@ -238,7 +231,6 @@ class SongPeer(db.base.Peer):
                   'accuracy_perc = ?, capo_number = ?, relpath = ?, ' + \
                   'time_added = ?, time_started = ?, time_completed = ?, ' + \
                   'time_postponed = ?, song_type = ? where id = ?'
-            sig = signals.SONG_DB_UPDATED
 
         data = (obj._title, 
                 obj._artist,
@@ -269,9 +261,7 @@ class SongPeer(db.base.Peer):
             # update the relations of the tabs
             p = SongTabListPeer(self._conn)
             p.Update(obj)
-        
-        Publisher().sendMessage(sig, obj)
-            
+                    
     # --------------------------------------------------------------------------    
     def Delete(self, obj):
         sql = 'delete from song where id = ?'
@@ -290,7 +280,6 @@ class SongPeer(db.base.Peer):
         for t in obj.tabs:
             p.Delete(t)
                     
-        Publisher().sendMessage(signals.SONG_DB_DELETED, obj)
 
     # --------------------------------------------------------------------------    
     def UpdateCategories(self, obj):

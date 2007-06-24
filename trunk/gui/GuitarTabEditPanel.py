@@ -2,10 +2,10 @@ import wx
 import wx.xrc as xrc
 
 from wx.lib.pubsub import Publisher
-from objs import signals, songs, tabs, songfilter
+from objs import songs, tabs, songfilter
 from db import tabs_peer, songs_peer
 import db.engine
-import xmlres
+import xmlres, viewmgr
 
 class GuitarTabEditPanel(wx.Panel):
     def __init__(self, parent, id = wx.ID_ANY):
@@ -26,12 +26,10 @@ class GuitarTabEditPanel(wx.Panel):
         self.__applySelect.SetSelection(0)
         self.__tab = None
 
-        Publisher().subscribe(self.__OnSongSelected, signals.SONG_VIEW_SELECTED)
-        Publisher().subscribe(self.__OnTabUpdated, signals.TAB_DB_UPDATED)
-        Publisher().subscribe(self.__OnTabRestored, signals.TAB_DB_RESTORED)
-        Publisher().subscribe(self.__OnSongSelected, signals.APP_CLEAR)
-        Publisher().subscribe(self.__OnTabAdded, signals.TAB_DB_INSERTED)
-
+        Publisher().subscribe(self.__OnSongClear, viewmgr.SIGNAL_CLEAR_DATA)
+        Publisher().subscribe(self.__OnSongSelected, viewmgr.SIGNAL_SONG_SELECTED)
+        Publisher().subscribe(self.__OnTabAdded, viewmgr.SIGNAL_TAB_ADDED)
+        
         # change font to modern look on Windows
         if 'wxMSW' in wx.PlatformInfo:
             fnt = self.__tabText.GetFont()
@@ -41,33 +39,43 @@ class GuitarTabEditPanel(wx.Panel):
         # TODO: we might need to force this on Linux as well
         
     #---------------------------------------------------------------------------
-    def __OnSongSelected(self, message):
-        """ We received an select signal for the song """
-        # en/disable the view
-        s = message.data
-        
-        self.__addSongTab.Enable(s <> None)
+    def __OnSongClear(self, message):
+        """ We received a clear signal, db change or initialization for the app """
+
+        self.__addSongTab.Enable(False)
         self.__tabSelect.Clear()
         self.__tabText.SetValue('')
         self.__applySelect.SetSelection(0)
         self.__tab = None
 
         # no tabs in the song 
-        self.__EnableEditing(self.__tab <> None)            
-
+        self.__EnableEditing(False)     
+        
     #---------------------------------------------------------------------------
-    def __OnTabRestored(self, message):
-        t = message.data
-        if t:
-            idx = self.__tabSelect.Append(t._name)
-            self.__tabSelect.SetClientData(idx, t)
-            
-            if not self.__tab:
+    def __OnSongSelected(self, message):
+        """ Populate this with tabs, we have a selected song """
+        
+        song = message.data
+        self.__applySelect.SetSelection(0)
+        self.__tab = None
+        self.__tabSelect.Clear()
+        self.__tabText.SetValue('')
+
+        # populate tabs in the list
+        if song:
+            if song.tabs.count() > 0:
+                for t in song.tabs:
+                    idx = self.__tabSelect.Append(t._name)
+                    self.__tabSelect.SetClientData(idx, t)
+                
+                # we select the first tab in the list
                 self.__DoSelectTab(self.__tabSelect.GetClientData(0))
+        else:
+            self.__EnableEditing(False)
 
     #---------------------------------------------------------------------------
-    def __OnApply(self, event): # wxGlade: GuitarTabEditPanel.<event_handler>
-        if self.__tab <> None:
+    def __OnApply(self, event):
+        if self.__tab:
             if self.__applySelect.GetSelection() == 0:     
                 # update in DB
                 self.__DoUpdateTab()
@@ -95,8 +103,8 @@ class GuitarTabEditPanel(wx.Panel):
                 if res == wx.YES:
                     self.__DoUpdateTab()
                         
-        tab = message.data
         # add the tab to the list here
+        tab = message.data
         idx = self.__tabSelect.Append(tab._name)
         self.__tabSelect.SetClientData(idx, tab)    
         self.__DoSelectTab(tab)
@@ -110,6 +118,8 @@ class GuitarTabEditPanel(wx.Panel):
             
             tp = tabs_peer.TabPeer(db.engine.GetDb())
             tp.Update(self.__tab)
+            
+            viewmgr.signalTabUpdated(self.__tab)
         
     #---------------------------------------------------------------------------
     def __DoRevertTab(self):
@@ -135,6 +145,9 @@ class GuitarTabEditPanel(wx.Panel):
                 tp = tabs_peer.TabPeer(db.engine.GetDb())
                 tp.Delete(self.__tab)
 
+                # we just deleted a tab (krikey!)
+                viewmgr.signalTabDeleted(self.__tab)
+
             # find the tab by client data and remove it
             for i in xrange(0, self.__tabSelect.GetCount()):
                 if self.__tabSelect.GetClientData(i) == self.__tab:
@@ -145,21 +158,11 @@ class GuitarTabEditPanel(wx.Panel):
                         self.__tab = None
                         self.__EnableEditing(False)
                     break
-            
+                    
     #---------------------------------------------------------------------------
-    def __OnTabUpdated(self, message):
-        # find the tab by client data and replace and select
-        tab = message.data
-        if tab:
-            idx = self.__tabSelect.GetSelection()
-            for i in xrange(0, self.__tabSelect.GetCount()):
-                if self.__tabSelect.GetClientData(i) == tab:
-                    self.__tabSelect.SetString(i, tab._name)
-                    self.__tabSelect.SetSelection(i)
-                    break
-
-    #---------------------------------------------------------------------------
-    def __OnAddTab(self, event): # wxGlade: GuitarTabEditPanel.<event_handler>
+    def __OnAddTab(self, event): 
+        """ We received an event that a tab is added (we initiated it ourselves (DUH)) """
+        
         # create a new tab to be added
         s = songfilter.Get()._selectedSong
         if s <> None:
@@ -178,7 +181,9 @@ class GuitarTabEditPanel(wx.Panel):
             tlp = songs_peer.SongTabListPeer(db.engine.GetDb())
             tlp.Update(s)
             
-                                   
+            # tell the world we have a tab again
+            viewmgr.signalTabAdded(tab)
+            
     #---------------------------------------------------------------------------
     def __DoSelectTab(self, tab):
         """ Fill edit area with tab data """
@@ -207,7 +212,7 @@ class GuitarTabEditPanel(wx.Panel):
             self.__tabSelect.Clear()
 
     #---------------------------------------------------------------------------
-    def __OnTabSelect(self, event): # wxGlade: GuitarTabEditPanel.<event_handler>
+    def __OnTabSelect(self, event): 
         self.__tab = None
         idx = self.__tabSelect.GetSelection()
         if idx == wx.NOT_FOUND:
@@ -215,7 +220,5 @@ class GuitarTabEditPanel(wx.Panel):
             return
         else:
             self.__DoSelectTab(self.__tabSelect.GetClientData(idx))
-
-# end of class GuitarTabEditPanel
 
 

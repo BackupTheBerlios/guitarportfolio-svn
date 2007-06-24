@@ -8,8 +8,8 @@ import wx.lib.mixins.listctrl as listmix
 import wx.xrc as xrc
 
 from images import icon_path_ok, icon_path_not_ok
-from objs import signals, linkmgt
-import appcfg, xmlres
+from objs import linkmgt
+import appcfg, xmlres, viewmgr
                 
 class LinksPanel(wx.Panel):
     def __init__(self, parent, id = -1):
@@ -36,10 +36,11 @@ class LinksPanel(wx.Panel):
         self.Bind(wx.EVT_BUTTON, self.__OnIgnoreFile, self.__ignoreFile)
         self.Bind(wx.EVT_BUTTON, self.__OnManageFiles, self.__manage)
 
-        Publisher().subscribe(self.__OnSongSelected, signals.APP_CLEAR)
-        Publisher().subscribe(self.__OnSongSelected, signals.SONG_VIEW_SELECTED)
-        Publisher().subscribe(self.__OnSongUpdated, signals.SONG_VIEW_UPDATED)
-        Publisher().subscribe(self.__OnConfigUpdated, signals.CFG_UPDATED)
+        Publisher().subscribe(self.__OnSongSelected, viewmgr.SIGNAL_CLEAR_DATA)
+        Publisher().subscribe(self.__OnSongSelected, viewmgr.SIGNAL_SONG_SELECTED)
+        Publisher().subscribe(self.__OnSongSelected, viewmgr.SIGNAL_SONG_UPDATED)
+        Publisher().subscribe(self.__OnRefreshLinks, viewmgr.SIGNAL_SETTINGS_CHANGED)
+        Publisher().subscribe(self.__OnRefreshLinks, viewmgr.SIGNAL_LINKS_REFRESHED)
         
         self.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.__OnExecuteLink, self._links)
 
@@ -61,15 +62,17 @@ class LinksPanel(wx.Panel):
             self._links.DeleteAllItems()
         
     # --------------------------------------------------------------------------
-    def __OnSongUpdated(self, message):
-        """ A song is updated, we need to resync the state of the work dir """
-        self.__SyncWorkDirState()
-
-    # --------------------------------------------------------------------------
-    def __OnConfigUpdated(self, message):
-        """ Config is updated, we need to resync the state of the work dir """
+    def __OnRefreshLinks(self, message):
+        """ We do not change the assigned song, we only refresh the links as there are
+            changes in either the populated link list, or the work directory """
+        
         self.__SyncWorkDirState()
         
+        if self._song:
+            self.__PopulateLinks()
+        else:
+            self._links.DeleteAllItems()
+                
     # --------------------------------------------------------------------------
     def __SyncWorkDirState(self):
         """ Syncs the work dir and enables / disables the buttons and shows the 
@@ -104,6 +107,7 @@ class LinksPanel(wx.Panel):
         self.__ignoreFile.Enable(valid_path)
         self.__manage.Enable(valid_path) 
 
+    # --------------------------------------------------------------------------
     def __PopulateLinks(self):
         """ Populate the links in the link list view """
         self._links.DeleteAllItems()
@@ -113,14 +117,9 @@ class LinksPanel(wx.Panel):
                 self._links.SetStringItem(index, 1, l._type)
                 self._links.SetStringItem(index, 2, l._comment)
                 self._links.SetItemData(index, l._id)         
-
+                
     # --------------------------------------------------------------------------
-    def __RefreshLinks(self):
-        """ Refreshes the view, can be called from multiple handlers """
-        linkmgt.Get().Load(appcfg.GetAbsWorkPathFromSong(self._song))
-            
-    # --------------------------------------------------------------------------
-    def __OnCreateBasePath(self, event): # wxGlade: LinksPanel.<event_handler>
+    def __OnCreateBasePath(self, event): 
         path = appcfg.GetAbsWorkPathFromSong(self._song)
         if os.path.isabs(path):        
             result = wx.MessageBox('Would you like to create the work directory for this song?', 'Warning', wx.ICON_QUESTION | wx.YES_NO)
@@ -142,12 +141,13 @@ class LinksPanel(wx.Panel):
     def __OnExecuteLink(self, event):
         l = linkmgt.Get().links.find_id(event.GetData())
         linkfile.executelink(l)
+
     # --------------------------------------------------------------------------
     def __OnRefresh(self, event): 
         """ Refresh button is pressed, check if the directory is valid
             and if so, repopulate the links """
         if self.__SyncWorkDirState():
-            self.__RefreshLinks()
+            viewmgr.signalRefreshLinks()
 
     # --------------------------------------------------------------------------
     def __OnAddURL(self, event): 
@@ -161,7 +161,5 @@ class LinksPanel(wx.Panel):
 
     # --------------------------------------------------------------------------
     def __OnManageFiles(self, event): 
-        Publisher().sendMessage(signals.LINKMGR_QUERY_EDIT)
+        viewmgr.signalEditAttachments()
         event.Skip()
-
-

@@ -6,11 +6,8 @@ import wx.html as html
 from wx.lib.pubsub import Publisher
 
 import wx.xrc as xrc
-from objs import signals, songs
-import xmlres
-
-# begin wxGlade: dependencies
-# end wxGlade
+from objs import songs
+import xmlres, viewmgr
 
 tabinfo = """<html><body>
 <pre>@currenttab@</pre>
@@ -34,10 +31,10 @@ class GuitarTabPanel(wx.Panel):
         self.Bind(wx.EVT_CHOICE, self.__OnSelectTab, self.__tabSelect)
 
         # hook up a select signal
-        Publisher().subscribe(self.__OnSongSelected, signals.SONG_VIEW_SELECTED)
-        Publisher().subscribe(self.__OnTabAdded, signals.TAB_DB_ADDED)
-        Publisher().subscribe(self.__OnTabDeleted, signals.TAB_DB_DELETED)
-        Publisher().subscribe(self.__OnTabUpdated, signals.TAB_DB_UPDATED)
+        Publisher().subscribe(self.__OnSongSelected, viewmgr.SIGNAL_SONG_SELECTED)
+        Publisher().subscribe(self.__OnTabAdded, viewmgr.SIGNAL_TAB_ADDED)
+        Publisher().subscribe(self.__OnTabDeleted, viewmgr.SIGNAL_TAB_DELETED)
+        Publisher().subscribe(self.__OnTabUpdated, viewmgr.SIGNAL_TAB_UPDATED)
 
     # --------------------------------------------------------------------------
     def SetTab(self, tab):
@@ -95,6 +92,8 @@ class GuitarTabPanel(wx.Panel):
     # --------------------------------------------------------------------------
     def __OnSelectTab(self, event):
         tab = self.__tabSelect.GetClientData(self.__tabSelect.GetSelection())
-        self.SetTab(tab)         
+        self.SetTab(tab)
+        # issue a signal that this tab is selected
+        viewmgr.signalTabSelected(tab)        
     
 

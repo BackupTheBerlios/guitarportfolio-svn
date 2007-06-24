@@ -1,10 +1,8 @@
 import os
 
 import wx
-from wx.lib.pubsub import Publisher
 import wx.xrc as xrc
-import xmlres, appcfg
-from objs import signals
+import xmlres, appcfg, viewmgr
 
 class OptionsDlg(wx.Dialog):
     def __init__(self, parent, id = wx.ID_ANY):
@@ -30,13 +28,16 @@ class OptionsDlg(wx.Dialog):
         else:
             self.__execPath.SetValue(appcfg.Get().Read(appcfg.CFG_LINUX_EXEC_CMD, 'gnome-open'))        
 
+    # --------------------------------------------------------------------------
     def __OnBrowsePath(self, event): 
         path = wx.DirSelector('Select the absolute work directory', self.__absPath.GetValue())
         if path:
             self.__absPath.SetValue(path)   
 
+    # --------------------------------------------------------------------------
     def __OnOK(self, event): 
         """ Press OK, verify the path and notify if the path is not valid """
+
         path = self.__absPath.GetValue()
         if not os.path.exists(path):        
             wx.MessageBox('The path specified is not a valid path!', 'Error', wx.ICON_ERROR | wx.OK)
@@ -45,7 +46,8 @@ class OptionsDlg(wx.Dialog):
         if "wxGTK" in wx.PlatformInfo:
             appcfg.Get().Write(appcfg.CFG_LINUX_EXEC_CMD, self.__execPath.GetValue())        
         
-        Publisher().sendMessage(signals.CFG_UPDATED)
+        # issue a change of settings
+        viewmgr.signalSettingsChanged()
         event.Skip()
 
 
