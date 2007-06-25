@@ -155,13 +155,14 @@ def __doImgSrcPictureTag(instr):
         else:
             break
     
-    paths = [os.path.join(appcfg.GetAbsWorkPath(), pic),
-             os.path.join(appcfg.imagesdir, pic) ]
+    paths = [os.path.join(appcfg.GetAbsWorkPath(), pic),            # global song dir  
+             os.path.join(appcfg.imagesdir, pic) ]                  # global icon dir
 
     song = viewmgr.Get()._selectedSong
     if song:
         # when song is present, do this one first
         paths.insert(0, os.path.join(appcfg.GetAbsWorkPathFromSong(song), pic))
+        paths.insert(0, os.path.join(appcfg.GetAbsWorkPathFromSong(song), 'images', pic))
 
     # try all possible paths
     for p in paths:

@@ -38,6 +38,8 @@ class AttachmentManageDlg(wx.Dialog):
         self.Bind(wx.EVT_BUTTON, self.__OnAllow, self._buttonAllow)
         self.Bind(wx.EVT_BUTTON, self.__OnRename, self._buttonRename)
         self.Bind(wx.EVT_BUTTON, self.__OnDelete, self._buttonDelete)
+        self.Bind(wx.EVT_TEXT, self.__OnTextChanged, self._comment)
+        self.Bind(wx.EVT_TEXT, self.__OnTextChanged, self._run_cmd)
         self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.__OnItemSelected, self._list)
 
         self._currLink = None
@@ -81,8 +83,8 @@ class AttachmentManageDlg(wx.Dialog):
                 else:
                     self._list.SetItemImage(idx, 1, 1)
                 
-                self._comment.SetValue(l._comment)
-                self._run_cmd.SetValue(l._runcmd)
+                self._comment.ChangeValue(l._comment)
+                self._run_cmd.ChangeValue(l._runcmd)
                     
         # no item selected, grey out all
         if global_enable:
@@ -97,7 +99,7 @@ class AttachmentManageDlg(wx.Dialog):
         self._comment.Enable(global_enable)
         self._run_cmd.Enable(global_enable)
         
-        if global_enable:
+        if not global_enable:
             # nothing to show when we have none selected
             self._comment.SetValue('')
             self._run_cmd.SetValue('')
@@ -126,3 +128,11 @@ class AttachmentManageDlg(wx.Dialog):
     #---------------------------------------------------------------------------
     def __OnItemSelected(self, event):
         self.__SyncEditState()
+
+    #---------------------------------------------------------------------------
+    def __OnTextChanged(self, event):
+
+        # sync the edit state back to the link
+        if self._currLink:
+            self._currLink._comment = self._comment.GetValue()
+            self._currLink._runcmd = self._run_cmd.GetValue()

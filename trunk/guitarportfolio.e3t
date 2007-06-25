@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Tasks SYSTEM "Tasks-3.8.dtd">
 <!-- Tasks file for project guitarportfolio -->
-<!-- Saved: 2007-06-25, 20:03:51 -->
+<!-- Saved: 2007-06-25, 22:30:35 -->
 <Tasks version="3.8">
   <Task priority="0" completed="0" bugfix="0">
     <Description>BUG: Categories cannot be added when song is not yet in DB</Description>
@@ -52,17 +52,6 @@
     </Resource>
   </Task>
   <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: These do not work. Why???</Description>
-    <Created>2007-06-10, 21:41:09</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>wikiparser.py</Name>
-      </Filename>
-      <Linenumber>143</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
     <Description>TODO: Needs better description!</Description>
     <Created>2007-06-16, 19:13:22</Created>
     <Resource>
@@ -82,17 +71,6 @@
         <Name>NewSongDlg.py</Name>
       </Filename>
       <Linenumber>57</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Should be placed in an config module</Description>
-    <Created>2007-06-17, 19:52:28</Created>
-    <Resource>
-      <Filename>
-        <Dir>objs</Dir>
-        <Name>linkmgt.py</Name>
-      </Filename>
-      <Linenumber>22</Linenumber>
     </Resource>
   </Task>
   <Task priority="1" completed="0" bugfix="0">
@@ -151,39 +129,6 @@
     </Resource>
   </Task>
   <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Put the text inside the DB!</Description>
-    <Created>2007-06-24, 15:35:08</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>htmlmarkup.py</Name>
-      </Filename>
-      <Linenumber>1</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Substitute version number / appname in HTML text</Description>
-    <Created>2007-06-24, 15:35:08</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>htmlmarkup.py</Name>
-      </Filename>
-      <Linenumber>3</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Put inside the DB!</Description>
-    <Created>2007-06-24, 15:35:08</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>htmlmarkup.py</Name>
-      </Filename>
-      <Linenumber>4</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
     <Description>TODO: Not certain if this will work, if a query is sent after a remove from</Description>
     <Created>2007-06-24, 17:00:58</Created>
     <Resource>
@@ -217,8 +162,74 @@
     </Resource>
   </Task>
   <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO:       (stats[songs.SS_NOT_STARTED],</Description>
+    <Created>2007-06-24, 21:01:54</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>SongBrowserPanel.py</Name>
+      </Filename>
+      <Linenumber>157</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Should be placed in an config module</Description>
+    <Created>2007-06-25, 20:49:29</Created>
+    <Resource>
+      <Filename>
+        <Dir>objs</Dir>
+        <Name>linkmgt.py</Name>
+      </Filename>
+      <Linenumber>22</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Put the text inside the DB!</Description>
+    <Created>2007-06-25, 21:09:09</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>htmlmarkup.py</Name>
+      </Filename>
+      <Linenumber>1</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Substitute version number / appname in HTML text</Description>
+    <Created>2007-06-25, 21:09:09</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>htmlmarkup.py</Name>
+      </Filename>
+      <Linenumber>3</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Put inside the DB!</Description>
+    <Created>2007-06-25, 21:09:09</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>htmlmarkup.py</Name>
+      </Filename>
+      <Linenumber>4</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: These do not work. Why???</Description>
+    <Created>2007-06-25, 21:12:47</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>wikiparser.py</Name>
+      </Filename>
+      <Linenumber>143</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
     <Description>TODO: Make a wx.ListCtrl, listmix.ListCtrlAutoWidthMixin custom class for XRC</Description>
-    <Created>2007-06-24, 20:52:33</Created>
+    <Created>2007-06-25, 21:14:50</Created>
     <Resource>
       <Filename>
         <Dir>gui</Dir>
@@ -229,24 +240,13 @@
   </Task>
   <Task priority="1" completed="0" bugfix="0">
     <Description>TODO: we might need to force this on Linux as well</Description>
-    <Created>2007-06-24, 20:54:40</Created>
+    <Created>2007-06-25, 21:51:09</Created>
     <Resource>
       <Filename>
         <Dir>gui</Dir>
         <Name>GuitarTabEditPanel.py</Name>
       </Filename>
       <Linenumber>39</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO:       (stats[songs.SS_NOT_STARTED],</Description>
-    <Created>2007-06-24, 21:01:54</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>SongBrowserPanel.py</Name>
-      </Filename>
-      <Linenumber>157</Linenumber>
     </Resource>
   </Task>
 </Tasks>

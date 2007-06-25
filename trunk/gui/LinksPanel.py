@@ -125,11 +125,14 @@ class LinksPanel(wx.Panel):
             result = wx.MessageBox('Would you like to create the work directory for this song?', 'Warning', wx.ICON_QUESTION | wx.YES_NO)
             if result == wx.YES:
                 try:
+                    # create the images dir, and the attachments dir
                     os.makedirs(path)
-                    wx.MessageBox('Path creation succesful!\n'
+                    os.makedirs(os.path.join(path, 'images'))
+                    
+                    wx.MessageBox('Path creation succesful!\n' + 
                                   'Now copy your gathered song files to this directory', 'Succes', wx.ICON_INFORMATION | wx.OK)                
                 except EnvironmentError:
-                    wx.MessageBox('Path creation unsuccesful\n'
+                    wx.MessageBox('Path creation unsuccesful\n' +
                                   'Please check for a valid base path, file rights and retry', 'Error', wx.ICON_ERROR | wx.OK)
                 self.__SyncWorkDirState()
         else:

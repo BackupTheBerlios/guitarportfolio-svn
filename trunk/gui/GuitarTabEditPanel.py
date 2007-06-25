@@ -59,6 +59,7 @@ class GuitarTabEditPanel(wx.Panel):
         self.__applySelect.SetSelection(0)
         self.__tab = None
         self.__tabSelect.Clear()
+        self.__tabSelect.SetValue('')
         self.__tabText.SetValue('')
 
         # populate tabs in the list
@@ -70,6 +71,10 @@ class GuitarTabEditPanel(wx.Panel):
                 
                 # we select the first tab in the list
                 self.__DoSelectTab(self.__tabSelect.GetClientData(0))
+            else:
+                # we have no tabs yet only enable the add and the list
+                self.__tabText.Enable(False)
+                self.__applySelect.Enable(False)
         else:
             self.__EnableEditing(False)
         
