@@ -3,7 +3,6 @@
 
 import wx
 from wx.lib.pubsub import Publisher
-from objs import songfilter
 import viewmgr
 
 import db.engine
@@ -36,7 +35,7 @@ class LyricsPanel(wx.Panel):
         """ Revert or apply the text. Revert will restore the information from the class
             else it will store the information in the database and update all views """
         
-        s = songfilter.Get()._selectedSong        
+        s = viewmgr.Get()._selectedSong        
         if s:
             if self.__applySelection.GetSelection():
                 # revert the lyrics

@@ -8,7 +8,7 @@ import xmlres
 import time
 
 from wx.lib.pubsub import Publisher
-from objs import songs, songfilter
+from objs import songs
 import wikiparser, linkfile, viewmgr
 
 songinfo = """
@@ -49,7 +49,7 @@ class CurrSongInfoPanel(wx.Panel):
         if message.data == None:
             self.__songInfo.SetPage(parser.Parse(songinfo))
         else:
-            if songfilter.Get()._selectedSong == message.data:                   
+            if viewmgr.Get()._selectedSong == message.data:                   
                 self.__songInfo.SetPage(parser.Parse(message.data._information))
 
     #---------------------------------------------------------------------------

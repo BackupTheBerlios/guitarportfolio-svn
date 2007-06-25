@@ -9,10 +9,10 @@ import db
 import db.engine
 import db.songs_peer
 
-from objs import signals, songs, category_mgr, tuning_mgr, songfilter, linkmgt
+from objs import signals, songs, category_mgr, tuning_mgr, linkmgt
 from gui import SongsPanel, EditorNotebook, CurrInfoNotebook, NewSongDlg, \
                 CategoriesDlg, SongFilterPanel, OptionsDlg, WelcomeDlg, \
-                AttachmentManageDlg, xmlres, viewmgr
+                AttachmentManageDlg, xmlres, viewmgr, linkfile
 from images import icon_main_window, guitarportfolio_icon
 
 import appcfg
@@ -162,7 +162,7 @@ class GuitarPortfolioFrame(wx.Frame):
 
         self.__aui.Update()
 
-        self._filter = songfilter.Get()
+        self._filter = viewmgr.Get()
 
         # hook up event handlers
         Publisher().subscribe(self.__SignalOnQueryAddSong, viewmgr.SIGNAL_ADD_SONG)
@@ -276,7 +276,7 @@ class GuitarPortfolioFrame(wx.Frame):
                 sp.Update(s, all = True)  
   
                 # signal everyone the song is updated
-                signalSongUpdated(s)
+                viewmgr.signalSongUpdated(s)
 
             dlg.Destroy()
 
@@ -323,7 +323,10 @@ class GuitarPortfolioFrame(wx.Frame):
 
                 # update the song in the database
                 sp = db.songs_peer.SongPeer(db.engine.GetDb())
-                sp.Update(s, all = True)                
+                sp.Update(s, all = True)     
+                
+                # tell all views we updated
+                viewmgr.signalSongUpdated(s)
 
             dlg.Destroy()
 
@@ -332,7 +335,7 @@ class GuitarPortfolioFrame(wx.Frame):
         """ Set the status of the song
             NOTE: This should eventually be done by a log mechanism """
             
-        song = songfilter.Get()._selectedSong
+        song = viewmgr.Get()._selectedSong
         if song:
             # if our status differs, force an update
             if song._status <> self.__menu_status_lookup[event.GetId()]:
@@ -396,7 +399,7 @@ class GuitarPortfolioFrame(wx.Frame):
             self.Close()
             return
 
-        viewmgr.signalDbChanged()
+        viewmgr.signalDbChange()
 
     #---------------------------------------------------------------------------
     def __SignalOnSongUpdated(self, message):
@@ -452,7 +455,7 @@ class GuitarPortfolioFrame(wx.Frame):
             that the user is not tempted to click anything that does nothing 
             anyway. """
         
-        song = songfilter.Get()._selectedSong
+        song = viewmgr.Get()._selectedSong
         self.__menuEditSong.Enable(song <> None)
         self.__menuDeleteSong.Enable(song <> None)
         self.__menuEditCategories.Enable(song <> None)

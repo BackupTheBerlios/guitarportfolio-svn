@@ -1,8 +1,8 @@
 import re
 import os.path
 
-from objs import songs, linkmgt, songfilter
-import appcfg
+from objs import songs, linkmgt
+import appcfg, viewmgr
  
 # SONG RELATED HTML TAGS
 HTML_LABEL_SONG          = '@song@'
@@ -194,7 +194,9 @@ def __getSongLinks(tags, song):
         if linkmgt.Get().links.count() > 0:
             str_links = linkstr[0]
             for l in linkmgt.Get().links:
-                str_links += _DoParseHtmlTags(linkstr[1], link_tags, stags,  l)
+                # only display when not ignored
+                if not l._ignored:
+                    str_links += _DoParseHtmlTags(linkstr[1], link_tags, stags,  l)
             str_links += linkstr[2]
     return str_links
     
@@ -240,7 +242,7 @@ def __getSongStatusSection(tags, section_tag):
 
 # ------------------------------------------------------------------------------
 def __getCurrentSongPath(tags):
-    song = songfilter.Get()._selectedSong
+    song = viewmgr.Get()._selectedSong
     if song:
         result = appcfg.GetAbsWorkPathFromSong(song)
     else:
@@ -304,7 +306,7 @@ song_tags   =  { HTML_LABEL_SONG:          lambda tags, song : song._title,
 
 link_tags    = { HTML_LINK_NAME:           lambda tags, link : link._name if link else 'None', 
                  HTML_LINK_TYPE:           lambda tags, link : link._type if link else 'N/A', 
-                 HTML_LINK_DESC:           lambda tags, link : 'None',
+                 HTML_LINK_DESC:           lambda tags, link : link._comment,
                  HTML_LINK_PATH:           __getLinkPath}
 
 song_status_tags = { HTML_SECTION_PRACTICING: lambda tags : \

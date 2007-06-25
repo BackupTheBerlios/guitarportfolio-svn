@@ -5,7 +5,6 @@ import wx
 import wx.xrc as xrc
 from wx.lib.pubsub import Publisher
 
-from objs import songfilter
 from db import songs_peer
 import db.engine
 import xmlres, viewmgr
@@ -44,7 +43,7 @@ class InfoPanel(wx.Panel):
     def __OnApply(self, event):
         """ Revert or apply the text. Revert will restore the information from the class
             else it will store the information in the database and update all views """
-        s = songfilter.Get()._selectedSong        
+        s = viewmgr.Get()._selectedSong        
         if self.__applySelection.GetSelection() == 0:
             s._information = self.__infoEdit.GetValue()
 

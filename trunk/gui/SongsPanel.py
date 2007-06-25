@@ -7,7 +7,7 @@ import wx.lib.mixins.listctrl as listmix
 from wx.lib.pubsub import Publisher
 
 import images
-from objs import songs, songfilter
+from objs import songs
 from db import songs_peer 
 import db.engine
 import viewmgr
@@ -55,15 +55,16 @@ class SongsListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
             
         # attach signal to get informed about songs
         Publisher().subscribe(self.__OnSongSelected, viewmgr.SIGNAL_SONG_SELECTED)  
-        Publisher().subscribe(self.__AddSong, songfilter.SONG_VIEW_ADDED)  
-        Publisher().subscribe(self.__UpdateSong, songfilter.SONG_VIEW_UPDATED)  
-        Publisher().subscribe(self.__DeleteSong, songfilter.SONG_VIEW_DELETED)  
+        Publisher().subscribe(self.__AddSong, viewmgr.SONG_VIEW_ADDED)  
+        Publisher().subscribe(self.__UpdateSong, viewmgr.SONG_VIEW_UPDATED)  
+        Publisher().subscribe(self.__DeleteSong, viewmgr.SONG_VIEW_DELETED)  
         Publisher().subscribe(self.__ClearSongs, viewmgr.SIGNAL_CLEAR_DATA)
 
     # --------------------------------------------------------------------------
     def __OnItemSelected(self, event):
         """ Select the song """
-        viewmgr.signalSetSong(event.GetData())
+        song = viewmgr.Get()._list.find_id(event.GetData())
+        viewmgr.signalSetSong(song)
         
     # --------------------------------------------------------------------------
     def __AddSong( self, message ):
@@ -122,7 +123,7 @@ class SongsListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
         # selected song to work on
         self.__statusMap = {}
         items = [ ]
-        song = songfilter.Get()._selectedSong
+        song = viewmgr.Get()._selectedSong
         if song:
             if song._status == songs.SS_STARTED:
                 items.append(("&Not Practicing", songs.SS_POSTPONED))
@@ -170,7 +171,7 @@ class SongsListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
     # --------------------------------------------------------------------------
     def __OnChangeStatus(self, event):
         """ Change the status of the song by context menu """
-        song = songfilter.Get()._selectedSong
+        song = viewmgr.Get()._selectedSong
         if song <> None:
             # if our status differs, force an update
             if song._status <> self.__statusMap[event.GetId()]:
@@ -186,7 +187,7 @@ class SongsListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
     # --------------------------------------------------------------------------
     def __OnSongSelected(self, message):
         """ Select a new song, this usually means sync with the existing song """
-        song = songfilter.Get()._selectedSong
+        song = viewmgr.Get()._selectedSong
         if song <> None:
             idx = self.FindItemData(start = -1, data = song._id)
             if idx <> wx.NOT_FOUND and not self.IsSelected(idx):

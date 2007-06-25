@@ -2,7 +2,7 @@ import wx
 import wx.xrc as xrc
 
 from wx.lib.pubsub import Publisher
-from objs import songs, tabs, songfilter
+from objs import songs, tabs
 from db import tabs_peer, songs_peer
 import db.engine
 import xmlres, viewmgr
@@ -72,6 +72,8 @@ class GuitarTabEditPanel(wx.Panel):
                 self.__DoSelectTab(self.__tabSelect.GetClientData(0))
         else:
             self.__EnableEditing(False)
+        
+        self.__addSongTab.Enable(song != None)
 
     #---------------------------------------------------------------------------
     def __OnApply(self, event):
@@ -134,7 +136,7 @@ class GuitarTabEditPanel(wx.Panel):
         if wx.MessageBox('Are you sure you want to delete this tab?', 
                          'Warning', wx.ICON_HAND | wx.YES_NO) == wx.YES:
             # remove it from the collection
-            s = songfilter.Get()._selectedSong
+            s = viewmgr.Get()._selectedSong
             if s and self.__tab:                
                 # update relations
                 s.tabs.remove(self.__tab)
@@ -164,7 +166,7 @@ class GuitarTabEditPanel(wx.Panel):
         """ We received an event that a tab is added (we initiated it ourselves (DUH)) """
         
         # create a new tab to be added
-        s = songfilter.Get()._selectedSong
+        s = viewmgr.Get()._selectedSong
         if s <> None:
             
             # first check if the current tab needs to be stored

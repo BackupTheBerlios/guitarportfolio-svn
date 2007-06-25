@@ -1,10 +1,8 @@
 import re
 import os.path
 import appcfg
-from objs import songfilter
-
-
-        
+import viewmgr
+     
 def maketable(page):
     """ Create table from || ... || syntax which is very convenient
         in simple markups to create a HTML table without much fuss 
@@ -160,7 +158,7 @@ def __doImgSrcPictureTag(instr):
     paths = [os.path.join(appcfg.GetAbsWorkPath(), pic),
              os.path.join(appcfg.imagesdir, pic) ]
 
-    song = songfilter.Get()._selectedSong
+    song = viewmgr.Get()._selectedSong
     if song:
         # when song is present, do this one first
         paths.insert(0, os.path.join(appcfg.GetAbsWorkPathFromSong(song), pic))

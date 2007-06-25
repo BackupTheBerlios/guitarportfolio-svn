@@ -5,7 +5,7 @@ import wx
 import wx.xrc as xrc
 from wx.lib.pubsub import Publisher
 
-from objs import songs, songfilter
+from objs import songs
 import appcfg, xmlres
 import viewmgr
 
@@ -39,7 +39,7 @@ class SongFilterPanel(wx.Panel):
         Publisher().subscribe(self.__OnChangeCats, viewmgr.SIGNAL_SONG_UPDATED)
         Publisher().subscribe(self.__OnChangeCats, viewmgr.SIGNAL_SONG_DELETED)
         Publisher().subscribe(self.__OnChangeCats, viewmgr.SIGNAL_SONG_ADDED)
-        Publisher().subscribe(self.__OnAppReady, viewmgr.SIGNAL_DATA_RESTORED)
+        Publisher().subscribe(self.__OnAppReady, viewmgr.SIGNAL_APP_READY)
         Publisher().subscribe(self.__OnClear, viewmgr.SIGNAL_CLEAR_DATA)
 
         # init controls
@@ -48,18 +48,18 @@ class SongFilterPanel(wx.Panel):
         
     #---------------------------------------------------------------------------
     def __OnFilterSongs(self, event): 
-        crits = [songfilter._CRIT_STATUS_ALL, 
+        crits = [viewmgr._CRIT_STATUS_ALL, 
                  songs.SS_STARTED, 
                  songs.SS_POSTPONED, 
                  songs.SS_COMPLETED, 
                  songs.SS_NOT_STARTED]
         idx = self.__progressFilter.GetSelection()
-        songfilter.Get().ChangeStatusCriteria(crits[idx])
+        viewmgr.Get().ChangeStatusCriteria(crits[idx])
         appcfg.Get().WriteInt(appcfg.CFG_PROGRESS, idx)
 
     #---------------------------------------------------------------------------
     def __OnSelectDifficulty(self, event): 
-        crits = [songfilter._CRIT_STATUS_ALL, 
+        crits = [viewmgr._CRIT_STATUS_ALL, 
                  songs.SD_EASY,
                  songs.SD_NORMAL,
                  songs.SD_INTERMEDIATE,
@@ -67,7 +67,7 @@ class SongFilterPanel(wx.Panel):
                  songs.SD_HARD,
                  songs.SD_IMPOSSIBLE]
         idx = self.__difficulty.GetSelection()
-        songfilter.Get().ChangeDifficultyCriteria(crits[idx])
+        viewmgr.Get().ChangeDifficultyCriteria(crits[idx])
         appcfg.Get().WriteInt(appcfg.CFG_DIFFICULTY, idx)
 
     #---------------------------------------------------------------------------
@@ -82,8 +82,8 @@ class SongFilterPanel(wx.Panel):
             
         self.__cats.Clear()
         self.__catsClientData = []
-        cats = songfilter.Get().GetUsedCategories()
-        criteria = songfilter.Get()._critCategories
+        cats = viewmgr.Get().GetUsedCategories()
+        criteria = viewmgr.Get()._critCategories
         for c in cats:
             idx = self.__cats.Append(c._name)
             # keep a list of associated data
@@ -97,29 +97,29 @@ class SongFilterPanel(wx.Panel):
         for i in xrange(self.__cats.GetCount()):
             if self.__cats.IsChecked(i):
                 selcats.append(self.__catsClientData[i])
-        songfilter.Get().ChangeCategoriesCriteria(selcats)
+        viewmgr.Get().ChangeCategoriesCriteria(selcats)
 
     #---------------------------------------------------------------------------
     def __OnShowMatchingLowerDifficulty(self, event): 
         chk = self.__strictDifficulty.GetValue()
-        songfilter.Get().ChangeDifficultyCriteriaLO(chk)
+        viewmgr.Get().ChangeDifficultyCriteriaLO(chk)
         appcfg.Get().WriteInt(appcfg.CFG_LOWERDIFFICULTY, 1 if chk else 0)
 
     #---------------------------------------------------------------------------
     def __OnShowCategoriesAND(self, event):
         chk = self.__categoriesAndFilter.GetValue()
-        songfilter.Get().ChangeCategoriesCriteriaAND(chk)
+        viewmgr.Get().ChangeCategoriesCriteriaAND(chk)
         appcfg.Get().WriteInt(appcfg.CFG_CATEGORIESAND, 1 if chk else 0)
 
     #---------------------------------------------------------------------------
     def __OnOnlyShow(self, event):
-        val = songfilter.SHOW_ALL
+        val = viewmgr.SHOW_ALL
         if self.__onlyShowTutorials.GetValue():
-            val = songfilter.SHOW_TUTORIALS
+            val = viewmgr.SHOW_TUTORIALS
         elif self.__onlyShowSongs.GetValue():
-            val = songfilter.SHOW_SONGS
+            val = viewmgr.SHOW_SONGS
         
-        songfilter.Get().OnlySnowType(val)
+        viewmgr.Get().OnlySnowType(val)
         appcfg.Get().WriteInt(appcfg.CFG_SHOWONLYTUTS, val)
         
     #---------------------------------------------------------------------------
@@ -144,10 +144,10 @@ class SongFilterPanel(wx.Panel):
             self.__strictDifficulty.SetValue(True if cfg.ReadInt(appcfg.CFG_LOWERDIFFICULTY, 0) <> 0 else False)
             self.__OnShowMatchingLowerDifficulty(event = None)
             # show tutorials, songs or both
-            val = cfg.ReadInt(appcfg.CFG_SHOWONLYTUTS, songfilter.SHOW_ALL)
-            if val == songfilter.SHOW_SONGS:
+            val = cfg.ReadInt(appcfg.CFG_SHOWONLYTUTS, viewmgr.SHOW_ALL)
+            if val == viewmgr.SHOW_SONGS:
                 self.__onlyShowSongs.SetValue(True)
-            elif val == songfilter.SHOW_TUTORIALS:
+            elif val == viewmgr.SHOW_TUTORIALS:
                 self.__onlyShowTutorials.SetValue(True)
             else:
                 self.__onlyShowAll.SetValue(True)

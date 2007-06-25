@@ -46,21 +46,35 @@ class GuitarTabPanel(wx.Panel):
     # --------------------------------------------------------------------------
     def __OnSongSelected(self, message):
         """ Select signal when a new song is selected by SongList, we react on it """
+        
         self.SetTab(None)
         self.__tabSelect.Clear()
         self.__tabSelect.Enable(message.data == None)
-                         
+        
+        song = message.data
+        if song:
+            for t in song.tabs:
+                self._DoAddTab(t)
+                                         
     # --------------------------------------------------------------------------
     def __OnTabAdded(self, message):
         """ Add a restored tab or a fresh added tab """
+        
         if message.data <> None:
-            self.__tabSelect.Enable(True)
-            idx = self.__tabSelect.Append(message.data._name)
-            self.__tabSelect.SetClientData(idx, message.data)
-            if self.__tabSelect.GetSelection() == wx.NOT_FOUND:
-                self.__tabSelect.SetSelection(0)
-                self.SetTab(message.data)     
-              
+            self._DoAddTab(message.data)
+            
+            
+    # --------------------------------------------------------------------------
+    def _DoAddTab(self, tab):
+        """ Add a tab and possibly select it if needed """
+        
+        self.__tabSelect.Enable(True)
+        idx = self.__tabSelect.Append(tab._name)
+        self.__tabSelect.SetClientData(idx, tab)
+        if self.__tabSelect.GetSelection() == wx.NOT_FOUND:
+            self.__tabSelect.SetSelection(0)
+            self.SetTab(tab)     
+                  
     # --------------------------------------------------------------------------
     def __OnTabDeleted(self, message):
         """ Remove from list, select other one if we are watching """
