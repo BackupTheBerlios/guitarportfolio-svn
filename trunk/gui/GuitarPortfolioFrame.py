@@ -205,6 +205,10 @@ class GuitarPortfolioFrame(wx.Frame):
         else:
             viewmgr.signalDbChange()
             
+        # at the end, make sure we are in the correct edit state
+        # TODO: Shouldn't we use OnUpdateUI event instead?
+        self.__SyncMenuItems()
+            
     #---------------------------------------------------------------------------
     def OnExit(self, event): 
         self.Close()

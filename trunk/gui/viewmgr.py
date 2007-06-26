@@ -1,4 +1,5 @@
 
+import wx
 from wx.lib.pubsub import Publisher
 
 import db, db.engine, db.songs_peer
@@ -512,7 +513,7 @@ def signalEditAttachments():
         of the GUI can also invoke an edit mechanism in the main form """
     
     Publisher().sendMessage(SIGNAL_EDIT_LINKS)
-
+    
 # ------------------------------------------------------------------------------
 def _DoReloadAttachments(song):
     """ Internal function that reloads the attachments list as it is a very common used 

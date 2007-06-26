@@ -26,13 +26,13 @@ class LinksPanel(wx.Panel):
         self.__pathOK = xrc.XRCCTRL(self, "ID_PATH_STATUS")
         self.__create = xrc.XRCCTRL(self, "ID_BTN_CREATE")
         self.__refresh = xrc.XRCCTRL(self, "ID_BTN_REFRESH")
-        self.__addURL = xrc.XRCCTRL(self, "ID_BTN_ADD")
+        #self.__addURL = xrc.XRCCTRL(self, "ID_BTN_ADD")
         self.__ignoreFile = xrc.XRCCTRL(self, "ID_BTN_IGNORE")
         self.__manage = xrc.XRCCTRL(self, "ID_BTN_EDIT")
        
         self.Bind(wx.EVT_BUTTON, self.__OnCreateBasePath, self.__create)
         self.Bind(wx.EVT_BUTTON, self.__OnRefresh, self.__refresh)
-        self.Bind(wx.EVT_BUTTON, self.__OnAddURL, self.__addURL)
+        #self.Bind(wx.EVT_BUTTON, self.__OnAddURL, self.__addURL)
         self.Bind(wx.EVT_BUTTON, self.__OnIgnoreFile, self.__ignoreFile)
         self.Bind(wx.EVT_BUTTON, self.__OnManageFiles, self.__manage)
 
@@ -103,7 +103,7 @@ class LinksPanel(wx.Panel):
         """ Enable / Disable a group of buttons when this is needed """
         self._links.Enable(valid_path)
         self.__refresh.Enable(valid_path)
-        self.__addURL.Enable(valid_path)
+        #self.__addURL.Enable(valid_path)
         self.__ignoreFile.Enable(valid_path)
         self.__manage.Enable(valid_path) 
 
@@ -153,14 +153,25 @@ class LinksPanel(wx.Panel):
             viewmgr.signalRefreshLinks()
 
     # --------------------------------------------------------------------------
-    def __OnAddURL(self, event): 
-        print "Event handler `__OnAddURL' not implemented!"
-        event.Skip()
+    #def __OnAddURL(self, event): 
+    #    print "Event handler `__OnAddURL' not implemented!"
+    #    event.Skip()
 
     # --------------------------------------------------------------------------
     def __OnIgnoreFile(self, event): 
-        print "Event handler `__OnIgnoreFile' not implemented!"
-        event.Skip()
+        """ Handler for ignoring the selected file """
+        
+        # get the link, and set the ignore flag. Then we refresh the 
+        # links by issuing a signal through the view manager
+        idx = self._links.GetFirstSelected()
+        if idx != -1:
+            link_id = self._links.GetItemData(idx)
+            link = linkmgt.Get().links.find_id(link_id)
+            if link:
+                link._ignored = True
+                # write XML file back
+                linkmgt.Get().Save()                            
+                viewmgr.signalRefreshLinks()
 
     # --------------------------------------------------------------------------
     def __OnManageFiles(self, event): 

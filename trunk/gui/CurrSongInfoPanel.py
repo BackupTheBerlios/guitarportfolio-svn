@@ -58,7 +58,6 @@ class CurrSongInfoPanel(wx.Panel):
         tag = event.GetLinkInfo().GetHref()
         
         if linkfile.is_valid_external_link(tag):
-            print "Executing link: " + tag
             linkfile.execute_uri(tag)
 
     #---------------------------------------------------------------------------

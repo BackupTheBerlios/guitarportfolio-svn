@@ -321,13 +321,6 @@
                     <object class="sizeritem">
                         <flag>wxALIGN_CENTER_HORIZONTAL|wxLEFT|wxRIGHT|wxBOTTOM</flag>
                         <border>5</border>
-                        <object class="wxButton" name="ID_BTN_ADD">
-                            <label>&amp;Add URL</label>
-                        </object>
-                    </object>
-                    <object class="sizeritem">
-                        <flag>wxALIGN_CENTER_HORIZONTAL|wxLEFT|wxRIGHT|wxBOTTOM</flag>
-                        <border>5</border>
                         <object class="wxButton" name="ID_BTN_IGNORE">
                             <label>&amp;Ignore File</label>
                         </object>
@@ -1177,13 +1170,13 @@
     <object class="wxDialog" name="ManageAttachmentDlg">
         <style>wxCAPTION|wxRESIZE_BORDER|wxSYSTEM_MENU|wxCLOSE_BOX</style>
         <exstyle>wxWS_EX_BLOCK_EVENTS</exstyle>
-        <size>400,300</size>
+        <size>400,400</size>
         <title>Manage Attachments</title>
         <centered>1</centered>
         <object class="wxBoxSizer">
             <orient>wxVERTICAL</orient>
             <object class="sizeritem">
-                <flag>wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE</flag>
+                <flag>wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP</flag>
                 <border>5</border>
                 <object class="wxStaticText" name="wxID_STATIC">
                     <label>Present Attachments</label>
@@ -1237,12 +1230,26 @@
                                     <label>&amp;Delete</label>
                                 </object>
                             </object>
+                            <object class="sizeritem">
+                                <flag>wxGROW|wxLEFT|wxRIGHT|wxBOTTOM</flag>
+                                <border>5</border>
+                                <object class="wxStaticLine" name="ID_STATICLINE5">
+                                    <style>wxLI_HORIZONTAL</style>
+                                </object>
+                            </object>
+                            <object class="sizeritem">
+                                <flag>wxALIGN_CENTER_HORIZONTAL|wxLEFT|wxRIGHT|wxBOTTOM</flag>
+                                <border>5</border>
+                                <object class="wxButton" name="ID_TEST_FILE">
+                                    <label>&amp;Test ...</label>
+                                </object>
+                            </object>
                         </object>
                     </object>
                 </object>
             </object>
             <object class="sizeritem">
-                <flag>wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE</flag>
+                <flag>wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP</flag>
                 <border>5</border>
                 <object class="wxStaticText" name="wxID_STATIC">
                     <label>Attachment Comment</label>
@@ -1255,7 +1262,7 @@
                 </object>
             </object>
             <object class="sizeritem">
-                <flag>wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE</flag>
+                <flag>wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP</flag>
                 <border>5</border>
                 <object class="wxStaticText" name="wxID_STATIC">
                     <label>Start the attachment with ($file is the current file)</label>

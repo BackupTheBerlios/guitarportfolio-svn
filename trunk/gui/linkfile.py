@@ -15,7 +15,6 @@ def is_valid_external_link(url):
         above, so it can be executed in a browser """
     pos = url.find(':')
     if pos > 0:
-        print url[:pos]
         return url[:pos] in allowed_tags
     
     return False
@@ -23,10 +22,10 @@ def is_valid_external_link(url):
 # ------------------------------------------------------------------------------
 def executelink(link):
     """ Execute a LINK object """
+
     cmd = ''
     if link:
         cmd = linkmgt.Get().GetLinkPath(link)
-        # in linux we have to adjust the spaces
             
     __doExecuteCommand(cmd)
 
@@ -56,9 +55,9 @@ def __doExecuteCommand(cmd):
     else:
         # in linux we must escape the spaces
         if "wxGTK" in wx.PlatformInfo:
-            cmdstr = os.path.normcase(cmd).replace(' ', '\\ ')
+            cmdstr = '"' + cmd + '"'
         else:
-            cmdstr = cmd
+            cmdstr = os.path.normcase(cmd)
 
     if cmdstr:
         if "wxMSW" in wx.PlatformInfo:

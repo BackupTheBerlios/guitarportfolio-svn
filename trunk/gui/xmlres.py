@@ -15,8 +15,6 @@ class GpfXmlResourceHandler(xrc.XmlResourceHandler):
 
     # This method and the next one are required for XmlResourceHandlers
     def CanHandle(self, node):
-        print 'self.IsOfClass(node, "SongFilterPanel") ', self.IsOfClass(node, "SongFilterPanel")
-        print 'self.IsOfClass(node, "wxPanel") ', self.IsOfClass(node, "wxPanel")
         return self.IsOfClass(node, "SongFilterPanel")
 
     def DoCreateResource(self):

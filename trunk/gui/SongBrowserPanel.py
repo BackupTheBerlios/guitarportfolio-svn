@@ -231,7 +231,6 @@ class SongBrowserPanel(wx.Panel):
     #---------------------------------------------------------------------------
     def __OnLinkClicked(self, event):
         tag = event.GetLinkInfo().GetHref()
-        print tag
         # check if we need to select a song
         if tag.startswith('#song:'):
             song_nr = tag[6:]
