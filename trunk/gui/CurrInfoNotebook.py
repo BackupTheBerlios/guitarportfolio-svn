@@ -5,6 +5,7 @@ import CurrSongInfoPanel
 import SongBrowserPanel
 import LyricInfoPanel
 import GuitarTabPanel
+import SongLogPanel
 
 #----------------------------------------------------------------------
 
@@ -20,6 +21,7 @@ class CurrInfoNotebook(wx.Panel):
         self.__mNB.AddPage(CurrSongInfoPanel.CurrSongInfoPanel(self.__mNB), "Info")
         self.__mNB.AddPage(LyricInfoPanel.LyricInfoPanel(self.__mNB), "Lyrics")
         self.__mNB.AddPage(GuitarTabPanel.GuitarTabPanel(self.__mNB), "Tabs")
+        self.__mNB.AddPage(SongLogPanel.SongLogPanel(self.__mNB), "Study Log")
             
         sizer = wx.BoxSizer()
         sizer.Add(self.__mNB, 1, wx.EXPAND)

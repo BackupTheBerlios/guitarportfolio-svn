@@ -8,7 +8,7 @@ import appcfg
 # use is_valid_link(url) to check on these
 allowed_tags = [ 'ftp', 'http', 'https', 'gopher', 'mailto', 
                  'news', 'nntp', 'telnet', 'wais', 'file', 'prospero', 
-                 'aim', 'webcal']
+                 'aim', 'webcal' ]
 
 def is_valid_external_link(url):
     """ Checks if the protocol specification is defined in one of the 
@@ -27,7 +27,7 @@ def executelink(link):
     if link:
         cmd = linkmgt.Get().GetLinkPath(link)
             
-    __doExecuteCommand(cmd)
+    __doExecuteCommand(cmd, link._runcmd)
 
 # ------------------------------------------------------------------------------
 def execute_uri(link):
@@ -46,7 +46,7 @@ def execute_uri(link):
     __doExecuteCommand(cmd)
 
 # ------------------------------------------------------------------------------
-def __doExecuteCommand(cmd):
+def __doExecuteCommand(cmd, runcmd = ''):
     """ The execute command string """
     cmdstr = ''
     # we check if we execute an URI or a normal file
@@ -63,9 +63,17 @@ def __doExecuteCommand(cmd):
         if "wxMSW" in wx.PlatformInfo:
             # simple shell execute.
             # TODO: Is there a way to get a status back?
-            os.startfile(os.path.normcase(cmdstr))
+            scmd = os.path.normcase(cmdstr)
+            if runcmd:
+                scmd = runcmd.replace('$file', scmd)
+            os.startfile(scmd)
         else:
-            exec_cmd = appcfg.Get().Read(appcfg.CFG_LINUX_EXEC_CMD)
+            # the run command is either the setting or a given one
+            if runcmd:
+                exec_cmd = runcmd.replace('$file', cmdstr)
+            else:
+                exec_cmd = appcfg.Get().Read(appcfg.CFG_LINUX_EXEC_CMD)
+            
             if exec_cmd:
                 runcmd = exec_cmd + ' ' + cmdstr 
                 if os.system(runcmd) <> 0:
