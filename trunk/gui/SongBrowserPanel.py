@@ -267,14 +267,8 @@ class SongBrowserPanel(wx.Panel):
         
         song = viewmgr.Get()._selectedSong
         if song:
-            if song._status <> status:
-                # update in DB
-                song._status = status
-                sp = db.songs_peer.SongPeer(db.engine.GetDb())
-                sp.Update(song)
-
-                # issue a song update
-                viewmgr.signalSongUpdated(song)
+            # signal a status change so we can enter a log
+            viewmgr.signalSongStatusChange(song, status)
         
     #---------------------------------------------------------------------------
     def __OnBrowseHome(self, event):

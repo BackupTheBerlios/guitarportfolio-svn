@@ -1,6 +1,6 @@
+import datetime
 from wx.lib.pubsub import Publisher
 
-import signals
 import db
 
 LOG_UNDEFINED           = 0  # not defined
@@ -19,6 +19,10 @@ class LogItem(db.base.Object):
         self._text = ''
         self._value = 0
         self._date = datetime.datetime.now()     
-    
+  
+    def tostr(self):
+        str = 'Log Entry: ' + self._date.strftime('%Y %m %d %H:%M:%S') + ' -- ' + repr(self._type) + ' "' + self._text + '" ' + repr(self._value) 
+        return str
+
 # =============================================================================
     

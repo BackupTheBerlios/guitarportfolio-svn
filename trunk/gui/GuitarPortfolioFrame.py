@@ -343,14 +343,7 @@ class GuitarPortfolioFrame(wx.Frame):
         if song:
             # if our status differs, force an update
             if song._status <> self.__menu_status_lookup[event.GetId()]:
-                song._status = self.__menu_status_lookup[event.GetId()]
-                
-                # update in DB
-                sp = db.songs_peer.SongPeer(db.engine.GetDb())
-                sp.Update(song)  
-          
-                # force a signal around to sync views
-                viewmgr.signalSongUpdated(song)
+                viewmgr.signalSongStatusChange(song, self.__menu_status_lookup[event.GetId()])
 
     #---------------------------------------------------------------------------
     def __OnShowOptions(self, event): 

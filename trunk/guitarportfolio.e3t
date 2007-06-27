@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Tasks SYSTEM "Tasks-3.8.dtd">
 <!-- Tasks file for project guitarportfolio -->
-<!-- Saved: 2007-06-26, 19:54:17 -->
+<!-- Saved: 2007-06-27, 21:30:21 -->
 <Tasks version="3.8">
   <Task priority="0" completed="0" bugfix="0">
     <Description>BUG: Categories cannot be added when song is not yet in DB</Description>
@@ -63,28 +63,6 @@
     </Resource>
   </Task>
   <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Artists which are mistyped (lower / upper) should not appear twice</Description>
-    <Created>2007-06-17, 12:01:33</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>NewSongDlg.py</Name>
-      </Filename>
-      <Linenumber>57</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Small problem, the category relations can be</Description>
-    <Created>2007-06-24, 13:48:42</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>GuitarPortfolioFrame.py</Name>
-      </Filename>
-      <Linenumber>279</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
     <Description>TODO: The Wiki HTML parser should be a generic component, so that other</Description>
     <Created>2007-06-24, 14:02:19</Created>
     <Resource>
@@ -96,17 +74,6 @@
     </Resource>
   </Task>
   <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Not certain if this will work, if a query is sent after a remove from</Description>
-    <Created>2007-06-24, 17:00:58</Created>
-    <Resource>
-      <Filename>
-        <Dir>objs</Dir>
-        <Name>signals.py</Name>
-      </Filename>
-      <Linenumber>38</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
     <Description>TODO: we need to insert some demo code!</Description>
     <Created>2007-06-24, 17:10:33</Created>
     <Resource>
@@ -115,28 +82,6 @@
         <Name>WelcomeDlg.py</Name>
       </Filename>
       <Linenumber>161</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO:       (stats[songs.SS_NOT_STARTED],</Description>
-    <Created>2007-06-24, 21:01:54</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>SongBrowserPanel.py</Name>
-      </Filename>
-      <Linenumber>157</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Should be placed in an config module</Description>
-    <Created>2007-06-25, 20:49:29</Created>
-    <Resource>
-      <Filename>
-        <Dir>objs</Dir>
-        <Name>linkmgt.py</Name>
-      </Filename>
-      <Linenumber>22</Linenumber>
     </Resource>
   </Task>
   <Task priority="1" completed="0" bugfix="0">
@@ -247,6 +192,83 @@
         <Name>GuitarNotebook.py</Name>
       </Filename>
       <Linenumber>9</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Artists which are mistyped (lower / upper) should not appear twice</Description>
+    <Created>2007-06-27, 20:24:39</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>NewSongDlg.py</Name>
+      </Filename>
+      <Linenumber>57</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Sort in the correct order</Description>
+    <Created>2007-06-27, 20:25:50</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>SongBrowserPanel.py</Name>
+      </Filename>
+      <Linenumber>74</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO:       (stats[songs.SS_NOT_STARTED],</Description>
+    <Created>2007-06-27, 20:25:50</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>SongBrowserPanel.py</Name>
+      </Filename>
+      <Linenumber>189</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Shouldn't we use OnUpdateUI event instead?</Description>
+    <Created>2007-06-27, 20:33:45</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>GuitarPortfolioFrame.py</Name>
+      </Filename>
+      <Linenumber>209</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Small problem, the category relations can be</Description>
+    <Created>2007-06-27, 20:33:45</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>GuitarPortfolioFrame.py</Name>
+      </Filename>
+      <Linenumber>273</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Not certain if this will work, if a query is sent after a remove from</Description>
+    <Created>2007-06-27, 21:19:17</Created>
+    <Resource>
+      <Filename>
+        <Dir>objs</Dir>
+        <Name>signals.py</Name>
+      </Filename>
+      <Linenumber>38</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Should be placed in an config module</Description>
+    <Created>2007-06-27, 21:19:34</Created>
+    <Resource>
+      <Filename>
+        <Dir>objs</Dir>
+        <Name>linkmgt.py</Name>
+      </Filename>
+      <Linenumber>22</Linenumber>
     </Resource>
   </Task>
 </Tasks>

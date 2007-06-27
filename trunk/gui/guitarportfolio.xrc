@@ -1306,7 +1306,7 @@
                 <object class="wxBoxSizer">
                     <orient>wxHORIZONTAL</orient>
                     <object class="sizeritem">
-                        <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE</flag>
+                        <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
                         <border>5</border>
                         <object class="wxStaticText" name="wxID_STATIC">
                             <label>Select</label>
@@ -1413,24 +1413,17 @@
                     <object class="sizeritem">
                         <flag>wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxBOTTOM</flag>
                         <border>5</border>
-                        <object class="wxButton" name="ID_BUTTON1">
+                        <object class="wxButton" name="ID_REFRESH">
                             <label>REFRESH</label>
                         </object>
                     </object>
                 </object>
             </object>
             <object class="sizeritem">
-                <flag>wxGROW|wxALL</flag>
-                <border>5</border>
-                <object class="wxStaticLine" name="ID_STATICLINE6">
-                    <style>wxLI_HORIZONTAL</style>
-                </object>
-            </object>
-            <object class="sizeritem">
-                <flag>wxGROW|wxALL</flag>
+                <flag>wxGROW|wxLEFT|wxRIGHT|wxBOTTOM</flag>
                 <border>5</border>
                 <option>1</option>
-                <object class="wxHtmlWindow" name="ID_HTMLWINDOW1">
+                <object class="wxHtmlWindow" name="ID_LOGAREA">
                     <size>200,150</size>
                     <style>wxHW_SCROLLBAR_AUTO|wxSUNKEN_BORDER</style>
                 </object>

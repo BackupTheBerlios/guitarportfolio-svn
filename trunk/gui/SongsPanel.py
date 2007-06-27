@@ -174,15 +174,8 @@ class SongsListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
         song = viewmgr.Get()._selectedSong
         if song <> None:
             # if our status differs, force an update
-            if song._status <> self.__statusMap[event.GetId()]:
-                song._status = self.__statusMap[event.GetId()]
-                
-                # update in DB
-                sp = songs_peer.SongPeer(db.engine.GetDb())
-                sp.Update(song)
-                
-                # issue an update
-                viewmgr.signalSongUpdated(song)
+            if song._status <> self.__statusMap[event.GetId()]:                
+                viewmgr.signalSongStatusChange(song, self.__statusMap[event.GetId()])
                 
     # --------------------------------------------------------------------------
     def __OnSongSelected(self, message):

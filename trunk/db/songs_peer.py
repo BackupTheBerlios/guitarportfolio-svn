@@ -266,6 +266,10 @@ class SongPeer(db.base.Peer):
         p = tabs_peer.TabPeer(self._conn)
         for t in obj.tabs:
             p.Delete(t)
+            
+        # remove log entries
+        p = log_peer.LogSetPeer(self._conn)
+        p.Delete(obj._id)
                     
     # --------------------------------------------------------------------------    
     def UpdateCategories(self, obj):

@@ -2,8 +2,8 @@
 import wx
 from wx.lib.pubsub import Publisher
 
-import db, db.engine, db.songs_peer
-from objs import category_mgr, tuning_mgr, linkmgt, songs, objlist 
+import db, db.engine, db.songs_peer, db.log_peer
+from objs import category_mgr, tuning_mgr, linkmgt, songs, objlist, log
 from gui import appcfg
 
 
@@ -547,8 +547,57 @@ def signalSongStatusChange(song, new_status):
             - Update the song in the DB
             - Call signalSongUpdated 
     """
-    pass
     
+    # make sure we are not going to log an unchanged or illegal status
+    valid_entry = False
+    if (song._status == new_status) or (new_status == songs.SS_NOT_STARTED):
+        return
+        
+    # create a new log object, we borrow the date from 
+    # this object to set in the song object
+    logentry = log.LogItem()
+    logentry._type = log.LOG_STATUSCHANGE
+    
+    # TODO --> STARTED
+    if song._status == songs.SS_NOT_STARTED:
+        if new_status == songs.SS_STARTED:
+            valid_entry = True
+            song._timeStarted = logentry._date
+    elif song._status == songs.SS_STARTED:
+        # IN PROGRESS -> POSTPONED
+        if new_status == songs.SS_POSTPONED:
+            valid_entry = True
+            song._timePostponed = logentry._date
+        # IN PROGRESS -> COMPLETED
+        elif new_status == songs.SS_COMPLETED:
+            valid_entry = True
+            song._timeCompleted = logentry._date
+    elif song._status == songs.SS_COMPLETED:
+        # COMPLETED -> IN PROGRESS
+        if new_status == songs.SS_STARTED:
+            valid_entry = True
+    elif song._status == songs.SS_POSTPONED:
+        # POSTPONED-> IN PROGRESS
+        if new_status == songs.SS_STARTED:
+            valid_entry = True
+
+    # when we have a valid entry we store the log
+    # and the song to the database, and change the status
+    if valid_entry:
+        song._status = new_status
+        logentry._value = new_status
+        
+        # update the song object
+        sp = db.songs_peer.SongPeer(db.engine.GetDb())
+        sp.Update(song, all = False)
+        
+        # insert the log object
+        sp = db.log_peer.LogPeer(db.engine.GetDb())
+        sp.Update(logentry, song._id)
+        
+        # invoke the update signal
+        signalSongUpdated(song)
+            
 # ------------------------------------------------------------------------------
 def _DoReloadAttachments(song):
     """ Internal function that reloads the attachments list as it is a very common used 
