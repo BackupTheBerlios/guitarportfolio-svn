@@ -513,6 +513,41 @@ def signalEditAttachments():
         of the GUI can also invoke an edit mechanism in the main form """
     
     Publisher().sendMessage(SIGNAL_EDIT_LINKS)
+
+# ------------------------------------------------------------------------------
+def signalSongStatusChange(song, new_status):
+    """ We are about to change the status of the song, this will be logged and some intelligent stuff
+        is performed. 
+        
+        Song status TODO -> IN PROGRESS:
+            - Set date started to this date
+            - Set status of song to IN PROGRESS
+            - Create a log entry and save it to DB
+            - Update the song in the DB
+            - Call signalSongUpdated 
+            
+        Song status IN PROGRESS -> NOT PRACTICING:
+            - Set time postponed to this date
+            - Set status of song to POSTPONED
+            - Create a log entry and save it to DB
+            - Update the song in the DB
+            - Call signalSongUpdated
+            
+        Song status IN PROGRESS -> COMPLETED:
+            - Is song been completed earlier? If not
+                - Set time completed to this date
+            - Set status of song to to completed
+            - Create a log entry and save it to DB
+            - Update the song in the DB
+            - Call signalSongUpdated 
+            
+        Song status COMPLETED -> IN_PROGRESS:
+            - Set status of song to in progress
+            - Create a log entry and save it to DB
+            - Update the song in the DB
+            - Call signalSongUpdated 
+    """
+    pass
     
 # ------------------------------------------------------------------------------
 def _DoReloadAttachments(song):

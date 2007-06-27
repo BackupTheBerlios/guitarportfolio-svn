@@ -12,7 +12,7 @@ class LogSetPeer(db.base.Peer):
     
     # --------------------------------------------------------------------------
     def Restore(self, song_id, log_types = None, start_date = None, end_date = None):
-si        
+        
         # we restore this slightly out of the given framework to 
         # speed up the restore as the log items are not standard DB objects
         # and are subject to filtering as well

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Tasks SYSTEM "Tasks-3.8.dtd">
 <!-- Tasks file for project guitarportfolio -->
-<!-- Saved: 2007-06-25, 22:30:35 -->
+<!-- Saved: 2007-06-26, 19:54:17 -->
 <Tasks version="3.8">
   <Task priority="0" completed="0" bugfix="0">
     <Description>BUG: Categories cannot be added when song is not yet in DB</Description>
@@ -74,28 +74,6 @@
     </Resource>
   </Task>
   <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: The path needs to be determined to start the file</Description>
-    <Created>2007-06-24, 13:39:47</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>linkfile.py</Name>
-      </Filename>
-      <Linenumber>43</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Is there a way to get a status back?</Description>
-    <Created>2007-06-24, 13:39:47</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>linkfile.py</Name>
-      </Filename>
-      <Linenumber>66</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
     <Description>TODO: Small problem, the category relations can be</Description>
     <Created>2007-06-24, 13:48:42</Created>
     <Resource>
@@ -104,17 +82,6 @@
         <Name>GuitarPortfolioFrame.py</Name>
       </Filename>
       <Linenumber>279</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Is this one deprecated?</Description>
-    <Created>2007-06-24, 14:00:11</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>GuitarNotebook.py</Name>
-      </Filename>
-      <Linenumber>9</Linenumber>
     </Resource>
   </Task>
   <Task priority="1" completed="0" bugfix="0">
@@ -148,17 +115,6 @@
         <Name>WelcomeDlg.py</Name>
       </Filename>
       <Linenumber>161</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Make sure song information can also be substituted in the tab</Description>
-    <Created>2007-06-24, 20:48:33</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>GuitarTabPanel.py</Name>
-      </Filename>
-      <Linenumber>17</Linenumber>
     </Resource>
   </Task>
   <Task priority="1" completed="0" bugfix="0">
@@ -228,8 +184,41 @@
     </Resource>
   </Task>
   <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: we might need to force this on Linux as well</Description>
+    <Created>2007-06-25, 21:51:09</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>GuitarTabEditPanel.py</Name>
+      </Filename>
+      <Linenumber>39</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: The path needs to be determined to start the file</Description>
+    <Created>2007-06-26, 19:17:35</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>linkfile.py</Name>
+      </Filename>
+      <Linenumber>42</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Is there a way to get a status back?</Description>
+    <Created>2007-06-26, 19:17:35</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>linkfile.py</Name>
+      </Filename>
+      <Linenumber>65</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
     <Description>TODO: Make a wx.ListCtrl, listmix.ListCtrlAutoWidthMixin custom class for XRC</Description>
-    <Created>2007-06-25, 21:14:50</Created>
+    <Created>2007-06-26, 19:42:48</Created>
     <Resource>
       <Filename>
         <Dir>gui</Dir>
@@ -239,14 +228,25 @@
     </Resource>
   </Task>
   <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: we might need to force this on Linux as well</Description>
-    <Created>2007-06-25, 21:51:09</Created>
+    <Description>TODO: Make sure song information can also be substituted in the tab</Description>
+    <Created>2007-06-26, 19:46:51</Created>
     <Resource>
       <Filename>
         <Dir>gui</Dir>
-        <Name>GuitarTabEditPanel.py</Name>
+        <Name>GuitarTabPanel.py</Name>
       </Filename>
-      <Linenumber>39</Linenumber>
+      <Linenumber>17</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Is this one deprecated?</Description>
+    <Created>2007-06-26, 19:51:59</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>GuitarNotebook.py</Name>
+      </Filename>
+      <Linenumber>9</Linenumber>
     </Resource>
   </Task>
 </Tasks>
