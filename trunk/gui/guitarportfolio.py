@@ -6,6 +6,10 @@ from GuitarPortfolioFrame import GuitarPortfolioFrame
 import appcfg, xmlres
 
 class GuitarPortfolioApp(wx.App):
+    #def __init__(self, redirect = True, filename = None, useBestVisual = False, clearSigInt = True):
+    #    super(GuitarPortfolioApp, self).__init__(redirect, filename, useBestVisual, clearSigInt)    
+    #    pass 
+
     def OnInit(self):
         wx.InitAllImageHandlers()
 

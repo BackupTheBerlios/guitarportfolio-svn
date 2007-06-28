@@ -2,7 +2,7 @@ import datetime
 from wx.lib.pubsub import Publisher
 
 import db
-from db import tabs_peer
+from db import tabs_peer, log_peer
 from objs import songs, tabs, tuning_mgr, category_mgr
 
 #===============================================================================
@@ -269,7 +269,7 @@ class SongPeer(db.base.Peer):
             
         # remove log entries
         p = log_peer.LogSetPeer(self._conn)
-        p.Delete(obj._id)
+        p.Delete(obj)
                     
     # --------------------------------------------------------------------------    
     def UpdateCategories(self, obj):

@@ -378,7 +378,6 @@ def signalEditSong():
 def signalSongUpdated(song):
     """ The song in question is updated. If the song is the selected song, we will also reload
         some stuff, like the attachments list before emitting the updated signal """
-    
     # reload the attachments when we are in view
     if song == Get()._selectedSong and song != None:
         _DoReloadAttachments(song)
@@ -598,6 +597,72 @@ def signalSongStatusChange(song, new_status):
         # invoke the update signal
         signalSongUpdated(song)
             
+# ------------------------------------------------------------------------------
+def signalAccuracyChange(song, accuracy):
+    """ Signal an accuracy % change to the log, and update the song and the database """
+                
+    if song:
+        # only change when a change occured
+        if song._percAccuracy != accuracy:
+            # create a new log object
+            logentry = log.LogItem()
+            logentry._type = log.LOG_PROGRESS_CHANGE_ACC
+            logentry._value = accuracy
+            
+            song._percAccuracy = accuracy
+            
+            # update the song object
+            sp = db.songs_peer.SongPeer(db.engine.GetDb())
+            sp.Update(song, all = False)
+            
+            # insert the log object
+            sp = db.log_peer.LogPeer(db.engine.GetDb())
+            sp.Update(logentry, song._id)
+            
+            # invoke the update signal
+            signalSongUpdated(song)
+
+# ------------------------------------------------------------------------------
+def signalCompletedChange(song, completed):
+    """ Signal an completed % change to the log, and update the song and the database """
+
+    if song:                
+        # only change when a change occured
+        if song._percCompleted != completed:
+            # create a new log object
+            logentry = log.LogItem()
+            logentry._type = log.LOG_PROGRESS_CHANGE_CMP
+            logentry._value = completed
+            
+            song._percCompleted = completed
+            
+            # update the song object
+            sp = db.songs_peer.SongPeer(db.engine.GetDb())
+            sp.Update(song, all = False)
+            
+            # insert the log object
+            sp = db.log_peer.LogPeer(db.engine.GetDb())
+            sp.Update(logentry, song._id)
+            
+            # invoke the update signal
+            signalSongUpdated(song)
+
+# ------------------------------------------------------------------------------
+def signalAddComment(song, comment):
+    """ Add a comment to the song log """
+    
+    if song:                
+        # only log when we have somthing to say
+        if comment != '':
+            # create a new log object
+            logentry = log.LogItem()
+            logentry._type = log.LOG_COMMENT
+            logentry._text = comment
+                        
+            # insert the log object
+            sp = db.log_peer.LogPeer(db.engine.GetDb())
+            sp.Update(logentry, song._id)
+
 # ------------------------------------------------------------------------------
 def _DoReloadAttachments(song):
     """ Internal function that reloads the attachments list as it is a very common used 

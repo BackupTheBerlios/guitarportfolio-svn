@@ -420,32 +420,45 @@
         <object class="wxBoxSizer">
             <orient>wxVERTICAL</orient>
             <object class="sizeritem">
-                <flag>wxGROW|wxALL</flag>
+                <flag>wxGROW|wxLEFT|wxRIGHT</flag>
                 <border>5</border>
                 <object class="wxBoxSizer">
                     <orient>wxHORIZONTAL</orient>
                     <object class="sizeritem">
                         <flag>wxALIGN_CENTER_VERTICAL|wxRIGHT|wxTOP|wxBOTTOM</flag>
                         <border>5</border>
-                        <object class="wxStaticText" name="wxID_STATIC">
-                            <label>Use</label>
+                        <object class="wxCheckBox" name="ID_USE_CUSTOM">
+                            <label>Use custom date</label>
+                            <checked>0</checked>
                         </object>
                     </object>
                     <object class="sizeritem">
                         <flag>wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                         <border>5</border>
-                        <object class="wxChoice" name="ID_LOGDATE">
-                            <content>
-                                <item>Current Time</item>
-                                <item>Date &amp; Time ...</item>
-                            </content>
+                        <object class="wxDatePickerCtrl" name="ID_LOGDATE">
+                            <style>wxDP_DEFAULT|wxDP_SHOWCENTURY</style>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                        <border>5</border>
+                        <object class="wxStaticText" name="ID_CHECKBOX6">
+                            <label>and time</label>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_VERTICAL|wxRIGHT|wxTOP|wxBOTTOM</flag>
+                        <border>5</border>
+                        <object class="wxTextCtrl" name="ID_CUSTOM_TIME">
+                            <size>50,-1</size>
+                            <value>23:55</value>
                         </object>
                     </object>
                     <object class="sizeritem">
                         <flag>wxALIGN_CENTER_VERTICAL|wxRIGHT|wxTOP|wxBOTTOM</flag>
                         <border>5</border>
                         <object class="wxStaticText" name="wxID_STATIC">
-                            <label>to write the following changes in log :</label>
+                            <label>(24 hour time) to write the following changes in log :</label>
                         </object>
                     </object>
                 </object>
@@ -463,14 +476,14 @@
                 <object class="wxBoxSizer">
                     <orient>wxHORIZONTAL</orient>
                     <object class="sizeritem">
-                        <flag>wxALIGN_CENTER_VERTICAL|wxRIGHT|wxTOP|wxBOTTOM</flag>
+                        <flag>wxALIGN_CENTER_VERTICAL|wxRIGHT</flag>
                         <border>5</border>
                         <object class="wxStaticText" name="wxID_STATIC">
                             <label>Grade for accuracy</label>
                         </object>
                     </object>
                     <object class="sizeritem">
-                        <flag>wxGROW|wxALL</flag>
+                        <flag>wxGROW|wxLEFT|wxRIGHT</flag>
                         <border>5</border>
                         <option>1</option>
                         <object class="wxSlider" name="ID_ACC_SLIDER">
@@ -482,21 +495,21 @@
                         </object>
                     </object>
                     <object class="sizeritem">
-                        <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                        <flag>wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</flag>
                         <border>5</border>
                         <object class="wxStaticText" name="ID_GRADE_ACC">
                             <label>[00]</label>
                         </object>
                     </object>
                     <object class="sizeritem">
-                        <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                        <flag>wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</flag>
                         <border>5</border>
                         <object class="wxStaticText" name="wxID_STATIC">
                             <label>Grade for completed</label>
                         </object>
                     </object>
                     <object class="sizeritem">
-                        <flag>wxGROW|wxALL</flag>
+                        <flag>wxGROW|wxLEFT|wxRIGHT</flag>
                         <border>5</border>
                         <option>1</option>
                         <object class="wxSlider" name="ID_COMP_SLIDER">
@@ -508,7 +521,7 @@
                         </object>
                     </object>
                     <object class="sizeritem">
-                        <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                        <flag>wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</flag>
                         <border>5</border>
                         <object class="wxStaticText" name="ID_GRADE_COMP">
                             <label>[00]</label>
@@ -522,14 +535,14 @@
                         </object>
                     </object>
                     <object class="sizeritem">
-                        <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                        <flag>wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</flag>
                         <border>5</border>
                         <object class="wxStaticText" name="wxID_STATIC">
                             <label>% Done</label>
                         </object>
                     </object>
                     <object class="sizeritem">
-                        <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                        <flag>wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</flag>
                         <border>5</border>
                         <object class="wxStaticText" name="ID_COMPLETED">
                             <font>
@@ -1323,7 +1336,6 @@
                                 <item>Last 6 Months</item>
                                 <item>Last Year</item>
                                 <item>All Entries</item>
-                                <item>Custom ...</item>
                             </content>
                         </object>
                     </object>
