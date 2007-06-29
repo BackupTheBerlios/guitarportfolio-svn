@@ -2,6 +2,7 @@ import wx
 import wx.xrc as xrc
 from wx.lib.pubsub import Publisher
 import xmlres, viewmgr
+from objs import songs
 
 class ProgressPanel(wx.Panel):
     def __init__(self, parent, id = wx.ID_ANY):
@@ -32,31 +33,23 @@ class ProgressPanel(wx.Panel):
         self.Bind(wx.EVT_COMMAND_SCROLL_THUMBTRACK, self.__OnCompletedScroll, self.__estimated)
         self.Bind(wx.EVT_BUTTON, self.__OnSubmitComment, self.__submitButton)
         self.Bind(wx.EVT_CHECKBOX, self.__OnUseCustomDate, self.__useCustom) 
+        self.Bind(wx.EVT_BUTTON, self.__OnStudyTimeSubmit, self.__minuteButton)
 
         Publisher().subscribe(self.__OnSongSelected, viewmgr.SIGNAL_SONG_SELECTED)
         Publisher().subscribe(self.__OnSongSelected, viewmgr.SIGNAL_CLEAR_DATA)
+        Publisher().subscribe(self.__OnSongSelected, viewmgr.SIGNAL_SONG_UPDATED)
 
     # --------------------------------------------------------------------------
     def __OnSongSelected(self, message): 
         """ Handler to update the view when a song is selected """
 
-        # signal the change to the view manager, and update the song
         song = message.data
-        self.__accuracy.Enable(song != None)
-        self.__estimated.Enable(song != None)
-        self.__minutes.Enable(song != None)
-        self.__minuteButton.Enable(song != None)
-        self.__status.Enable(song != None)
-        self.__statusButton.Enable(song != None)
-        self.__log.Enable(song != None)
-        self.__submitButton.Enable(song != None)
-        self.__logDate.Enable(song != None)
+
+        # set all controls to enabled / disabled
+        self.__UpdateAllowEdit(song)
         
         # by default, we do not set a custom date / time
         self.__useCustom.SetValue(False)                 
-        self.__useCustom.Enable(song != None)
-        self.__customTime.Enable(song != None)
-
         self.__log.SetValue('')
         
         if song:                    
@@ -72,6 +65,36 @@ class ProgressPanel(wx.Panel):
             self.__accuracy.SetValue(0)
             self.__estimated.SetValue(0)
     
+    #---------------------------------------------------------------------------
+    def __OnSongUpdated(self, message):
+        """ Handle an updated song """
+        
+        # when status is updated, some stuff needs to be disabled
+        self.__UpdateAllowEdit(message.data)
+
+    #---------------------------------------------------------------------------
+    def __UpdateAllowEdit(self, song):
+        """ Allow or disallow editing based upon a song being present or
+            not, etc """
+    
+        allow_edit = True if (song and song._status != songs.SS_POSTPONED) else False
+        
+        self.__accuracy.Enable(allow_edit)
+        self.__estimated.Enable(allow_edit)
+        self.__minutes.Enable(allow_edit)
+        self.__minuteButton.Enable(allow_edit)
+        self.__log.Enable(allow_edit)
+        self.__submitButton.Enable(allow_edit)
+        self.__logDate.Enable(allow_edit)
+        self.__useCustom.Enable(allow_edit)
+        self.__customTime.Enable(allow_edit)    
+
+        # we dissalow changing the status when we set he flag
+        # to back-annotate some things..
+        custom = self.__useCustom.GetValue()
+        self.__status.Enable(allow_edit and not custom)
+        self.__statusButton.Enable(allow_edit and not custom)
+
     # --------------------------------------------------------------------------
     def __OnUseCustomDate(self, event):
         """ Event handler for setting a custom date to be logged in the database
@@ -81,9 +104,7 @@ class ProgressPanel(wx.Panel):
         # as it is very hard to verify which status a song had at a given
         # time and date. Maybe some time when I find out how to perform 
         # complex queries
-        custom = self.__useCustom.GetValue()
-        self.__statusButton.Enable(not custom)
-        self.__status.Enable(not custom)
+        self.__UpdateAllowEdit(viewmgr.Get()._selectedSong)
         
     # --------------------------------------------------------------------------
     def __OnSubmitComment(self, event):
@@ -135,4 +156,21 @@ class ProgressPanel(wx.Panel):
             self.__estimatedNr.SetLabel('[%.2i]' % (cmp_number,))
             self.__percent.SetLabel('%i %%' % (((song._percAccuracy * 10) + (cmp_number * 10)) / 2))
 
-
+    # --------------------------------------------------------------------------
+    def __OnStudyTimeSubmit(self, event):
+        """ Handler to add study time to the log """
+        
+        # add studytime to log, notify user when the 
+        # time is illegal
+        song = viewmgr.Get()._selectedSong
+        if song:                    
+            studytime = 0
+            try:
+                studytime = int(self.__minutes.GetValue())
+            except ValueError:
+                pass
+                
+            if studytime:
+                viewmgr.signalAddStudyTime(song, studytime)
+            else:
+                wx.MessageBox('The studytime is invalid, please enter a number!', 'Error', wx.ICON_HAND | wx.OK)

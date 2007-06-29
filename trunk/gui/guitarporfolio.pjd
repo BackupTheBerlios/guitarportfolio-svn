@@ -281,6 +281,14 @@
             <string name="proxy-type">"wbBoxSizerProxy"</string>
             <string name="proxy-Orientation">"Vertical"</string>
             <string name="proxy-Member variable name">""</string>
+            <string name="proxy-AlignH">"Centre"</string>
+            <string name="proxy-AlignV">"Centre"</string>
+            <long name="proxy-Stretch factor">0</long>
+            <long name="proxy-Border">5</long>
+            <bool name="proxy-wxLEFT">1</bool>
+            <bool name="proxy-wxRIGHT">1</bool>
+            <bool name="proxy-wxTOP">1</bool>
+            <bool name="proxy-wxBOTTOM">1</bool>
             <bool name="proxy-wxSHAPED">0</bool>
             <bool name="proxy-wxADJUST_MINSIZE">0</bool>
             <bool name="proxy-wxFIXED_MINSIZE">0</bool>
@@ -1532,6 +1540,14 @@
             <string name="proxy-type">"wbBoxSizerProxy"</string>
             <string name="proxy-Orientation">"Vertical"</string>
             <string name="proxy-Member variable name">""</string>
+            <string name="proxy-AlignH">"Centre"</string>
+            <string name="proxy-AlignV">"Centre"</string>
+            <long name="proxy-Stretch factor">0</long>
+            <long name="proxy-Border">5</long>
+            <bool name="proxy-wxLEFT">1</bool>
+            <bool name="proxy-wxRIGHT">1</bool>
+            <bool name="proxy-wxTOP">1</bool>
+            <bool name="proxy-wxBOTTOM">1</bool>
             <bool name="proxy-wxSHAPED">0</bool>
             <bool name="proxy-wxADJUST_MINSIZE">0</bool>
             <bool name="proxy-wxFIXED_MINSIZE">0</bool>
@@ -1833,6 +1849,14 @@
             <string name="proxy-type">"wbBoxSizerProxy"</string>
             <string name="proxy-Orientation">"Vertical"</string>
             <string name="proxy-Member variable name">""</string>
+            <string name="proxy-AlignH">"Centre"</string>
+            <string name="proxy-AlignV">"Centre"</string>
+            <long name="proxy-Stretch factor">0</long>
+            <long name="proxy-Border">5</long>
+            <bool name="proxy-wxLEFT">1</bool>
+            <bool name="proxy-wxRIGHT">1</bool>
+            <bool name="proxy-wxTOP">1</bool>
+            <bool name="proxy-wxBOTTOM">1</bool>
             <bool name="proxy-wxSHAPED">0</bool>
             <bool name="proxy-wxADJUST_MINSIZE">0</bool>
             <bool name="proxy-wxFIXED_MINSIZE">0</bool>
@@ -1990,6 +2014,14 @@
             <string name="proxy-type">"wbBoxSizerProxy"</string>
             <string name="proxy-Orientation">"Vertical"</string>
             <string name="proxy-Member variable name">""</string>
+            <string name="proxy-AlignH">"Centre"</string>
+            <string name="proxy-AlignV">"Centre"</string>
+            <long name="proxy-Stretch factor">0</long>
+            <long name="proxy-Border">5</long>
+            <bool name="proxy-wxLEFT">1</bool>
+            <bool name="proxy-wxRIGHT">1</bool>
+            <bool name="proxy-wxTOP">1</bool>
+            <bool name="proxy-wxBOTTOM">1</bool>
             <bool name="proxy-wxSHAPED">0</bool>
             <bool name="proxy-wxADJUST_MINSIZE">0</bool>
             <bool name="proxy-wxFIXED_MINSIZE">0</bool>
@@ -2148,6 +2180,14 @@
             <string name="proxy-type">"wbBoxSizerProxy"</string>
             <string name="proxy-Orientation">"Horizontal"</string>
             <string name="proxy-Member variable name">""</string>
+            <string name="proxy-AlignH">"Centre"</string>
+            <string name="proxy-AlignV">"Centre"</string>
+            <long name="proxy-Stretch factor">0</long>
+            <long name="proxy-Border">5</long>
+            <bool name="proxy-wxLEFT">1</bool>
+            <bool name="proxy-wxRIGHT">1</bool>
+            <bool name="proxy-wxTOP">1</bool>
+            <bool name="proxy-wxBOTTOM">1</bool>
             <bool name="proxy-wxSHAPED">0</bool>
             <bool name="proxy-wxADJUST_MINSIZE">0</bool>
             <bool name="proxy-wxFIXED_MINSIZE">0</bool>
@@ -2808,6 +2848,14 @@
             <string name="proxy-type">"wbBoxSizerProxy"</string>
             <string name="proxy-Orientation">"Vertical"</string>
             <string name="proxy-Member variable name">""</string>
+            <string name="proxy-AlignH">"Centre"</string>
+            <string name="proxy-AlignV">"Centre"</string>
+            <long name="proxy-Stretch factor">0</long>
+            <long name="proxy-Border">5</long>
+            <bool name="proxy-wxLEFT">1</bool>
+            <bool name="proxy-wxRIGHT">1</bool>
+            <bool name="proxy-wxTOP">1</bool>
+            <bool name="proxy-wxBOTTOM">1</bool>
             <bool name="proxy-wxSHAPED">0</bool>
             <bool name="proxy-wxADJUST_MINSIZE">0</bool>
             <bool name="proxy-wxFIXED_MINSIZE">0</bool>
@@ -3112,6 +3160,14 @@
             <string name="proxy-type">"wbBoxSizerProxy"</string>
             <string name="proxy-Orientation">"Vertical"</string>
             <string name="proxy-Member variable name">""</string>
+            <string name="proxy-AlignH">"Centre"</string>
+            <string name="proxy-AlignV">"Centre"</string>
+            <long name="proxy-Stretch factor">0</long>
+            <long name="proxy-Border">5</long>
+            <bool name="proxy-wxLEFT">1</bool>
+            <bool name="proxy-wxRIGHT">1</bool>
+            <bool name="proxy-wxTOP">1</bool>
+            <bool name="proxy-wxBOTTOM">1</bool>
             <bool name="proxy-wxSHAPED">0</bool>
             <bool name="proxy-wxADJUST_MINSIZE">0</bool>
             <bool name="proxy-wxFIXED_MINSIZE">0</bool>
@@ -3415,6 +3471,14 @@
             <string name="proxy-type">"wbBoxSizerProxy"</string>
             <string name="proxy-Orientation">"Vertical"</string>
             <string name="proxy-Member variable name">""</string>
+            <string name="proxy-AlignH">"Centre"</string>
+            <string name="proxy-AlignV">"Centre"</string>
+            <long name="proxy-Stretch factor">0</long>
+            <long name="proxy-Border">5</long>
+            <bool name="proxy-wxLEFT">1</bool>
+            <bool name="proxy-wxRIGHT">1</bool>
+            <bool name="proxy-wxTOP">1</bool>
+            <bool name="proxy-wxBOTTOM">1</bool>
             <bool name="proxy-wxSHAPED">0</bool>
             <bool name="proxy-wxADJUST_MINSIZE">0</bool>
             <bool name="proxy-wxFIXED_MINSIZE">0</bool>
@@ -8989,6 +9053,14 @@
             <string name="proxy-type">"wbBoxSizerProxy"</string>
             <string name="proxy-Orientation">"Vertical"</string>
             <string name="proxy-Member variable name">""</string>
+            <string name="proxy-AlignH">"Centre"</string>
+            <string name="proxy-AlignV">"Centre"</string>
+            <long name="proxy-Stretch factor">0</long>
+            <long name="proxy-Border">5</long>
+            <bool name="proxy-wxLEFT">1</bool>
+            <bool name="proxy-wxRIGHT">1</bool>
+            <bool name="proxy-wxTOP">1</bool>
+            <bool name="proxy-wxBOTTOM">1</bool>
             <bool name="proxy-wxSHAPED">0</bool>
             <bool name="proxy-wxADJUST_MINSIZE">0</bool>
             <bool name="proxy-wxFIXED_MINSIZE">0</bool>
@@ -10135,7 +10207,7 @@
                 <string name="proxy-Custom ctor arguments">""</string>
               </document>
               <document>
-                <string name="title">"wxChoice: ID_CHOICE1"</string>
+                <string name="title">"wxChoice: ID_TIME_PERIOD"</string>
                 <string name="type">"dialog-control-document"</string>
                 <string name="filename">""</string>
                 <string name="icon-name">"choice"</string>
@@ -10145,7 +10217,7 @@
                 <long name="locked">0</long>
                 <string name="created">"26/6/2007"</string>
                 <string name="proxy-type">"wbChoiceProxy"</string>
-                <string name="proxy-Id name">"ID_CHOICE1"</string>
+                <string name="proxy-Id name">"ID_TIME_PERIOD"</string>
                 <long name="proxy-Id value">10070</long>
                 <string name="proxy-Class">"wxChoice"</string>
                 <string name="proxy-Base class">"wxChoice"</string>
@@ -10253,7 +10325,7 @@
                 <string name="proxy-Custom ctor arguments">""</string>
               </document>
               <document>
-                <string name="title">"wxCheckBox: ID_CHECKBOX4"</string>
+                <string name="title">"wxCheckBox: ID_ALL_CRITERIA"</string>
                 <string name="type">"dialog-control-document"</string>
                 <string name="filename">""</string>
                 <string name="icon-name">"checkbox"</string>
@@ -10263,7 +10335,7 @@
                 <long name="locked">0</long>
                 <string name="created">"26/6/2007"</string>
                 <string name="proxy-type">"wbCheckBoxProxy"</string>
-                <string name="proxy-Id name">"ID_CHECKBOX4"</string>
+                <string name="proxy-Id name">"ID_ALL_CRITERIA"</string>
                 <long name="proxy-Id value">10074</long>
                 <string name="proxy-Class">"wxCheckBox"</string>
                 <string name="proxy-Base class">"wxCheckBox"</string>
@@ -10311,7 +10383,7 @@
                 <string name="proxy-Custom ctor arguments">""</string>
               </document>
               <document>
-                <string name="title">"wxCheckBox: ID_CHECKBOX1"</string>
+                <string name="title">"wxCheckBox: ID_CRIT_PROGRESS"</string>
                 <string name="type">"dialog-control-document"</string>
                 <string name="filename">""</string>
                 <string name="icon-name">"checkbox"</string>
@@ -10321,7 +10393,7 @@
                 <long name="locked">0</long>
                 <string name="created">"26/6/2007"</string>
                 <string name="proxy-type">"wbCheckBoxProxy"</string>
-                <string name="proxy-Id name">"ID_CHECKBOX1"</string>
+                <string name="proxy-Id name">"ID_CRIT_PROGRESS"</string>
                 <long name="proxy-Id value">10071</long>
                 <string name="proxy-Class">"wxCheckBox"</string>
                 <string name="proxy-Base class">"wxCheckBox"</string>
@@ -10369,7 +10441,7 @@
                 <string name="proxy-Custom ctor arguments">""</string>
               </document>
               <document>
-                <string name="title">"wxCheckBox: ID_CHECKBOX5"</string>
+                <string name="title">"wxCheckBox: ID_CRIT_STUDYTIME"</string>
                 <string name="type">"dialog-control-document"</string>
                 <string name="filename">""</string>
                 <string name="icon-name">"checkbox"</string>
@@ -10379,7 +10451,7 @@
                 <long name="locked">0</long>
                 <string name="created">"26/6/2007"</string>
                 <string name="proxy-type">"wbCheckBoxProxy"</string>
-                <string name="proxy-Id name">"ID_CHECKBOX5"</string>
+                <string name="proxy-Id name">"ID_CRIT_STUDYTIME"</string>
                 <long name="proxy-Id value">10075</long>
                 <string name="proxy-Class">"wxCheckBox"</string>
                 <string name="proxy-Base class">"wxCheckBox"</string>
@@ -10427,7 +10499,7 @@
                 <string name="proxy-Custom ctor arguments">""</string>
               </document>
               <document>
-                <string name="title">"wxCheckBox: ID_CHECKBOX2"</string>
+                <string name="title">"wxCheckBox: ID_CRIT_STATUS"</string>
                 <string name="type">"dialog-control-document"</string>
                 <string name="filename">""</string>
                 <string name="icon-name">"checkbox"</string>
@@ -10437,7 +10509,7 @@
                 <long name="locked">0</long>
                 <string name="created">"26/6/2007"</string>
                 <string name="proxy-type">"wbCheckBoxProxy"</string>
-                <string name="proxy-Id name">"ID_CHECKBOX2"</string>
+                <string name="proxy-Id name">"ID_CRIT_STATUS"</string>
                 <long name="proxy-Id value">10072</long>
                 <string name="proxy-Class">"wxCheckBox"</string>
                 <string name="proxy-Base class">"wxCheckBox"</string>
@@ -10485,7 +10557,7 @@
                 <string name="proxy-Custom ctor arguments">""</string>
               </document>
               <document>
-                <string name="title">"wxCheckBox: ID_CHECKBOX3"</string>
+                <string name="title">"wxCheckBox: ID_CRIT_COMMENT"</string>
                 <string name="type">"dialog-control-document"</string>
                 <string name="filename">""</string>
                 <string name="icon-name">"checkbox"</string>
@@ -10495,7 +10567,7 @@
                 <long name="locked">0</long>
                 <string name="created">"26/6/2007"</string>
                 <string name="proxy-type">"wbCheckBoxProxy"</string>
-                <string name="proxy-Id name">"ID_CHECKBOX3"</string>
+                <string name="proxy-Id name">"ID_CRIT_COMMENT"</string>
                 <long name="proxy-Id value">10073</long>
                 <string name="proxy-Class">"wxCheckBox"</string>
                 <string name="proxy-Base class">"wxCheckBox"</string>
@@ -10633,7 +10705,7 @@
                 <string name="proxy-Custom ctor arguments">""</string>
               </document>
               <document>
-                <string name="title">"wxRadioButton: ID_RADIOBUTTON1"</string>
+                <string name="title">"wxRadioButton: ID_SORT_ASCENDING"</string>
                 <string name="type">"dialog-control-document"</string>
                 <string name="filename">""</string>
                 <string name="icon-name">"radiobutton"</string>
@@ -10643,7 +10715,7 @@
                 <long name="locked">0</long>
                 <string name="created">"26/6/2007"</string>
                 <string name="proxy-type">"wbRadioButtonProxy"</string>
-                <string name="proxy-Id name">"ID_RADIOBUTTON1"</string>
+                <string name="proxy-Id name">"ID_SORT_ASCENDING"</string>
                 <long name="proxy-Id value">10076</long>
                 <string name="proxy-Class">"wxRadioButton"</string>
                 <string name="proxy-Base class">"wxRadioButton"</string>
@@ -10653,7 +10725,7 @@
                 <string name="proxy-Header filename">""</string>
                 <string name="proxy-Member variable name">""</string>
                 <string name="proxy-Label">"Ascending"</string>
-                <bool name="proxy-Initial value">0</bool>
+                <bool name="proxy-Initial value">1</bool>
                 <string name="proxy-Help text">""</string>
                 <string name="proxy-Tooltip text">""</string>
                 <string name="proxy-Background colour">""</string>
@@ -10689,7 +10761,7 @@
                 <string name="proxy-Custom ctor arguments">""</string>
               </document>
               <document>
-                <string name="title">"wxRadioButton: ID_RADIOBUTTON2"</string>
+                <string name="title">"wxRadioButton: ID_SORT_DESCENDING"</string>
                 <string name="type">"dialog-control-document"</string>
                 <string name="filename">""</string>
                 <string name="icon-name">"radiobutton"</string>
@@ -10699,7 +10771,7 @@
                 <long name="locked">0</long>
                 <string name="created">"26/6/2007"</string>
                 <string name="proxy-type">"wbRadioButtonProxy"</string>
-                <string name="proxy-Id name">"ID_RADIOBUTTON2"</string>
+                <string name="proxy-Id name">"ID_SORT_DESCENDING"</string>
                 <long name="proxy-Id value">10077</long>
                 <string name="proxy-Class">"wxRadioButton"</string>
                 <string name="proxy-Base class">"wxRadioButton"</string>

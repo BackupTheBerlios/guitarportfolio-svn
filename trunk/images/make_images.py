@@ -15,7 +15,9 @@ images = [ 'icon_completed.png',
            'icon_browse_prev.png',
            'guitarportfolio_icon.png',
            'icon_attachment.png',
-           'icon_ignore.png'  ]
+           'icon_ignore.png',
+           'icon_status_changed.png',
+           'icon_progress_changed.png'  ]
 
 
 for name in images:

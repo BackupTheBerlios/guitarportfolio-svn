@@ -52,6 +52,10 @@ _file_illegal_chars = [ ('?',  '' ),
                         ("'",  '' ),
                         ('"',  '' ) ]
 
+
+# placeholder to set images directory. Will be set by the application instance
+imagesdir = ''
+
 # app CFG
 __cfg = None
 

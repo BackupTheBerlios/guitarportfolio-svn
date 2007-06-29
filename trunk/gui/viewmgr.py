@@ -609,6 +609,9 @@ def signalAccuracyChange(song, accuracy):
             logentry._type = log.LOG_PROGRESS_CHANGE_ACC
             logentry._value = accuracy
             
+            # in the text portion set the current % in progress
+            logentry._text = '%.02i' % (((song._percCompleted *10) + (accuracy * 10)) / 2)
+            
             song._percAccuracy = accuracy
             
             # update the song object
@@ -633,6 +636,9 @@ def signalCompletedChange(song, completed):
             logentry = log.LogItem()
             logentry._type = log.LOG_PROGRESS_CHANGE_CMP
             logentry._value = completed
+
+            # in the text portion set the current % in progress
+            logentry._text = '%.02i' % (((song._percAccuracy *10) + (completed * 10)) / 2)
             
             song._percCompleted = completed
             
@@ -674,6 +680,20 @@ def _DoReloadAttachments(song):
         linkmgt.Get().Load(appcfg.GetAbsWorkPathFromSong(song))
     else:
         linkmgt.Get().Clear()
+        
+# ------------------------------------------------------------------------------
+def signalAddStudyTime(song, studytime):
+    """ Send a study time to the log belonging to the current song """
+    
+    if song and studytime:
+        # create a new log object
+        logentry = log.LogItem()
+        logentry._type = log.LOG_STUDYTIME
+        logentry._value = studytime
+                    
+        # insert the log object
+        sp = db.log_peer.LogPeer(db.engine.GetDb())
+        sp.Update(logentry, song._id)
         
 #===============================================================================
 

@@ -1,5 +1,4 @@
 import db
-from objs import signals
 from wx.lib.pubsub import Publisher
 
 class TabPeer(db.base.Peer):

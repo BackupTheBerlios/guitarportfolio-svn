@@ -1,8 +1,9 @@
 import re
 import os.path
 
-from objs import songs, linkmgt
+from objs import songs, linkmgt, log
 import appcfg, viewmgr
+from images import icon_status_changed
  
 # SONG RELATED HTML TAGS
 HTML_LABEL_SONG          = '@song@'
@@ -61,6 +62,33 @@ HTML_SECTION_TODO        = "@songs_todo@"
 HTML_SECTION_COMPLETED   = "@songs_completed@"
 
 HTML_LABEL_CATNAME       = '@name@'              # only used in section!
+
+# maybe we should put this in the htmlmarkup module, 
+# but it is too specific, and I do not want to do complex parsing here
+# because the log can get complex, with icons and specific info per row
+
+log_begin_html = """
+<html><body>
+  <table cellspacing="0" width="95%">
+     <tr bgcolor="#CCCDE4">
+       <td><b>Date</b></td>
+       <td><b>Time</b></td>
+       <td><b>Type</b></td>
+       <td><b>Information</b></td>
+    </tr>
+"""
+    
+log_end_html = """
+  </table>
+</body></html>
+"""
+
+# a translation dictionary to convert the song status 
+# to a displayable icon in the HTML log 
+log_status_icons = { songs.SS_STARTED:     ("icon_in_progress.png", "in progress"),
+                     songs.SS_POSTPONED:   ("icon_not_practicing.png", "not practicing"),
+                     songs.SS_COMPLETED:   ("icon_completed.png", "completed!"),
+                     songs.SS_NOT_STARTED: ("icon_todo.png", "todo") }
 
 # ------------------------------------------------------------------------------
 def __getIconPath(tags):
@@ -372,3 +400,83 @@ def ParseSongsByStatus(page, subtags):
     tmp = _DoParseHtmlTags(page, song_status_tags, subtags)
     return _DoParseHtmlTags(tmp, common_tags, subtags)    
 
+#-------------------------------------------------------------------------------
+
+def ParseSongLog(song, logitems):
+    """ Parses the HTML log. Expects the following:
+    
+        song - The current song to log 
+        logitems - A list of LogItem instances to display
+        
+        The markup happens per section:
+    """
+    
+    # now per item, we create one row and add it to a list of rows
+    # we choose alternating row colors to make it look pretty
+    html_rows = []
+    alternate = False
+    tr_color1 = ''
+    tr_color2 = ' bgcolor="#F2F2F8" '
+    
+    # we also keep track of the total study time and 
+    # number of comments, status changes etc
+    total_study = 0
+    total_statuses = 0
+    total_comments = 0
+    total_progress = 0
+    
+    # go parse the rows, and per log item, try to add useful info
+    for item in logitems:
+        color_tag = tr_color2 if alternate else tr_color1
+        str = '<tr' + color_tag + '>' + \
+              '<td nowrap>' + item._date.strftime('%d %B %Y') + '</td>' + \
+              '<td>' + item._date.strftime('%H:%M') + '</td>'
+        
+        # type is status change, render a part that contains the info
+        if item._type == log.LOG_STATUSCHANGE:
+            stat = log_status_icons[item._value]
+            str += '<td><img src="' + os.path.join(appcfg.imagesdir, 'icon_status_changed.png') + '" /></td>'
+            str += '<td>Status changed to&nbsp;<img src = "' + os.path.join(appcfg.imagesdir, stat[0]) + '" /><b>&nbsp;' + stat[1] + '</b></td>'
+            total_statuses += 1
+        # type is accuracy progress change
+        elif item._type == log.LOG_PROGRESS_CHANGE_ACC:
+            str += '<td><img src="' + os.path.join(appcfg.imagesdir, 'icon_progress_changed.png') + '" /></td>'
+            str += '<td>Accuracy grade set to ' + repr(item._value)
+            if item._text:
+                str += ' (progress <b>' + item._text + '%</b>)'
+            str += '</td>'
+            total_progress += 1
+        # type is completed progress change
+        elif item._type == log.LOG_PROGRESS_CHANGE_CMP:
+            str += '<td><img src="' + os.path.join(appcfg.imagesdir, 'icon_progress_changed.png') + '" /></td>'
+            str += '<td>Complete grade set to ' + repr(item._value) + '</td>'
+            if item._text:
+                str += ' (progress <b>' + item._text + '%</b>)'
+            str += '</td>'
+            total_progress += 1
+        # type is text comment
+        elif item._type == log.LOG_COMMENT:
+            str += '<td><img src="' + os.path.join(appcfg.imagesdir, 'icon_comment.png') + '" /></td>'
+            str += '<td VALIGN="TOP">' + item._text.replace('\n', '<br>') + '</td>'
+            total_comments += 1
+        # type is time practiced
+        elif item._type == log.LOG_STUDYTIME:
+            str += '<td><img src="' + os.path.join(appcfg.imagesdir, 'icon_study_time.png') + '" /></td>'
+            str += '<td>Studied for <b>' + repr(item._value) + '</b> minutes</td>'
+            total_study += item._value
+        else:
+            str += '<td></td><td></td>'
+        
+        str += '</tr>'
+        
+        # add to collection of rows
+        html_rows.append(str)
+        alternate = not alternate
+                
+    # now construct the page to be sent back
+    page = log_begin_html
+    for tr in html_rows:
+        page += tr
+    page += log_end_html
+    
+    return page
