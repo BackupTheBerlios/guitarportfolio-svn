@@ -11,13 +11,24 @@ class LogSetPeer(db.base.Peer):
         super(LogSetPeer, self).__init__(conn)        
     
     # --------------------------------------------------------------------------
-    def Restore(self, song_id, log_types = None, start_date = None, end_date = None):
+    def Restore(self, song_id, sort_asc = True, log_types = None, start_date = None, end_date = None):
         
         # we restore this slightly out of the given framework to 
         # speed up the restore as the log items are not standard DB objects
         # and are subject to filtering as well
         
         sql = 'select id, log_date, log_text, log_type, log_value from logentry where song_id = ?'
+        
+        if log_types and len(log_types) > 0:
+            logtype_qry = ''
+            for l in log_types:
+                if logtype_qry:
+                    logtype_qry += ' or '
+                logtype_qry += 'log_type = %i' % l
+            sql += ' and (' + logtype_qry + ')'
+
+        sql += ' order by log_date ' + ('asc' if sort_asc else 'desc')
+                    
         r = self._conn.execute(sql, (song_id,))  
         
         lst = []

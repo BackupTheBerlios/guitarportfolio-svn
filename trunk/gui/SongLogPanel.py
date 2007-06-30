@@ -6,9 +6,7 @@ import wx
 from wx.lib.pubsub import Publisher
 import wx.xrc as xrc
 import db, db.engine, db.log_peer
-from objs import songfilter
-
-from objs import linkmgt
+from objs import log, linkmgt
 import appcfg, xmlres, viewmgr, htmlparse
              
 class SongLogPanel(wx.Panel):
@@ -37,10 +35,27 @@ class SongLogPanel(wx.Panel):
     def __OnRefresh(self, event):
         song = viewmgr.Get()._selectedSong
         
+        # determine which types should be restored
+        log_types = []
+        if self._critProgress.GetValue():
+            log_types.append(log.LOG_PROGRESS_CHANGE_ACC)
+            log_types.append(log.LOG_PROGRESS_CHANGE_CMP)
+        if self._critStudyTime.GetValue():
+            log_types.append(log.LOG_STUDYTIME)
+        if self._critStatus.GetValue():
+            log_types.append(log.LOG_STATUSCHANGE)
+        if self._critComment.GetValue():
+            log_types.append(log.LOG_COMMENT)
+        
+        # if we have no log types selected, we make the list
+        # none again, so that the restore peer does not use the criteria
+        if len(log_types) == 0:
+            log_types = None
+            
         # restore all log entries that match the criteria
         if song:
             lp = db.log_peer.LogSetPeer(db.engine.GetDb())
-            objs = lp.Restore(song._id)
+            objs = lp.Restore(song._id, self._sortAsc.GetValue(), log_types)
             
             # create a log 
             if objs:
