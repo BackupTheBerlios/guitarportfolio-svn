@@ -36,7 +36,3 @@ class GuitarPortfolioApp(wx.App):
         """ Exit the application """
         appcfg.Get().Flush()
 
-
-if __name__ == "__main__":
-    guitarportfolio = GuitarPortfolioApp(0)
-    guitarportfolio.MainLoop()

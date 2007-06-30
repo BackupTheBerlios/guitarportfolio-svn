@@ -119,7 +119,7 @@ class NewSongDlg(wx.Dialog):
                 self.__tuningCustom.SetValue(True)
         else:
             self.__tuningCustom.SetValue(True)
-            self.__tuning.SetSelection(-1)
+            self.__tuningSelect.SetSelection(-1)
             self.__tuningText.SetLabel('[Custom Selection]')
 
         self.__customTuning.SetValue(song._altTuning)

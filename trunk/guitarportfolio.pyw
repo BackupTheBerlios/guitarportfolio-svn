@@ -1,4 +1,4 @@
 import gui.guitarportfolio as gpf
 
-guitarportfolio = gpf.GuitarPortfolioApp(0, redirect=True)
+guitarportfolio = gpf.GuitarPortfolioApp(redirect=True)
 guitarportfolio.MainLoop()

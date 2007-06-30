@@ -32,18 +32,20 @@ def executelink(link):
 # ------------------------------------------------------------------------------
 def execute_uri(link):
     """ Executes an URI or file, located in the directory in the current song """
-    cmd = ''
+##    cmd = ''
 
-    if link:
-        # if we have an url, we do not have to get the path for the attachment
-        if is_valid_external_link(link):
-            cmd = link
-        else:
-            # TODO: The path needs to be determined to start the file
-            return
-            
-    # determine how to execute the command 
-    __doExecuteCommand(cmd)
+##    if link:
+##        # if we have an url, we do not have to get the path for the attachment
+##        if is_valid_external_link(link):
+##            cmd = link
+##        else:
+##            # TODO: The path needs to be determined to start the file
+##            return
+##            
+##    # determine how to execute the command 
+##    __doExecuteCommand(cmd)
+
+    wx.LaunchDefaultBrowser(link)
 
 # ------------------------------------------------------------------------------
 def __doExecuteCommand(cmd, runcmd = ''):

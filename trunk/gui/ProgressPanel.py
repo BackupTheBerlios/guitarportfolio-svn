@@ -77,7 +77,8 @@ class ProgressPanel(wx.Panel):
         """ Allow or disallow editing based upon a song being present or
             not, etc """
     
-        allow_edit = True if (song and song._status != songs.SS_POSTPONED) else False
+        allow_edit = True if (song and (song._status != songs.SS_POSTPONED and \
+                                        song._status != songs.SS_NOT_STARTED)) else False
         
         self.__accuracy.Enable(allow_edit)
         self.__estimated.Enable(allow_edit)

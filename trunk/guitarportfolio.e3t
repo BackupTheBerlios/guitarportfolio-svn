@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Tasks SYSTEM "Tasks-3.8.dtd">
 <!-- Tasks file for project guitarportfolio -->
-<!-- Saved: 2007-06-28, 19:25:23 -->
+<!-- Saved: 2007-06-29, 22:33:12 -->
 <Tasks version="3.8">
   <Task priority="0" completed="0" bugfix="0">
     <Description>BUG: Categories cannot be added when song is not yet in DB</Description>
@@ -173,17 +173,6 @@
     </Resource>
   </Task>
   <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Artists which are mistyped (lower / upper) should not appear twice</Description>
-    <Created>2007-06-27, 20:24:39</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>NewSongDlg.py</Name>
-      </Filename>
-      <Linenumber>57</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
     <Description>TODO: Sort in the correct order</Description>
     <Created>2007-06-27, 20:25:50</Created>
     <Resource>
@@ -269,6 +258,17 @@
         <Name>htmlparse.py</Name>
       </Filename>
       <Linenumber>316</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Artists which are mistyped (lower / upper) should not appear twice</Description>
+    <Created>2007-06-29, 21:57:14</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>NewSongDlg.py</Name>
+      </Filename>
+      <Linenumber>57</Linenumber>
     </Resource>
   </Task>
 </Tasks>
