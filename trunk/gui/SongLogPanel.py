@@ -27,6 +27,8 @@ class SongLogPanel(wx.Panel):
         
         Publisher().subscribe(self.__OnSongSelected, viewmgr.SIGNAL_SONG_SELECTED)
         Publisher().subscribe(self.__OnSongSelected, viewmgr.SIGNAL_CLEAR_DATA)
+        Publisher().subscribe(self.__OnAppReady, viewmgr.SIGNAL_APP_READY)
+        Publisher().subscribe(self.__OnAppQuit, viewmgr.SIGNAL_APP_QUIT)
         
     # --------------------------------------------------------------------------
     def __OnRefresh(self, event):
@@ -76,6 +78,34 @@ class SongLogPanel(wx.Panel):
                 self._logArea.SetPage(page)                
             else:
                 self._logArea.SetPage('')
+
+    # --------------------------------------------------------------------------
+    def __OnAppReady(self, message):
+        """ Handler to set all the configuration from the settings in the controls """
+        
+        cfg = appcfg.Get()
+        if cfg.HasGroup('log'):
+            self._critSelectTime.SetSelection(cfg.ReadInt(appcfg.CFG_LOG_SELECTTIME, 0))
+            self._critProgress.SetValue(cfg.ReadInt(appcfg.CFG_LOG_PROGRESS, 0) != 0)
+            self._critStudyTime.SetValue(cfg.ReadInt(appcfg.CFG_LOG_STUDY, 0) != 0)
+            self._critStatus.SetValue(cfg.ReadInt(appcfg.CFG_LOG_STATUS, 0) != 0)
+            self._critComment.SetValue(cfg.ReadInt(appcfg.CFG_LOG_COMMENT, 0) != 0)
+            if cfg.ReadInt(appcfg.CFG_LOG_SORT, 0) == 0: 
+                self._sortAsc.SetValue(True)
+            else:
+                self._sortDesc.SetValue(True)        
+
+    # --------------------------------------------------------------------------
+    def __OnAppQuit(self, message):
+        """ Handler to store all configuration to the settings """
+        
+        cfg = appcfg.Get()
+        cfg.WriteInt(appcfg.CFG_LOG_SELECTTIME, self._critSelectTime.GetSelection())
+        cfg.WriteInt(appcfg.CFG_LOG_PROGRESS, 1 if self._critProgress.GetValue() else 0)
+        cfg.WriteInt(appcfg.CFG_LOG_STUDY, 1 if self._critStudyTime.GetValue() else 0)
+        cfg.WriteInt(appcfg.CFG_LOG_STATUS, 1 if self._critStatus.GetValue() else 0)
+        cfg.WriteInt(appcfg.CFG_LOG_COMMENT, 1 if self._critComment.GetValue() else 0)
+        cfg.WriteInt(appcfg.CFG_LOG_SORT, 0 if self._sortAsc.GetValue() else 1)
 
     # --------------------------------------------------------------------------
     def __OnSongSelected(self, message):

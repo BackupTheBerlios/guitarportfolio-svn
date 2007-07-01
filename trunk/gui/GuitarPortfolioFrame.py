@@ -356,6 +356,10 @@ class GuitarPortfolioFrame(wx.Frame):
 
     #---------------------------------------------------------------------------
     def __OnClose(self, event):
+        
+        # send quit event first
+        viewmgr.signalAppQuit()
+        
         cfg = appcfg.Get()
         cfg.Write(appcfg.CFG_LAYOUT_LAST, self.__aui.SavePerspective())  
         width, height = self.GetSize()

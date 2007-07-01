@@ -33,6 +33,7 @@ SIGNAL_TAB_UPDATED      = ('tab', 'updated')            # send a command to upda
 SIGNAL_TAB_DELETED      = ('tab', 'deleted')            # send around that we lost a tab 
 
 SIGNAL_APP_READY        = ('app', 'ready')              # sent when all stuff is done, app is ready
+SIGNAL_APP_QUIT         = ('app', 'quit')               # sent when app quits
 
 SONG_VIEW_ADDED         = ('song', 'view', 'added')     # song added to view
 SONG_VIEW_UPDATED       = ('song', 'view', 'updated')   # selected song updated in view 
@@ -710,6 +711,13 @@ def signalAddStudyTime(song, studytime):
         sp = db.log_peer.LogPeer(db.engine.GetDb())
         sp.Update(logentry, song._id)
         
+        
+def signalAppQuit():
+    """ Send a signal that the application closes """
+    
+    # update the config, etc
+    Publisher().sendMessage(SIGNAL_APP_QUIT)
+    
 #===============================================================================
 
 __obj = None

@@ -23,6 +23,12 @@ CFG_LAYOUT_LAST     = 'window/last_layout'          # last layout when closing w
 CFG_LAYOUT_LAST_H   = 'window/last_height'          # last height when closing window
 CFG_LAYOUT_LAST_W   = 'window/last_width'           # last width when closing window
 CFG_LINUX_EXEC_CMD  = 'os/linux/shellexec'          # exec command 
+CFG_LOG_SELECTTIME  = 'log/selecttime'              # what time period was last selected
+CFG_LOG_PROGRESS    = 'log/progress'                # should progress logs be displayed
+CFG_LOG_STUDY       = 'log/studytime'               # should study time logs be displayed
+CFG_LOG_STATUS      = 'log/status'                  # should status logs be displayed
+CFG_LOG_COMMENT     = 'log/comment'                 # should comment logs be displayed
+CFG_LOG_SORT        = 'log/sortorder'               # ascending / descending log order
 
 # TODO: Needs better description!
 description = "Guitar Portfolio is an application that manages the songs you are playing on the guitar. " + \
