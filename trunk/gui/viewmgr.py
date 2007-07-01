@@ -82,6 +82,7 @@ class SongFilter:
         self._critCategoryAND = False 
         self._critDifficultyLO = False
         self._showSongType = SHOW_ALL   
+        self._hideConcepts = False
     
     # --------------------------------------------------------------------------
     def _SignalAddSong(self, message):
@@ -158,6 +159,16 @@ class SongFilter:
         self.__ResyncAllSongs()
 
     # --------------------------------------------------------------------------
+    def ChangeHideConceptSongs(self, value):
+        """ Change the criteria to hide or show concept songs. Concept songs are 
+            songs that have no lyrics or information set yet. Typically the songs
+            that you quickly add for later, but not want to see yet because they
+            are not in your scope of playing """
+        
+        self._hideConcepts = value
+        self.__ResyncAllSongs()
+        
+    # --------------------------------------------------------------------------
     def OnlySnowType(self, value):
         self._showSongType = value
         self.__ResyncAllSongs()
@@ -227,6 +238,10 @@ class SongFilter:
         if visible and self._showSongType != SHOW_ALL:
             visible = (self._showSongType == SHOW_TUTORIALS and song._songType == songs.ST_TUTORIAL) or \
                       (self._showSongType == SHOW_SONGS and song._songType == songs.ST_NORMAL)
+        
+        # hide the concept songs from the view
+        if visible and self._hideConcepts:
+            visible = not song.IsConcept()
         
         # always if not visible, but present, remove
         if not visible and present:

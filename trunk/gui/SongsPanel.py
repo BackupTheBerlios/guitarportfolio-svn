@@ -42,6 +42,7 @@ class SongsListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
         self.__statToIcon[songs.SS_NOT_STARTED] = self.__icons.Add(images.icon_todo.getBitmap())
         self.__statToIcon[songs.SS_STARTED]     = self.__icons.Add(images.icon_in_progress.getBitmap())
         self.__statToIcon[songs.SS_POSTPONED]   = self.__icons.Add(images.icon_not_practicing.getBitmap())
+        self._conceptIconIndex = self.__icons.Add(images.icon_concept.getBitmap())
         self.SetImageList(self.__icons, wx.IMAGE_LIST_SMALL)
         
         # hook up our event
@@ -70,26 +71,34 @@ class SongsListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
     def __AddSong( self, message ):
         """ Signal that is emitted when a song is added to the list (restored or 
             added in the database """
-        index = self.InsertStringItem(sys.maxint, message.data._title)
-        self.SetStringItem(index, 1, '%d' % message.data.GetProgressPerc())
-        self.SetStringItem(index, 2, message.data._artist)
-        self.SetStringItem(index, 3, songs.GetCapoString(message.data._capoOnFret))
-        self.SetItemData(index, message.data._id)
-        self.SetItemImage(index, self.__statToIcon[message.data._status],
-                                 self.__statToIcon[message.data._status])
+        song = message.data
+        index = self.InsertStringItem(sys.maxint, song._title)
+        self.SetStringItem(index, 1, '%d' % song.GetProgressPerc())
+        self.SetStringItem(index, 2, song._artist)
+        self.SetStringItem(index, 3, songs.GetCapoString(song._capoOnFret))
+        self.SetItemData(index, song._id)
+        if song.IsConcept():
+            self.SetItemImage(index, self._conceptIconIndex, self._conceptIconIndex)
+        else:
+            self.SetItemImage(index, self.__statToIcon[song._status],
+                                     self.__statToIcon[song._status])
 
     # --------------------------------------------------------------------------
     def __UpdateSong(self, message ):
         """ We received an update now we are going to find and update """
-        if message.data <> None:
-            index = self.FindItemData(-1, message.data._id)
+        song = message.data
+        if song <> None:
+            index = self.FindItemData(-1, song._id)
             if index <> wx.NOT_FOUND:
-                self.SetStringItem(index, 0, message.data._title)
-                self.SetStringItem(index, 2, message.data._artist)
-                self.SetStringItem(index, 1, '%d' % message.data.GetProgressPerc())
-                self.SetItemImage(index, self.__statToIcon[message.data._status],
-                                         self.__statToIcon[message.data._status])
-                self.SetStringItem(index, 3, songs.GetCapoString(message.data._capoOnFret))
+                self.SetStringItem(index, 0, song._title)
+                self.SetStringItem(index, 2, song._artist)
+                self.SetStringItem(index, 1, '%d' % song.GetProgressPerc())
+                if song.IsConcept():
+                    self.SetItemImage(index, self._conceptIconIndex, self._conceptIconIndex)
+                else:
+                    self.SetItemImage(index, self.__statToIcon[song._status],
+                                             self.__statToIcon[song._status])
+                self.SetStringItem(index, 3, songs.GetCapoString(song._capoOnFret))
                 
     # --------------------------------------------------------------------------
     def __DeleteSong(self, message):

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Tasks SYSTEM "Tasks-3.8.dtd">
 <!-- Tasks file for project guitarportfolio -->
-<!-- Saved: 2007-06-30, 13:07:08 -->
+<!-- Saved: 2007-07-01, 13:28:58 -->
 <Tasks version="3.8">
   <Task priority="0" completed="0" bugfix="0">
     <Description>BUG: Categories cannot be added when song is not yet in DB</Description>
@@ -30,17 +30,6 @@
     </Resource>
   </Task>
   <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Needs better description!</Description>
-    <Created>2007-06-16, 19:13:22</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>appcfg.py</Name>
-      </Filename>
-      <Linenumber>26</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
     <Description>TODO: The Wiki HTML parser should be a generic component, so that other</Description>
     <Created>2007-06-24, 14:02:19</Created>
     <Resource>
@@ -60,39 +49,6 @@
         <Name>WelcomeDlg.py</Name>
       </Filename>
       <Linenumber>161</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Put the text inside the DB!</Description>
-    <Created>2007-06-25, 21:09:09</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>htmlmarkup.py</Name>
-      </Filename>
-      <Linenumber>1</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Substitute version number / appname in HTML text</Description>
-    <Created>2007-06-25, 21:09:09</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>htmlmarkup.py</Name>
-      </Filename>
-      <Linenumber>3</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Put inside the DB!</Description>
-    <Created>2007-06-25, 21:09:09</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>htmlmarkup.py</Name>
-      </Filename>
-      <Linenumber>4</Linenumber>
     </Resource>
   </Task>
   <Task priority="1" completed="0" bugfix="0">
@@ -151,28 +107,6 @@
     </Resource>
   </Task>
   <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Shouldn't we use OnUpdateUI event instead?</Description>
-    <Created>2007-06-27, 20:33:45</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>GuitarPortfolioFrame.py</Name>
-      </Filename>
-      <Linenumber>209</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Small problem, the category relations can be</Description>
-    <Created>2007-06-27, 20:33:45</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>GuitarPortfolioFrame.py</Name>
-      </Filename>
-      <Linenumber>273</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
     <Description>TODO: Not certain if this will work, if a query is sent after a remove from</Description>
     <Created>2007-06-27, 21:19:17</Created>
     <Resource>
@@ -192,28 +126,6 @@
         <Name>linkmgt.py</Name>
       </Filename>
       <Linenumber>22</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO:            lambda tags : STR_ICON_TODO,</Description>
-    <Created>2007-06-28, 18:57:50</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>htmlparse.py</Name>
-      </Filename>
-      <Linenumber>273</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO:       lambda tags : \</Description>
-    <Created>2007-06-28, 18:57:50</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>htmlparse.py</Name>
-      </Filename>
-      <Linenumber>316</Linenumber>
     </Resource>
   </Task>
   <Task priority="1" completed="0" bugfix="0">
@@ -258,6 +170,105 @@
         <Name>SongBrowserPanel.py</Name>
       </Filename>
       <Linenumber>189</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Shouldn't we use OnUpdateUI event instead?</Description>
+    <Created>2007-06-30, 16:59:53</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>GuitarPortfolioFrame.py</Name>
+      </Filename>
+      <Linenumber>209</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Small problem, the category relations can be</Description>
+    <Created>2007-06-30, 16:59:53</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>GuitarPortfolioFrame.py</Name>
+      </Filename>
+      <Linenumber>273</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Needs better description!</Description>
+    <Created>2007-07-01, 11:10:17</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>appcfg.py</Name>
+      </Filename>
+      <Linenumber>27</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: This should be in the peer</Description>
+    <Created>2007-07-01, 11:28:54</Created>
+    <Resource>
+      <Filename>
+        <Dir>objs</Dir>
+        <Name>tuning_mgr.py</Name>
+      </Filename>
+      <Linenumber>33</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Put the text inside the DB!</Description>
+    <Created>2007-07-01, 12:16:21</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>htmlmarkup.py</Name>
+      </Filename>
+      <Linenumber>1</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Substitute version number / appname in HTML text</Description>
+    <Created>2007-07-01, 12:16:21</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>htmlmarkup.py</Name>
+      </Filename>
+      <Linenumber>3</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Put inside the DB!</Description>
+    <Created>2007-07-01, 12:16:21</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>htmlmarkup.py</Name>
+      </Filename>
+      <Linenumber>4</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO:            lambda tags : STR_ICON_TODO,</Description>
+    <Created>2007-07-01, 12:17:58</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>htmlparse.py</Name>
+      </Filename>
+      <Linenumber>301</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO:       lambda tags : \</Description>
+    <Created>2007-07-01, 12:17:58</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>htmlparse.py</Name>
+      </Filename>
+      <Linenumber>344</Linenumber>
     </Resource>
   </Task>
 </Tasks>

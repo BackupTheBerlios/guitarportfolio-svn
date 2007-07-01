@@ -1,6 +1,4 @@
-import os
-import os.path
-import sys
+import os, os.path, sys, datetime
 
 import wx
 from wx.lib.pubsub import Publisher
@@ -18,7 +16,6 @@ class SongLogPanel(wx.Panel):
         self._refreshButton = xrc.XRCCTRL(self, "ID_REFRESH")
         self._logArea = xrc.XRCCTRL(self, "ID_LOGAREA")
         self._critSelectTime = xrc.XRCCTRL(self, "ID_TIME_PERIOD")
-        self._critSelectAll = xrc.XRCCTRL(self, "ID_ALL_CRITERIA")
         self._critProgress = xrc.XRCCTRL(self, "ID_CRIT_PROGRESS")
         self._critStudyTime = xrc.XRCCTRL(self, "ID_CRIT_STUDYTIME")
         self._critStatus = xrc.XRCCTRL(self, "ID_CRIT_STATUS")
@@ -52,10 +49,26 @@ class SongLogPanel(wx.Panel):
         if len(log_types) == 0:
             log_types = None
             
+        # when we have an end date selected, constuct one
+        end_date = None
+        date_select = self._critSelectTime.GetSelection()
+        if date_select > 0:
+            end_date = datetime.datetime.now() 
+            if date_select == 1:        # this day
+               end_date -= datetime.timedelta(days = 1)
+            elif date_select == 2:        # last week
+               end_date -= datetime.timedelta(weeks = 1)
+            elif date_select == 3:        # last month
+               end_date -= datetime.timedelta(weeks = 4)
+            elif date_select == 4:        # last six months
+               end_date -= datetime.timedelta(days = 183)
+            elif date_select == 5:        # last year
+               end_date -= datetime.timedelta(days = 365)
+               
         # restore all log entries that match the criteria
         if song:
             lp = db.log_peer.LogSetPeer(db.engine.GetDb())
-            objs = lp.Restore(song._id, self._sortAsc.GetValue(), log_types)
+            objs = lp.Restore(song._id, self._sortAsc.GetValue(), log_types, end_date)
             
             # create a log 
             if objs:
@@ -77,7 +90,6 @@ class SongLogPanel(wx.Panel):
         self._critSelectTime.Enable(song != None)
         self._refreshButton.Enable(song != None)
         self._logArea.Enable(song != None)
-        self._critSelectAll.Enable(song != None)
         self._critProgress.Enable(song != None)
         self._critStudyTime.Enable(song != None)
         self._critStatus.Enable(song != None)

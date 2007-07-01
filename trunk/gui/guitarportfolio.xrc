@@ -55,6 +55,14 @@
                 </object>
             </object>
             <object class="sizeritem">
+                <flag>wxALIGN_LEFT|wxLEFT|wxRIGHT|wxBOTTOM</flag>
+                <border>5</border>
+                <object class="wxCheckBox" name="ID_HIDE_CONCEPTS">
+                    <label>Hide concept songs</label>
+                    <checked>0</checked>
+                </object>
+            </object>
+            <object class="sizeritem">
                 <flag>wxGROW|wxLEFT|wxRIGHT</flag>
                 <border>5</border>
                 <object class="wxStaticLine" name="ID_STATICLINE">
@@ -1330,12 +1338,12 @@
                         <border>5</border>
                         <object class="wxChoice" name="ID_TIME_PERIOD">
                             <content>
+                                <item>All Entries</item>
                                 <item>This Day</item>
                                 <item>Last Week</item>
                                 <item>Last Month</item>
                                 <item>Last 6 Months</item>
                                 <item>Last Year</item>
-                                <item>All Entries</item>
                             </content>
                         </object>
                     </object>
@@ -1349,9 +1357,8 @@
                     <object class="sizeritem">
                         <flag>wxALIGN_CENTER_VERTICAL|wxRIGHT|wxTOP|wxBOTTOM</flag>
                         <border>5</border>
-                        <object class="wxCheckBox" name="ID_ALL_CRITERIA">
+                        <object class="wxStaticText" name="ID_ALL_CRITERIA">
                             <label>All, or</label>
-                            <checked>0</checked>
                         </object>
                     </object>
                     <object class="sizeritem">

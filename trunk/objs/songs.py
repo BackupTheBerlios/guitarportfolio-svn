@@ -8,7 +8,7 @@ from wx.lib.pubsub import Publisher
 
 import db
 import signals
-import tuning
+import tuning, tuning_mgr
 import tabs
 import category
 import objlist
@@ -108,3 +108,24 @@ class Song(db.base.Object):
         if self._tuning:
             return self._tuning._tuningName
         return "Custom"
+
+    def IsConcept(self):
+        """ Returns true when nearly all values are still set to their defaults. """
+        
+        # unfortunately we cannot check the tabs because we do restore them at
+        # the very last moment.
+        return (self._status == SS_NOT_STARTED) and \
+               (self._difficulty == SD_NORMAL) and \
+               (self._barCount == 0) and \
+               (self._tuning == tuning_mgr.Get().GetDefaultTuning()) and \
+               (self._lyrics == 'Enter your lyrics here') and \
+               (self._information == 'Enter your song information here') and \
+               (self._altTuning == 'E  A  D  G  B  E ') and \
+               (self._dateUnknown == True) and \
+               (self._yearOnly == False) and \
+               (self._percCompleted == 0) and \
+               (self._percAccuracy == 0) and \
+               (self._capoOnFret == 0) and \
+               (self._songType == ST_NORMAL)
+               #(self.categories.count() == 0) and \
+        

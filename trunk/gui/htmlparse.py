@@ -429,40 +429,40 @@ def ParseSongLog(song, logitems):
     for item in logitems:
         color_tag = tr_color2 if alternate else tr_color1
         str = '<tr' + color_tag + '>' + \
-              '<td nowrap>' + item._date.strftime('%d %B %Y') + '</td>' + \
-              '<td>' + item._date.strftime('%H:%M') + '</td>'
+              '<td valign="top" nowrap>' + item._date.strftime('%d %B %Y') + '</td>' + \
+              '<td valign="top">' + item._date.strftime('%H:%M') + '</td>'
         
         # type is status change, render a part that contains the info
         if item._type == log.LOG_STATUSCHANGE:
             stat = log_status_icons[item._value]
-            str += '<td><img src="' + os.path.join(appcfg.imagesdir, 'icon_status_changed.png') + '" /></td>'
-            str += '<td>Status changed to&nbsp;<img src = "' + os.path.join(appcfg.imagesdir, stat[0]) + '" /><b>&nbsp;' + stat[1] + '</b></td>'
+            str += '<td valign="top"><img src="' + os.path.join(appcfg.imagesdir, 'icon_status_changed.png') + '" /></td>'
+            str += '<td valign="top">Status changed to&nbsp;<img src = "' + os.path.join(appcfg.imagesdir, stat[0]) + '" /><b>&nbsp;' + stat[1] + '</b></td>'
             total_statuses += 1
         # type is accuracy progress change
         elif item._type == log.LOG_PROGRESS_CHANGE_ACC:
-            str += '<td><img src="' + os.path.join(appcfg.imagesdir, 'icon_progress_changed.png') + '" /></td>'
-            str += '<td>Accuracy grade set to ' + repr(item._value)
+            str += '<td valign="top"><img src="' + os.path.join(appcfg.imagesdir, 'icon_progress_changed.png') + '" /></td>'
+            str += '<td valign="top">Accuracy grade set to ' + repr(item._value)
             if item._text:
                 str += ' (progress <b>' + item._text + '%</b>)'
             str += '</td>'
             total_progress += 1
         # type is completed progress change
         elif item._type == log.LOG_PROGRESS_CHANGE_CMP:
-            str += '<td><img src="' + os.path.join(appcfg.imagesdir, 'icon_progress_changed.png') + '" /></td>'
-            str += '<td>Complete grade set to ' + repr(item._value) + '</td>'
+            str += '<td valign="top"><img src="' + os.path.join(appcfg.imagesdir, 'icon_progress_changed.png') + '" /></td>'
+            str += '<td valign="top">Complete grade set to ' + repr(item._value) + '</td>'
             if item._text:
                 str += ' (progress <b>' + item._text + '%</b>)'
             str += '</td>'
             total_progress += 1
         # type is text comment
         elif item._type == log.LOG_COMMENT:
-            str += '<td><img src="' + os.path.join(appcfg.imagesdir, 'icon_comment.png') + '" /></td>'
-            str += '<td VALIGN="TOP">' + item._text.replace('\n', '<br>') + '</td>'
+            str += '<td valign="top"><img src="' + os.path.join(appcfg.imagesdir, 'icon_comment.png') + '" /></td>'
+            str += '<td valign="top">' + item._text.replace('\n', '<br>') + '</td>'
             total_comments += 1
         # type is time practiced
         elif item._type == log.LOG_STUDYTIME:
-            str += '<td><img src="' + os.path.join(appcfg.imagesdir, 'icon_study_time.png') + '" /></td>'
-            str += '<td>Studied for <b>' + repr(item._value) + '</b> minutes</td>'
+            str += '<td valign="top"><img src="' + os.path.join(appcfg.imagesdir, 'icon_study_time.png') + '" /></td>'
+            str += '<td valign="top">Studied for <b>' + repr(item._value) + '</b> minutes</td>'
             total_study += item._value
         else:
             str += '<td></td><td></td>'

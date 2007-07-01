@@ -17,7 +17,8 @@ images = [ 'icon_completed.png',
            'icon_attachment.png',
            'icon_ignore.png',
            'icon_status_changed.png',
-           'icon_progress_changed.png'  ]
+           'icon_progress_changed.png',
+           'icon_concept.png']
 
 
 for name in images:

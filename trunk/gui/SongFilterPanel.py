@@ -24,12 +24,14 @@ class SongFilterPanel(wx.Panel):
         self.__onlyShowTutorials = xrc.XRCCTRL(self, "ID_RADIO_TUTONLY")
         self.__onlyShowSongs = xrc.XRCCTRL(self, "ID_RADIO_SONGONLY")
         self.__onlyShowAll = xrc.XRCCTRL(self, "ID_RADIO_ALL")
+        self.__hideConcepts = xrc.XRCCTRL(self, "ID_HIDE_CONCEPTS")
 
         # bind events
         self.Bind(wx.EVT_CHOICE, self.__OnFilterSongs, self.__progressFilter)
         self.Bind(wx.EVT_CHOICE, self.__OnSelectDifficulty, self.__difficulty)
         self.Bind(wx.EVT_CHECKBOX, self.__OnShowMatchingLowerDifficulty, self.__strictDifficulty)
         self.Bind(wx.EVT_CHECKBOX, self.__OnShowCategoriesAND, self.__categoriesAndFilter)
+        self.Bind(wx.EVT_CHECKBOX, self.__OnHideConcepts, self.__hideConcepts)
         self.Bind(wx.EVT_CHECKLISTBOX, self.__OnItemChecked, self.__cats)       
         self.Bind(wx.EVT_RADIOBUTTON, self.__OnOnlyShow, self.__onlyShowTutorials) 
         self.Bind(wx.EVT_RADIOBUTTON, self.__OnOnlyShow, self.__onlyShowSongs) 
@@ -123,6 +125,14 @@ class SongFilterPanel(wx.Panel):
         appcfg.Get().WriteInt(appcfg.CFG_SHOWONLYTUTS, val)
         
     #---------------------------------------------------------------------------
+    def __OnHideConcepts(self, event):
+        """ Handler to change visibility of concept songs """
+        
+        chk = self.__hideConcepts.GetValue()
+        viewmgr.Get().ChangeHideConceptSongs(chk)
+        appcfg.Get().WriteInt(appcfg.CFG_HIDE_CONCEPTS, 1 if chk else 0)
+        
+    #---------------------------------------------------------------------------
     def __OnAppReady(self, message):
         """ App is ready with data, we can initialize our last viewstate """
         cfg = appcfg.Get()
@@ -152,6 +162,9 @@ class SongFilterPanel(wx.Panel):
             else:
                 self.__onlyShowAll.SetValue(True)
             self.__OnOnlyShow(event = None)
+            # hide concept songs or not
+            self.__hideConcepts.SetValue(cfg.ReadInt(appcfg.CFG_HIDE_CONCEPTS, 0) != 0)
+            self.__OnHideConcepts(event = None)
         
         self.__PopulateCategories()
 
