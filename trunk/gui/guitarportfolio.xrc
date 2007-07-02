@@ -11,17 +11,33 @@
                 </object>
             </object>
             <object class="sizeritem">
-                <flag>wxGROW|wxALL</flag>
+                <flag>wxGROW</flag>
                 <border>5</border>
-                <object class="wxChoice" name="ID_PROGRESS">
-                    <size>200,-1</size>
-                    <content>
-                        <item>All Progress</item>
-                        <item>In Progress</item>
-                        <item>Not Practicing</item>
-                        <item>Completed!</item>
-                        <item>TODO</item>
-                    </content>
+                <object class="wxBoxSizer">
+                    <orient>wxHORIZONTAL</orient>
+                    <object class="sizeritem">
+                        <flag>wxGROW|wxALL</flag>
+                        <border>5</border>
+                        <option>1</option>
+                        <object class="wxChoice" name="ID_PROGRESS">
+                            <size>200,-1</size>
+                            <content>
+                                <item>All Progress</item>
+                                <item>In Progress</item>
+                                <item>Not Practicing</item>
+                                <item>Completed!</item>
+                                <item>TODO</item>
+                            </content>
+                        </object>
+                    </object>
+                    <object class="sizeritem">
+                        <flag>wxALIGN_CENTER_VERTICAL|wxRIGHT|wxTOP|wxBOTTOM</flag>
+                        <border>5</border>
+                        <object class="wxBitmapButton" name="ID_RESET_SONGFILTER">
+                            <size>30,30</size>
+                            <style>wxBU_AUTODRAW</style>
+                        </object>
+                    </object>
                 </object>
             </object>
             <object class="sizeritem">
@@ -107,7 +123,7 @@
                         </object>
                     </object>
                     <object class="sizeritem">
-                        <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                        <flag>wxALIGN_CENTER_VERTICAL|wxRIGHT|wxTOP|wxBOTTOM</flag>
                         <border>5</border>
                         <object class="wxRadioButton" name="ID_RADIO_TUTONLY">
                             <label>Tutorials</label>
@@ -115,7 +131,7 @@
                         </object>
                     </object>
                     <object class="sizeritem">
-                        <flag>wxALIGN_CENTER_VERTICAL|wxALL</flag>
+                        <flag>wxALIGN_CENTER_VERTICAL|wxRIGHT|wxTOP|wxBOTTOM</flag>
                         <border>5</border>
                         <object class="wxRadioButton" name="ID_RADIO_ALL">
                             <label>All</label>

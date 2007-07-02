@@ -6,6 +6,7 @@ import wx.xrc as xrc
 from wx.lib.pubsub import Publisher
 
 from objs import songs
+from images import icon_reset_filter
 import appcfg, xmlres
 import viewmgr
 
@@ -25,6 +26,9 @@ class SongFilterPanel(wx.Panel):
         self.__onlyShowSongs = xrc.XRCCTRL(self, "ID_RADIO_SONGONLY")
         self.__onlyShowAll = xrc.XRCCTRL(self, "ID_RADIO_ALL")
         self.__hideConcepts = xrc.XRCCTRL(self, "ID_HIDE_CONCEPTS")
+        self.__resetFilter = xrc.XRCCTRL(self, "ID_RESET_SONGFILTER")
+
+        self.__resetFilter.SetBitmapLabel(icon_reset_filter.getBitmap())
 
         # bind events
         self.Bind(wx.EVT_CHOICE, self.__OnFilterSongs, self.__progressFilter)
@@ -36,6 +40,7 @@ class SongFilterPanel(wx.Panel):
         self.Bind(wx.EVT_RADIOBUTTON, self.__OnOnlyShow, self.__onlyShowTutorials) 
         self.Bind(wx.EVT_RADIOBUTTON, self.__OnOnlyShow, self.__onlyShowSongs) 
         self.Bind(wx.EVT_RADIOBUTTON, self.__OnOnlyShow, self.__onlyShowAll) 
+        self.Bind(wx.EVT_BUTTON, self.__OnResetFilterButton, self.__resetFilter)
         
         # bind signals
         Publisher().subscribe(self.__OnChangeCats, viewmgr.SIGNAL_SONG_UPDATED)
@@ -43,6 +48,8 @@ class SongFilterPanel(wx.Panel):
         Publisher().subscribe(self.__OnChangeCats, viewmgr.SIGNAL_SONG_ADDED)
         Publisher().subscribe(self.__OnAppReady, viewmgr.SIGNAL_APP_READY)
         Publisher().subscribe(self.__OnClear, viewmgr.SIGNAL_CLEAR_DATA)
+        Publisher().subscribe(self.__OnResetSongFilter, viewmgr.SIGNAL_RESET_SONGFILTER)
+        Publisher().subscribe(self.__OnAppQuit, viewmgr.SIGNAL_APP_QUIT)
 
         # init controls
         self.__progressFilter.SetSelection(0)
@@ -57,7 +64,6 @@ class SongFilterPanel(wx.Panel):
                  songs.SS_NOT_STARTED]
         idx = self.__progressFilter.GetSelection()
         viewmgr.Get().ChangeStatusCriteria(crits[idx])
-        appcfg.Get().WriteInt(appcfg.CFG_PROGRESS, idx)
 
     #---------------------------------------------------------------------------
     def __OnSelectDifficulty(self, event): 
@@ -70,8 +76,7 @@ class SongFilterPanel(wx.Panel):
                  songs.SD_IMPOSSIBLE]
         idx = self.__difficulty.GetSelection()
         viewmgr.Get().ChangeDifficultyCriteria(crits[idx])
-        appcfg.Get().WriteInt(appcfg.CFG_DIFFICULTY, idx)
-
+        
     #---------------------------------------------------------------------------
     def __OnChangeCats(self, message):
         self.__PopulateCategories()
@@ -105,13 +110,11 @@ class SongFilterPanel(wx.Panel):
     def __OnShowMatchingLowerDifficulty(self, event): 
         chk = self.__strictDifficulty.GetValue()
         viewmgr.Get().ChangeDifficultyCriteriaLO(chk)
-        appcfg.Get().WriteInt(appcfg.CFG_LOWERDIFFICULTY, 1 if chk else 0)
-
+        
     #---------------------------------------------------------------------------
     def __OnShowCategoriesAND(self, event):
         chk = self.__categoriesAndFilter.GetValue()
         viewmgr.Get().ChangeCategoriesCriteriaAND(chk)
-        appcfg.Get().WriteInt(appcfg.CFG_CATEGORIESAND, 1 if chk else 0)
 
     #---------------------------------------------------------------------------
     def __OnOnlyShow(self, event):
@@ -122,7 +125,6 @@ class SongFilterPanel(wx.Panel):
             val = viewmgr.SHOW_SONGS
         
         viewmgr.Get().OnlySnowType(val)
-        appcfg.Get().WriteInt(appcfg.CFG_SHOWONLYTUTS, val)
         
     #---------------------------------------------------------------------------
     def __OnHideConcepts(self, event):
@@ -130,7 +132,6 @@ class SongFilterPanel(wx.Panel):
         
         chk = self.__hideConcepts.GetValue()
         viewmgr.Get().ChangeHideConceptSongs(chk)
-        appcfg.Get().WriteInt(appcfg.CFG_HIDE_CONCEPTS, 1 if chk else 0)
         
     #---------------------------------------------------------------------------
     def __OnAppReady(self, message):
@@ -174,6 +175,42 @@ class SongFilterPanel(wx.Panel):
         self.__cats.Clear()
         self.__catsClientData = []
         
-
-
+    #---------------------------------------------------------------------------
+    def __OnResetSongFilter(self, message):
+        """ Handler to reset all song filter related controls """
         
+        # reset all controls
+        self.__progressFilter.SetSelection(0)
+        self.__difficulty.SetSelection(0)
+        
+        self.__strictDifficulty.SetValue(False)
+        for i in xrange (0, self.__cats.GetCount()):
+            self.__cats.Check(i, False)
+        
+        self.__categoriesAndFilter.SetValue(False)
+        self.__onlyShowAll.SetValue(True)
+        self.__hideConcepts.SetValue(False)
+        
+    #---------------------------------------------------------------------------
+    def __OnAppQuit(self, message):
+        """ Handler called when app is about to quit """
+        
+        # write all filter controls to the settings.
+        cfg = appcfg.Get()
+        cfg.WriteInt(appcfg.CFG_PROGRESS, self.__progressFilter.GetSelection())
+        cfg.WriteInt(appcfg.CFG_DIFFICULTY, self.__difficulty.GetSelection())
+        cfg.WriteInt(appcfg.CFG_CATEGORIESAND, 1 if self.__categoriesAndFilter.GetValue() else 0)
+        cfg.WriteInt(appcfg.CFG_LOWERDIFFICULTY, 1 if self.__strictDifficulty.GetValue() else 0)
+        cfg.WriteInt(appcfg.CFG_HIDE_CONCEPTS, 1 if self.__hideConcepts.GetValue() else 0)
+        
+        val = viewmgr.SHOW_ALL
+        if self.__onlyShowTutorials.GetValue():
+            val = viewmgr.SHOW_TUTORIALS
+        elif self.__onlyShowSongs.GetValue():
+            val = viewmgr.SHOW_SONGS
+        cfg.WriteInt(appcfg.CFG_SHOWONLYTUTS, val)
+        
+    #---------------------------------------------------------------------------
+    def __OnResetFilterButton(self, event):
+        """ Handler to reset the song filter contents """
+        viewmgr.signalResetFilter()

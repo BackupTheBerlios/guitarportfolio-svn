@@ -39,6 +39,8 @@ SONG_VIEW_ADDED         = ('song', 'view', 'added')     # song added to view
 SONG_VIEW_UPDATED       = ('song', 'view', 'updated')   # selected song updated in view 
 SONG_VIEW_DELETED       = ('song', 'view', 'deleted')   # song deleted from view
 
+SIGNAL_RESET_SONGFILTER = ('songfilter', 'reset')       # reset the songfilter
+
 # definitions
 ADD    = 0
 DELETE = 1
@@ -85,6 +87,20 @@ class SongFilter:
         self._showSongType = SHOW_ALL   
         self._hideConcepts = False
     
+    # --------------------------------------------------------------------------
+    def ResetFilter(self):
+        """ Reset all the view settings """
+        
+        # reset all the values
+        self._critStatus = _CRIT_STATUS_ALL
+        self._critDifficulty = _CRIT_STATUS_ALL
+        self._critCategories = []
+        self._critCategoryAND = False 
+        self._critDifficultyLO = False
+        self._showSongType = SHOW_ALL   
+        self._hideConcepts = False    
+        self.__ResyncAllSongs()
+
     # --------------------------------------------------------------------------
     def _SignalAddSong(self, message):
         """ Convenience function to call the actual function _AddSong """
@@ -711,12 +727,21 @@ def signalAddStudyTime(song, studytime):
         sp = db.log_peer.LogPeer(db.engine.GetDb())
         sp.Update(logentry, song._id)
         
-        
+# ------------------------------------------------------------------------------
 def signalAppQuit():
     """ Send a signal that the application closes """
     
     # update the config, etc
     Publisher().sendMessage(SIGNAL_APP_QUIT)
+    
+# ------------------------------------------------------------------------------
+def signalResetFilter():
+    """ Performs a clear on the songfilter object, and sends around that other views
+        should update accordingly """
+    
+    Get().ResetFilter()
+    Publisher().sendMessage(SIGNAL_RESET_SONGFILTER)
+
     
 #===============================================================================
 

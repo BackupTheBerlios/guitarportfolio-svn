@@ -29,6 +29,7 @@ CFG_LOG_STUDY       = 'log/studytime'               # should study time logs be 
 CFG_LOG_STATUS      = 'log/status'                  # should status logs be displayed
 CFG_LOG_COMMENT     = 'log/comment'                 # should comment logs be displayed
 CFG_LOG_SORT        = 'log/sortorder'               # ascending / descending log order
+CFG_PROGRESS_TIME   = 'progress/studytime'          # studytime progress
 
 # TODO: Needs better description!
 description = "Guitar Portfolio is an application that manages the songs you are playing on the guitar. " + \

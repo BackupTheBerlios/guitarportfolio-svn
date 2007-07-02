@@ -1,7 +1,7 @@
 import wx
 import wx.xrc as xrc
 from wx.lib.pubsub import Publisher
-import xmlres, viewmgr
+import xmlres, viewmgr, appcfg
 from objs import songs
 
 class ProgressPanel(wx.Panel):
@@ -38,6 +38,8 @@ class ProgressPanel(wx.Panel):
         Publisher().subscribe(self.__OnSongSelected, viewmgr.SIGNAL_SONG_SELECTED)
         Publisher().subscribe(self.__OnSongSelected, viewmgr.SIGNAL_CLEAR_DATA)
         Publisher().subscribe(self.__OnSongSelected, viewmgr.SIGNAL_SONG_UPDATED)
+        Publisher().subscribe(self.__OnAppReady, viewmgr.SIGNAL_APP_READY)
+        Publisher().subscribe(self.__OnAppQuit, viewmgr.SIGNAL_APP_QUIT)
 
     # --------------------------------------------------------------------------
     def __OnSongSelected(self, message): 
@@ -175,3 +177,22 @@ class ProgressPanel(wx.Panel):
                 viewmgr.signalAddStudyTime(song, studytime)
             else:
                 wx.MessageBox('The studytime is invalid, please enter a number!', 'Error', wx.ICON_HAND | wx.OK)
+    
+    # --------------------------------------------------------------------------
+    def __OnAppReady(self, event):
+        """ Handler to get default values from the settings """
+        
+        cfg = appcfg.Get()
+        str = '%i' % (cfg.ReadInt(appcfg.CFG_PROGRESS_TIME, 30),)
+        self.__minutes.SetValue(str)
+        
+    # --------------------------------------------------------------------------
+    def __OnAppQuit(self, event):
+        """ Handler to get default values to the settings """
+        
+        cfg = appcfg.Get()
+        try:
+            studytime = int(self.__minutes.GetValue())
+        except ValueError:
+            studytime = 30
+        cfg.WriteInt(appcfg.CFG_PROGRESS_TIME, studytime)

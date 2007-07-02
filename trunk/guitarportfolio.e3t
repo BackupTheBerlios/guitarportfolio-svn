@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Tasks SYSTEM "Tasks-3.8.dtd">
 <!-- Tasks file for project guitarportfolio -->
-<!-- Saved: 2007-07-01, 13:28:58 -->
+<!-- Saved: 2007-07-01, 15:21:42 -->
 <Tasks version="3.8">
   <Task priority="0" completed="0" bugfix="0">
     <Description>BUG: Categories cannot be added when song is not yet in DB</Description>
@@ -38,17 +38,6 @@
         <Name>CurrSongInfoPanel.py</Name>
       </Filename>
       <Linenumber>18</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: we need to insert some demo code!</Description>
-    <Created>2007-06-24, 17:10:33</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>WelcomeDlg.py</Name>
-      </Filename>
-      <Linenumber>161</Linenumber>
     </Resource>
   </Task>
   <Task priority="1" completed="0" bugfix="0">
@@ -173,39 +162,6 @@
     </Resource>
   </Task>
   <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Shouldn't we use OnUpdateUI event instead?</Description>
-    <Created>2007-06-30, 16:59:53</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>GuitarPortfolioFrame.py</Name>
-      </Filename>
-      <Linenumber>209</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Small problem, the category relations can be</Description>
-    <Created>2007-06-30, 16:59:53</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>GuitarPortfolioFrame.py</Name>
-      </Filename>
-      <Linenumber>273</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Needs better description!</Description>
-    <Created>2007-07-01, 11:10:17</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>appcfg.py</Name>
-      </Filename>
-      <Linenumber>27</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
     <Description>TODO: This should be in the peer</Description>
     <Created>2007-07-01, 11:28:54</Created>
     <Resource>
@@ -269,6 +225,50 @@
         <Name>htmlparse.py</Name>
       </Filename>
       <Linenumber>344</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: we need to insert some demo code!</Description>
+    <Created>2007-07-01, 14:58:40</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>WelcomeDlg.py</Name>
+      </Filename>
+      <Linenumber>161</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Shouldn't we use OnUpdateUI event instead?</Description>
+    <Created>2007-07-01, 15:17:52</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>GuitarPortfolioFrame.py</Name>
+      </Filename>
+      <Linenumber>209</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Small problem, the category relations can be</Description>
+    <Created>2007-07-01, 15:17:52</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>GuitarPortfolioFrame.py</Name>
+      </Filename>
+      <Linenumber>273</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Needs better description!</Description>
+    <Created>2007-07-01, 15:19:54</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>appcfg.py</Name>
+      </Filename>
+      <Linenumber>33</Linenumber>
     </Resource>
   </Task>
 </Tasks>

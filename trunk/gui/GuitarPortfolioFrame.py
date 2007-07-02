@@ -256,6 +256,14 @@ class GuitarPortfolioFrame(wx.Frame):
             
             # invoke the add signal
             viewmgr.signalSongAdded(s)
+            
+            # check if we are visible or not, if not mention this to the user and 
+            # offer them to reset the songfilter
+            if s not in viewmgr.Get()._critList:
+                res = wx.MessageBox('The song added is not yet visible due to filter criteria.\n' + \
+                                    'Do you want to reset the song filter?', 'Not visible', wx.ICON_INFORMATION | wx.YES_NO )
+                if res == wx.YES:
+                    viewmgr.signalResetFilter()
 
         dlg.Destroy()  
 
