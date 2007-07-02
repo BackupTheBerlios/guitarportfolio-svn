@@ -34,7 +34,6 @@ class SongBrowserPanel(wx.Panel):
         self.Bind(wx.EVT_BUTTON, self.__OnBrowseBack, self.__browseBack)
 
         # signals for song selection dropdown
-        Publisher().subscribe(self.__AddSong, viewmgr.SIGNAL_SONG_ADDED)  
         Publisher().subscribe(self.__UpdateSong, viewmgr.SIGNAL_SONG_UPDATED)  
         Publisher().subscribe(self.__DeleteSong, viewmgr.SIGNAL_SONG_DELETED)  
         Publisher().subscribe(self.__ClearSongs, viewmgr.SIGNAL_CLEAR_DATA)  
@@ -60,27 +59,19 @@ class SongBrowserPanel(wx.Panel):
             self.__RenderHomepage()
       
     # --------------------------------------------------------------------------
-    def __AddSong(self, message):
-        # if we are on the homepage, update the report
-        if self._currPage == -1:
-            self.__RenderHomepage()
-          
-    # --------------------------------------------------------------------------
-    def __DeleteSong(self, message):
-        # if we are on the homepage, update the report
-        if self._currPage == -1 or self._currPage == message.data._id:
-            self._currPage = -1
-            self.__RenderHomepage()
-
-    # --------------------------------------------------------------------------
     def __UpdateSong(self, message):
         
         # if we are on the homepage, update the report
-        if self._currPage == -1:
-            self.__RenderHomepage()
-        elif self._currPage == message.data._id:
+        if self._currPage == message.data._id:
             # we are on the song page, update
             self.__RenderSongPage(message.data)
+
+    # --------------------------------------------------------------------------
+    def __DeleteSong(self, message):
+        # if we are on the current page of the song, render homepage
+        if self._currPage == message.data._id:
+            self._currPage = -1
+            self.__RenderHomePage()
 
     # --------------------------------------------------------------------------
     def __ClearSongs(self, message):
@@ -110,6 +101,8 @@ class SongBrowserPanel(wx.Panel):
 
     # --------------------------------------------------------------------------
     def __CriteriaListChanged(self, message):
+        
+        # if we are on the main page, render
         if self._currPage == -1:
             self.__RenderHomepage()
             

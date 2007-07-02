@@ -115,6 +115,8 @@ class SongFilter:
         
         self._list.append(song)
         self.__SyncWithCriteriaList(song, action = ADD)
+        # send a message always when criteria list is changed
+        Publisher().sendMessage(SIGNAL_CRITLIST_CHANGED, self._critList)
         pass 
         
     # --------------------------------------------------------------------------
@@ -125,6 +127,8 @@ class SongFilter:
         if self._list.has_item(song):
             self._list.remove(song)
             self.__SyncWithCriteriaList(song, action = DELETE)
+            # send a message always when criteria list is changed
+            Publisher().sendMessage(SIGNAL_CRITLIST_CHANGED, self._critList)
 
     # --------------------------------------------------------------------------
     def _UpdateSong(self, message):
@@ -137,7 +141,9 @@ class SongFilter:
             # if we are still the selected song, repopulate links
             if song == self._selectedSong:
                 # refresh the links
-                linkmgt.Get().Load(appcfg.GetAbsWorkPathFromSong(song))                
+                linkmgt.Get().Load(appcfg.GetAbsWorkPathFromSong(song))   
+            # send a message always when criteria list is changed
+            Publisher().sendMessage(SIGNAL_CRITLIST_CHANGED, self._critList)
         
     # --------------------------------------------------------------------------
     def ChangeStatusCriteria(self, criteria):
