@@ -20,7 +20,6 @@ class SongBrowserPanel(wx.Panel):
         
         self._currPage = -1 # id of song in queue, -1 is home
         
-        self.__songList = xrc.XRCCTRL( self, "ID_SONG_SELECTOR" )
         self.__homeButton = xrc.XRCCTRL( self, "ID_BTN_HOME")
         self.__browseBack = xrc.XRCCTRL( self, "ID_BTN_BACK")
         self.__browseForward = xrc.XRCCTRL( self, "ID_BTN_FORWARD")
@@ -29,7 +28,6 @@ class SongBrowserPanel(wx.Panel):
         if "gtk2" in wx.PlatformInfo:
             self.__songBrowser.SetStandardFonts()
             
-        self.Bind(wx.EVT_CHOICE, self.__OnSongSelect, self.__songList)
         self.Bind(html.EVT_HTML_LINK_CLICKED, self.__OnLinkClicked, self.__songBrowser)
         self.Bind(wx.EVT_BUTTON, self.__OnBrowseHome, self.__homeButton)
         self.Bind(wx.EVT_BUTTON, self.__OnBrowseForward, self.__browseForward)
@@ -41,7 +39,8 @@ class SongBrowserPanel(wx.Panel):
         Publisher().subscribe(self.__DeleteSong, viewmgr.SIGNAL_SONG_DELETED)  
         Publisher().subscribe(self.__ClearSongs, viewmgr.SIGNAL_CLEAR_DATA)  
         Publisher().subscribe(self.__OnSongSelected, viewmgr.SIGNAL_SONG_SELECTED)  
-        Publisher().subscribe(self.__AddSongs, viewmgr.SIGNAL_DATA_RESTORED)  
+        Publisher().subscribe(self.__AddSongs, viewmgr.SIGNAL_DATA_RESTORED) 
+        Publisher().subscribe(self.__CriteriaListChanged, viewmgr.SIGNAL_CRITLIST_CHANGED) 
         Publisher().subscribe(self.__OnSetHomepage, viewmgr.SIGNAL_SET_HOMEPAGE)
         Publisher().subscribe(self.__LinksRefreshed, viewmgr.SIGNAL_LINKS_REFRESHED)
 
@@ -56,37 +55,18 @@ class SongBrowserPanel(wx.Panel):
         
     # --------------------------------------------------------------------------
     def __AddSongs(self, message):
-        sl = self.__songList
-        songlist = message.data
-        for song in songlist:
-            idx = sl.Append(song._title)
-            sl.SetClientData(idx, song)
-        
         # if we are on the homepage, update the report
         if self._currPage == -1:
             self.__RenderHomepage()
       
     # --------------------------------------------------------------------------
     def __AddSong(self, message):
-        sl = self.__songList
-        song = message.data
-
-        # TODO: Sort in the correct order
-        idx = sl.Append(song._title)
-        sl.SetClientData(idx, song)
-        
         # if we are on the homepage, update the report
         if self._currPage == -1:
             self.__RenderHomepage()
           
     # --------------------------------------------------------------------------
     def __DeleteSong(self, message):
-        sl = self.__songList
-        for i in xrange(0, sl.GetCount()):
-            if sl.GetClientData(i) == message.data:
-                sl.Delete(i)
-                break
-
         # if we are on the homepage, update the report
         if self._currPage == -1 or self._currPage == message.data._id:
             self._currPage = -1
@@ -94,16 +74,7 @@ class SongBrowserPanel(wx.Panel):
 
     # --------------------------------------------------------------------------
     def __UpdateSong(self, message):
-        sl = self.__songList
-        old_idx = self.__songList.GetSelection()
-        for i in xrange(0, sl.GetCount()):
-            if sl.GetClientData(i) == message.data:
-                sl.SetString(i, message.data._title)
-                break
-        # set back the selection because after update this resets (weird)
-        if old_idx != -1:
-            self.__songList.SetSelection(old_idx)    
-
+        
         # if we are on the homepage, update the report
         if self._currPage == -1:
             self.__RenderHomepage()
@@ -114,41 +85,17 @@ class SongBrowserPanel(wx.Panel):
     # --------------------------------------------------------------------------
     def __ClearSongs(self, message):
         """ Clear list, we are changing databases """
-        self.__songList.Clear()
         wp = wikiparser.WikiParser()
         self.__songBrowser.SetPage(wp.Parse(htmlmarkup.startupinfo))
         
-    # --------------------------------------------------------------------------
-    def __OnSongSelect(self, event): 
-        """ User selects a song, we set the song filter and the other
-            components should show the proper info """
-        idx = self.__songList.GetSelection()
-        if idx <> wx.NOT_FOUND:
-            s = self.__songList.GetClientData(idx)
-            viewmgr.signalSetSong(s)
-
     # --------------------------------------------------------------------------
     def __OnSongSelected(self, message):
         """ Another song is selected, sync our list """
         if message.data:
             # render the song info page
             self.__RenderSongPage(message.data)
-        
-            # if we already stand on the song, we do nothing
-            sl = self.__songList
-            idx = sl.GetSelection()
-            if idx <> wx.NOT_FOUND:
-                if message.data == self.__songList.GetClientData(idx):
-                    return
-    
-            for i in xrange(0, sl.GetCount()):
-                if sl.GetClientData(i) == message.data:
-                    sl.SetSelection(i)
-                    return
         else:
             self.__RenderHomepage()
-            self.__songList.SetSelection(-1)
-
 
     # --------------------------------------------------------------------------
     def __LinksRefreshed(self, message):
@@ -162,9 +109,15 @@ class SongBrowserPanel(wx.Panel):
             self.__RenderSongPage(song)
 
     # --------------------------------------------------------------------------
+    def __CriteriaListChanged(self, message):
+        if self._currPage == -1:
+            self.__RenderHomepage()
+            
+    # --------------------------------------------------------------------------
     def __RenderHomepage(self):
         """ We render the homepage containing all song statuses divided in sections """
-        if not self.__songList.GetCount():
+        criteria = viewmgr.Get()._critList
+        if not len(criteria):
             wp = wikiparser.WikiParser()
             self.__songBrowser.SetPage(wp.Parse(htmlmarkup.startupinfo))
             return
@@ -177,11 +130,12 @@ class SongBrowserPanel(wx.Panel):
         # go by the songs list, and get lists per status
         for stat_key in stats.iterkeys():
             lst = stats[stat_key]
-            for i in xrange(0, self.__songList.GetCount()):
-                s = self.__songList.GetClientData(i)
+            
+            for s in criteria:
                 if s._status == stat_key:
                     lst.append(s)
         
+        # set the markup for the rendering engine
         songs_section = { htmlparse.HTML_SECTION_PRACTICING: (stats[songs.SS_STARTED],
                                                               htmlmarkup.songs_practicing_begin,
                                                               htmlmarkup.songs_practicing_row,

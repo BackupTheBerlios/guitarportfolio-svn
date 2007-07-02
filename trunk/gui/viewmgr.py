@@ -38,6 +38,7 @@ SIGNAL_APP_QUIT         = ('app', 'quit')               # sent when app quits
 SONG_VIEW_ADDED         = ('song', 'view', 'added')     # song added to view
 SONG_VIEW_UPDATED       = ('song', 'view', 'updated')   # selected song updated in view 
 SONG_VIEW_DELETED       = ('song', 'view', 'deleted')   # song deleted from view
+SIGNAL_CRITLIST_CHANGED = ('song', 'view', 'changed')   # criteria list is changed 
 
 SIGNAL_RESET_SONGFILTER = ('songfilter', 'reset')       # reset the songfilter
 
@@ -58,16 +59,17 @@ class SongFilter:
         self._list = objlist.ObjList(class_name = songs.Song)
         self.Reset()
 
-        Publisher().subscribe(self._PopulateSongs, SIGNAL_DATA_RESTORED)
+        #Publisher().subscribe(self._PopulateSongs, SIGNAL_DATA_RESTORED)
         Publisher().subscribe(self._SignalAddSong, SIGNAL_SONG_ADDED)
         Publisher().subscribe(self._RemoveSong, SIGNAL_SONG_DELETED)
         Publisher().subscribe(self._UpdateSong, SIGNAL_SONG_UPDATED)
         
     # --------------------------------------------------------------------------
-    def _PopulateSongs(self, message):
+    def _PopulateSongs(self, songlist):
         """ Populate the list after all data is restored """
         
-        songlist = message.data
+        self._critList = []
+        self._list.clear()
         
         for s in songlist:
             self._list.append(s)
@@ -206,8 +208,12 @@ class SongFilter:
     def __ResyncAllSongs(self):
         """ Resync the whole list, remove all the songs not matching
             add new that are matching """
+        changed = False
         for s in self._list:
             self.__SyncWithCriteriaList(s, action = ADD)
+        
+        # send a message always when criteria list is changed
+        Publisher().sendMessage(SIGNAL_CRITLIST_CHANGED, self._critList)
 
     # --------------------------------------------------------------------------
     def __SyncWithCriteriaList(self, song, action = ADD):
@@ -349,12 +355,17 @@ def signalDbChange():
     # restore all songs
     sp = db.songs_peer.SongSetPeer(dbc)
     songlist = sp.Restore()        
-        
+    
     # restore all song category relations
     sp = db.songs_peer.SongPeer(dbc)
     for s in songlist:
         sp.RestoreCategories(s)     
-     
+    
+    # first populate song filter, so others can use that
+    # criteria list for the song selection
+    Get()._PopulateSongs(songlist)
+   
+    # now inform others
     Publisher().sendMessage(SIGNAL_DATA_RESTORED, songlist)
     
     # one last message to to post processing, 
