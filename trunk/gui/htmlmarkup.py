@@ -167,7 +167,8 @@ songinfo = """<html><body>
   <tr><td valign="top"><b>Categories:</b></td><td>@categories@</td></tr>
   <tr><td valign="top"><b>Tuning:</b></td><td>@tuning_text@ (@tuning_name@)</td></tr>
   <tr><td valign="top"><b>Capo On:</b></td><td>@capo_text@</td></tr>
-  <tr><td valign="top"><b>Number Of Bars:</b></td><td>@bar_count@</td></tr>
+  <tr><td valign="top"><b>Measures:</b></td><td>@bar_count@</td></tr>
+  <tr><td valign="top"><b>Tabs:</b></td><td>@song_label_tabs@</td></tr>
   <tr><td valign="top"><b>Progress:</b></td><td><b>@cprogress@</b>&nbsp;<img src="@icon_path@@song_status_icon@" />&nbsp;(@percprogress@%)</td></tr>
   <tr><td valign="top"><b>Difficulty:</b></td><td><img src="@icon_path@@song_rank@" /></td></tr>
   <tr><td valign="top"><b>Added In Database:</b></td><td>@time_added@</td></tr>
@@ -177,6 +178,7 @@ songinfo = """<html><body>
 </font>
 @song_status_change@
 @song_links@
+@song_info@
 </body></html>
 """
 
@@ -194,6 +196,12 @@ song_links_row = """
 """
 song_links_end = """
 </table></font>
+"""
+
+# ==============================================================================
+
+song_info_header = """
+<br><br><font size="+3"><img src="@icon_path@icon_info.png"/><i>&nbsp;Information</i></font><br><br>
 """
 
 # ==============================================================================

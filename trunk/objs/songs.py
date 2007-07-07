@@ -66,8 +66,8 @@ class Song(db.base.Object):
         self._barCount = 0
         self._time = datetime.datetime.now()
         self._tuning = None
-        self._lyrics = 'Enter your lyrics here'
-        self._information = 'Enter your song information here'
+        self._lyrics = ''
+        self._information = ''
         self._altTuning = 'E  A  D  G  B  E '
         self._dateUnknown = True
         self._yearOnly = False
@@ -115,17 +115,9 @@ class Song(db.base.Object):
         # unfortunately we cannot check the tabs because we do restore them at
         # the very last moment.
         return (self._status == SS_NOT_STARTED) and \
-               (self._difficulty == SD_NORMAL) and \
-               (self._barCount == 0) and \
-               (self._tuning == tuning_mgr.Get().GetDefaultTuning()) and \
-               (self._lyrics == 'Enter your lyrics here') and \
-               (self._information == 'Enter your song information here') and \
-               (self._altTuning == 'E  A  D  G  B  E ') and \
-               (self._dateUnknown == True) and \
-               (self._yearOnly == False) and \
+               (self._lyrics == '') and \
+               (self._information == '') and \
                (self._percCompleted == 0) and \
                (self._percAccuracy == 0) and \
-               (self._capoOnFret == 0) and \
-               (self._songType == ST_NORMAL)
-               #(self.categories.count() == 0) and \
+               (self._capoOnFret == 0)
         

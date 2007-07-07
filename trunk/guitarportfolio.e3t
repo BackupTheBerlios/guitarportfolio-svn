@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Tasks SYSTEM "Tasks-3.8.dtd">
 <!-- Tasks file for project guitarportfolio -->
-<!-- Saved: 2007-07-02, 20:42:56 -->
+<!-- Saved: 2007-07-07, 20:15:00 -->
 <Tasks version="3.8">
   <Task priority="0" completed="0" bugfix="0">
     <Description>BUG: Categories cannot be added when song is not yet in DB</Description>
@@ -49,17 +49,6 @@
         <Name>wikiparser.py</Name>
       </Filename>
       <Linenumber>143</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: we might need to force this on Linux as well</Description>
-    <Created>2007-06-25, 21:51:09</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>GuitarTabEditPanel.py</Name>
-      </Filename>
-      <Linenumber>39</Linenumber>
     </Resource>
   </Task>
   <Task priority="1" completed="0" bugfix="0">
@@ -151,61 +140,6 @@
     </Resource>
   </Task>
   <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Put the text inside the DB!</Description>
-    <Created>2007-07-01, 12:16:21</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>htmlmarkup.py</Name>
-      </Filename>
-      <Linenumber>1</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Substitute version number / appname in HTML text</Description>
-    <Created>2007-07-01, 12:16:21</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>htmlmarkup.py</Name>
-      </Filename>
-      <Linenumber>3</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Put inside the DB!</Description>
-    <Created>2007-07-01, 12:16:21</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>htmlmarkup.py</Name>
-      </Filename>
-      <Linenumber>4</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO:            lambda tags : STR_ICON_TODO,</Description>
-    <Created>2007-07-01, 12:17:58</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>htmlparse.py</Name>
-      </Filename>
-      <Linenumber>301</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO:       lambda tags : \</Description>
-    <Created>2007-07-01, 12:17:58</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>htmlparse.py</Name>
-      </Filename>
-      <Linenumber>344</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
     <Description>TODO: we need to insert some demo code!</Description>
     <Created>2007-07-01, 14:58:40</Created>
     <Resource>
@@ -250,14 +184,91 @@
     </Resource>
   </Task>
   <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: we might need to force this on Linux as well</Description>
+    <Created>2007-07-05, 19:26:09</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>GuitarTabEditPanel.py</Name>
+      </Filename>
+      <Linenumber>39</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
     <Description>TODO:       (stats[songs.SS_NOT_STARTED],</Description>
-    <Created>2007-07-02, 20:39:18</Created>
+    <Created>2007-07-07, 19:47:03</Created>
     <Resource>
       <Filename>
         <Dir>gui</Dir>
         <Name>SongBrowserPanel.py</Name>
       </Filename>
-      <Linenumber>136</Linenumber>
+      <Linenumber>150</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: We should place this in a one time structure since they are all static</Description>
+    <Created>2007-07-07, 19:47:03</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>SongBrowserPanel.py</Name>
+      </Filename>
+      <Linenumber>173</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Put the text inside the DB!</Description>
+    <Created>2007-07-07, 20:02:44</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>htmlmarkup.py</Name>
+      </Filename>
+      <Linenumber>1</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Substitute version number / appname in HTML text</Description>
+    <Created>2007-07-07, 20:02:44</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>htmlmarkup.py</Name>
+      </Filename>
+      <Linenumber>3</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Put inside the DB!</Description>
+    <Created>2007-07-07, 20:02:44</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>htmlmarkup.py</Name>
+      </Filename>
+      <Linenumber>4</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO:            lambda tags : STR_ICON_TODO,</Description>
+    <Created>2007-07-07, 20:11:43</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>htmlparse.py</Name>
+      </Filename>
+      <Linenumber>358</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO:       lambda tags : \</Description>
+    <Created>2007-07-07, 20:11:43</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>htmlparse.py</Name>
+      </Filename>
+      <Linenumber>403</Linenumber>
     </Resource>
   </Task>
 </Tasks>

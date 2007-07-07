@@ -9,7 +9,8 @@ from wx.lib.pubsub import Publisher
 from objs import songs, linkmgt
 import db
 import db.songs_peer
-from images import icon_home, icon_browse_next, icon_browse_prev
+from images import icon_home, icon_browse_next, icon_browse_prev, \
+                   icon_song_next, icon_song_previous, icon_song
 import xmlres, appcfg, htmlparse, linkfile, htmlmarkup, wikiparser, viewmgr
 
 class SongBrowserPanel(wx.Panel):
@@ -18,20 +19,30 @@ class SongBrowserPanel(wx.Panel):
         xmlres.Res().LoadOnPanel(pre, parent, "SongBrowserPanel")
         self.PostCreate(pre)
         
-        self._currPage = -1 # id of song in queue, -1 is home
+        # list of items that are browsed on the stack. with back 
+        # and next the user can select through them.
+        # an index of -1 means homepage diplay, else use stack
+        self._viewstack = []
+        self._stackIdx = -1 
+        
+        # OBSOLETED
+        self._currPage = -1
         
         self.__homeButton = xrc.XRCCTRL( self, "ID_BTN_HOME")
         self.__browseBack = xrc.XRCCTRL( self, "ID_BTN_BACK")
         self.__browseForward = xrc.XRCCTRL( self, "ID_BTN_FORWARD")
         self.__songBrowser = xrc.XRCCTRL(self, "ID_BROWSER_WINDOW")
+        self.__browseSongBack = xrc.XRCCTRL( self, "ID_PREV_SONG")
+        self.__browseSongForward = xrc.XRCCTRL( self, "ID_NEXT_SONG")
+        self.__songIcon = xrc.XRCCTRL(self, "ID_SONG_BMP")
         
         if "gtk2" in wx.PlatformInfo:
             self.__songBrowser.SetStandardFonts()
             
         self.Bind(html.EVT_HTML_LINK_CLICKED, self.__OnLinkClicked, self.__songBrowser)
         self.Bind(wx.EVT_BUTTON, self.__OnBrowseHome, self.__homeButton)
-        self.Bind(wx.EVT_BUTTON, self.__OnBrowseForward, self.__browseForward)
-        self.Bind(wx.EVT_BUTTON, self.__OnBrowseBack, self.__browseBack)
+        self.Bind(wx.EVT_BUTTON, self.__OnBrowseForward, self.__browseSongForward)
+        self.Bind(wx.EVT_BUTTON, self.__OnBrowseBack, self.__browseSongBack)
 
         # signals for song selection dropdown
         Publisher().subscribe(self.__UpdateSong, viewmgr.SIGNAL_SONG_UPDATED)  
@@ -43,10 +54,13 @@ class SongBrowserPanel(wx.Panel):
         Publisher().subscribe(self.__OnSetHomepage, viewmgr.SIGNAL_SET_HOMEPAGE)
         Publisher().subscribe(self.__LinksRefreshed, viewmgr.SIGNAL_LINKS_REFRESHED)
 
-        # add some nice buttons
+        # add some nice images
         self.__homeButton.SetBitmapLabel(icon_home.getBitmap())
         self.__browseBack.SetBitmapLabel(icon_browse_prev.getBitmap())
         self.__browseForward.SetBitmapLabel(icon_browse_next.getBitmap())
+        self.__browseSongBack.SetBitmapLabel(icon_song_previous.getBitmap())
+        self.__browseSongForward.SetBitmapLabel(icon_song_next.getBitmap())
+        self.__songIcon.SetBitmap(icon_song.getBitmap())
         
         # set the start page
         wp = wikiparser.WikiParser()
@@ -152,7 +166,11 @@ class SongBrowserPanel(wx.Panel):
         
     # --------------------------------------------------------------------------
     def __RenderSongPage(self, song):
-        """ We render the homepage containing all song statuses divided in sections """
+        """ 
+        We render the homepage containing all song statuses divided in sections 
+        """
+        
+        # TODO: We should place this in a one time structure since they are all static
         taginfo = { htmlparse.HTML_LABEL_CATEGORIES:  (htmlmarkup.categories_begin, 
                                                        htmlmarkup.categories_row, 
                                                        htmlmarkup.categories_append,
@@ -167,7 +185,8 @@ class SongBrowserPanel(wx.Panel):
                                                          songs.SS_COMPLETED: htmlmarkup.change_status_in_completed },
                                                        htmlmarkup.change_status_start,
                                                        htmlmarkup.change_status_append,
-                                                       htmlmarkup.change_status_end )
+                                                       htmlmarkup.change_status_end ),
+                    htmlparse.HTML_SONG_INFO:          htmlmarkup.song_info_header
                   }        
 
         pg = htmlparse.ParseSongHtml(htmlmarkup.songinfo, song, taginfo)

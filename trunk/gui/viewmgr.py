@@ -506,20 +506,28 @@ def signalTabSelected(tab):
     Publisher().sendMessage(SIGNAL_TAB_SELECTED, tab)
 
 # ------------------------------------------------------------------------------
-def signalTabUpdated(tab):
+def signalTabUpdated(tab, song):
     """ A tab is updated, we need to transmit so all views can sync using this 
         tab if needed. """
         
     # fire in the hull!
-    Publisher().sendMessage(SIGNAL_TAB_UPDATED, tab)   
+    Publisher().sendMessage(SIGNAL_TAB_UPDATED, tab)
+    
+    # if our song is the song with the updated tab, we signal an update
+    if song == Get()._selectedSong and song != None:
+        Publisher().sendMessage(SIGNAL_SONG_UPDATED, song) 
 
 # ------------------------------------------------------------------------------
-def signalTabDeleted(tab):
+def signalTabDeleted(tab, song):
     """ A tab is deleted, we need to transmit so all views can remove this 
         tab if needed. """
         
     # fire in the hull! and it's a hit!
-    Publisher().sendMessage(SIGNAL_TAB_DELETED, tab)   
+    Publisher().sendMessage(SIGNAL_TAB_DELETED, tab)  
+   
+    # if our song is the song with the deleted tab, we signal an update
+    if song == Get()._selectedSong and song != None:
+        Publisher().sendMessage(SIGNAL_SONG_UPDATED, song) 
 
 # ------------------------------------------------------------------------------
 def signalSetHomepage():
@@ -549,11 +557,15 @@ def signalSelectPreviousSong():
     signalSetSong(Get().GetPreviousVisibleSong())
     
 # ------------------------------------------------------------------------------
-def signalTabAdded(tab):
+def signalTabAdded(tab, song):
     """ A new tab is added to the list of tabs in the database, send out a signal to all the listeners
         to update the views if needed """
     
     Publisher().sendMessage(SIGNAL_TAB_ADDED ,tab)
+    
+    # if our song is the song with the added tab, we signal an update
+    if song == Get()._selectedSong and song != None:
+        Publisher().sendMessage(SIGNAL_SONG_UPDATED, song) 
     
 # ------------------------------------------------------------------------------
 def signalEditAttachments():

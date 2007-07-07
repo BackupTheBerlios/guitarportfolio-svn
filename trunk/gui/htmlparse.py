@@ -4,6 +4,7 @@ import os.path
 from objs import songs, linkmgt, log
 import appcfg, viewmgr
 from images import icon_status_changed
+import wikiparser
  
 # SONG RELATED HTML TAGS
 HTML_LABEL_SONG          = '@song@'
@@ -30,6 +31,9 @@ HTML_LABEL_LINKS         = '@song_links@'
 HTML_LABEL_STATCHANGE    = "@song_status_change@"
 HTML_LABEL_SONGPATH      = '@song_path@'
 HTML_SONG_TYPE_ICON      = '@song_type_icon@'
+HTML_LABEL_TABS          = '@song_label_tabs@'  
+HTML_LABEL_SONGINFO_TXT  = '@song_label_infotxt@'
+HTML_SONG_INFO           = '@song_info@'
 
 # LINKS HTML TAGS
 HTML_LINK_NAME           = '@link_name@'
@@ -62,6 +66,11 @@ HTML_SECTION_TODO        = "@songs_todo@"
 HTML_SECTION_COMPLETED   = "@songs_completed@"
 
 HTML_LABEL_CATNAME       = '@name@'              # only used in section!
+
+# TAB SECTION PARTS
+HTML_LABEL_TABNAME       = '@name@'              # only used in section!
+HTML_LABEL_TABID         = '@id@'                # only used in section!
+
 
 # maybe we should put this in the htmlmarkup module, 
 # but it is too specific, and I do not want to do complex parsing here
@@ -187,6 +196,35 @@ def __getSongCategories(tags, song):
     return categories_str
 
 # ------------------------------------------------------------------------------
+def __getSongTabNames(tags, song):
+    """ Return a markup text with tab links in it """
+    
+    # categories, use repetative mechanism
+    if HTML_LABEL_TABS in tags:
+        reptup = tags[HTML_LABEL_TABS]
+    else:
+        reptup = ('',                   # pre html tag 
+                  '<a href="#tab:' + HTML_LABEL_TABID + '">' + HTML_LABEL_TABNAME + '</a>',
+                  '<br>',               # append tag
+                  '')                   # post html tag
+    
+    tempstr = ''
+    tabs_str = reptup[0]
+    if not song.tabs.count():
+        tabs_str += 'No Tabs'
+    else:
+        for t in song.tabs:
+            str = reptup[1].replace(HTML_LABEL_TABNAME, t._name)
+            str = str.replace(HTML_LABEL_TABID, repr(t._id))
+            if not tempstr:
+                tempstr += str
+            else:
+                tempstr += reptup[2] + str 
+
+    tabs_str = tabs_str + tempstr + reptup[3]
+    return tabs_str
+
+# ------------------------------------------------------------------------------
 def __getSongIcon(tags, song):
     # which song icon
     if song._status == songs.SS_STARTED:
@@ -227,6 +265,25 @@ def __getSongLinks(tags, song):
                     str_links += _DoParseHtmlTags(linkstr[1], link_tags, stags,  l)
             str_links += linkstr[2]
     return str_links
+    
+# ------------------------------------------------------------------------------
+def __getSongInfo(tags, song):
+    """
+    Returns the song info parsed as a wiki page, expirimental to see if we can adjust place it all 
+    on one big page 
+    """
+
+    # look up the tag and parse the info
+    info_str = ''
+    if song._information:
+        if HTML_SONG_INFO in tags:
+            info_str = _DoParseHtmlTags(tags[HTML_SONG_INFO], common_tags)
+            
+            # now parse a wiki page
+            wp = wikiparser.WikiParser()
+            info_str += wp.Parse(song._information)            
+    
+    return info_str
     
 # ------------------------------------------------------------------------------
 def __getSongCreatePath(tags, song):
@@ -322,6 +379,7 @@ song_tags   =  { HTML_LABEL_SONG:          lambda tags, song : song._title,
                  HTML_LABEL_STATCHANGE:    __getStatusCommands,
                  HTML_LABEL_ID:            lambda tags, song : repr(song._id),
                  HTML_LABEL_CATEGORIES:    __getSongCategories,
+                 HTML_LABEL_TABS:          __getSongTabNames,
                  HTML_SONG_ICON:           __getSongIcon,
                  HTML_LABEL_RANK:          lambda tags, song : STR_ICON_RANK_X.replace('@', repr(song._difficulty)),
                  HTML_LABEL_BARCOUNT:      __getSongBarCount,      
@@ -329,7 +387,8 @@ song_tags   =  { HTML_LABEL_SONG:          lambda tags, song : song._title,
                  HTML_LABEL_LINKS:         __getSongLinks,
                  HTML_LINK_CREATEPATH:     __getSongCreatePath,
                  HTML_SONG_TYPE_ICON:      lambda tags, song : STR_ICON_GUITAR if song._songType == songs.ST_NORMAL \
-                                                                               else STR_ICON_TUTORIAL
+                                                                               else STR_ICON_TUTORIAL,
+                 HTML_SONG_INFO:           __getSongInfo                                                       
                 }
 
 link_tags    = { HTML_LINK_NAME:           lambda tags, link : link._name if link else 'None', 

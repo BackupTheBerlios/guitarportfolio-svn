@@ -126,7 +126,7 @@ class GuitarTabEditPanel(wx.Panel):
             tp = tabs_peer.TabPeer(db.engine.GetDb())
             tp.Update(self.__tab)
             
-            viewmgr.signalTabUpdated(self.__tab)
+            viewmgr.signalTabUpdated(self.__tab, viewmgr.Get()._selectedSong)
         
     #---------------------------------------------------------------------------
     def __DoRevertTab(self):
@@ -153,7 +153,7 @@ class GuitarTabEditPanel(wx.Panel):
                 tp.Delete(self.__tab)
 
                 # we just deleted a tab (krikey!)
-                viewmgr.signalTabDeleted(self.__tab)
+                viewmgr.signalTabDeleted(self.__tab, s)
 
             # find the tab by client data and remove it
             for i in xrange(0, self.__tabSelect.GetCount()):
@@ -189,7 +189,7 @@ class GuitarTabEditPanel(wx.Panel):
             tlp.Update(s)
             
             # tell the world we have a tab again
-            viewmgr.signalTabAdded(tab)
+            viewmgr.signalTabAdded(tab, s)
             
     #---------------------------------------------------------------------------
     def __DoSelectTab(self, tab):
