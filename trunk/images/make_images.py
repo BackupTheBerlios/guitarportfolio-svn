@@ -19,7 +19,10 @@ images = [ 'icon_completed.png',
            'icon_status_changed.png',
            'icon_progress_changed.png',
            'icon_concept.png',
-           'icon_reset_filter.png']
+           'icon_reset_filter.png',
+           'icon_song_next.png',
+           'icon_song_previous.png',
+           'icon_song.png']
 
 
 for name in images:
