@@ -22,7 +22,8 @@ images = [ 'icon_completed.png',
            'icon_reset_filter.png',
            'icon_song_next.png',
            'icon_song_previous.png',
-           'icon_song.png']
+           'icon_song.png',
+           'icon_edit.png']
 
 
 for name in images:

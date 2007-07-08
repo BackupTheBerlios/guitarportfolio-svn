@@ -26,3 +26,16 @@ class EditorNotebook(wx.Panel):
         sizer = wx.BoxSizer()
         sizer.Add(self.__mNB, 1, wx.EXPAND)
         self.SetSizer(sizer)
+
+    #---------------------------------------------------------------------------
+    def SelectSongInfoTab(self):
+        """ 
+        Shows the editor tab for the song info
+        """
+        self.__mNB.SetSelection(2)
+
+    def SelectSongLyricsTab(self):
+        """ 
+        Shows the editor tab for the song lyrics
+        """
+        self.__mNB.SetSelection(3)

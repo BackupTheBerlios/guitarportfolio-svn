@@ -151,7 +151,8 @@ class GuitarPortfolioFrame(wx.Frame):
                            MinSize(wx.Size(250,100)).BestSize(wx.Size(250, 100)).Left().MaximizeButton(True))
 
         # construct the bottom panel
-        self.__aui.AddPane(EditorNotebook.EditorNotebook(self), wx.aui.AuiPaneInfo().
+        self.__songEditNotebook = EditorNotebook.EditorNotebook(self)
+        self.__aui.AddPane(self.__songEditNotebook, wx.aui.AuiPaneInfo().
                           Name("editpanel").Caption("Edit").MinSize(wx.Size(200,205)).
                           Bottom().MaximizeButton(True))
 
@@ -171,6 +172,8 @@ class GuitarPortfolioFrame(wx.Frame):
         Publisher().subscribe(self.__SignalOnQueryDeleteSong, viewmgr.SIGNAL_DELETE_SONG)
         Publisher().subscribe(self.__SignalOnSongUpdated, viewmgr.SIGNAL_SONG_UPDATED)
         Publisher().subscribe(self.__SignalOnQueryEditAttachments, viewmgr.SIGNAL_EDIT_LINKS)
+        Publisher().subscribe(self.__SignalOnOpenEditInformation, viewmgr.SIGNAL_SHOW_EDIT_INFO)
+        Publisher().subscribe(self.__SignalOnOpenEditLyrics, viewmgr.SIGNAL_SHOW_EDIT_LYRICS)
         
         # dependent on the layout settings, we restore the old perspective, or save the default
         cfg = appcfg.Get()
@@ -525,5 +528,24 @@ class GuitarPortfolioFrame(wx.Frame):
         # reload the attachments
         viewmgr.signalRefreshLinks()
 
-
+    #---------------------------------------------------------------------------
+    def __SignalOnOpenEditInformation(self, message):
+        """ 
+        We received a signal to open the editor pane if not opened yet, and select the 
+        edit tab for the song info. Let's do so
+        """
+        self.__songEditNotebook.SelectSongInfoTab()
+        self.__aui.GetPane("editpanel").Show(True)
+        self.__aui.Update()
+        
+    #---------------------------------------------------------------------------
+    def __SignalOnOpenEditLyrics(self, message):
+        """ 
+        We received a signal to open the editor pane if not opened yet, and select the 
+        edit tab for the song lyrics. Let's do so
+        """
+        self.__songEditNotebook.SelectSongLyricsTab()
+        self.__aui.GetPane("editpanel").Show(True)
+        self.__aui.Update()
+        
 

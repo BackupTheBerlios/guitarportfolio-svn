@@ -34,6 +34,8 @@ HTML_SONG_TYPE_ICON      = '@song_type_icon@'
 HTML_LABEL_TABS          = '@song_label_tabs@'  
 HTML_LABEL_SONGINFO_TXT  = '@song_label_infotxt@'
 HTML_SONG_INFO           = '@song_info@'
+HTML_SONG_INFO_LINK      = '@song_info_link@'
+HTML_SONG_LYRICS_LINK    = '@song_lyrics_link@'
 
 # LINKS HTML TAGS
 HTML_LINK_NAME           = '@link_name@'
@@ -286,6 +288,40 @@ def __getSongInfo(tags, song):
     return info_str
     
 # ------------------------------------------------------------------------------
+def __getSongInfoLink(tags, song):
+    """
+    Returns "No Info" or an anchor link to the song information of the song
+    """
+    
+    info_str = ''
+    if song._information:
+        info_str = '<a href="#info:@song_id@">Show Info</a>'
+    else:
+        info_str = ' ... '
+    info_str += '&nbsp;<a href="#cmd:edit_info"><img src="@icon_path@icon_edit.png"/></a>'
+    
+    # parse common tags
+    info_str = _DoParseHtmlTags(info_str, common_tags)
+    return info_str
+
+# ------------------------------------------------------------------------------
+def __getSongLyricsLink(tags, song):
+    """
+    Returns "No Lyrics" or an anchor link to the song lyrics of the song
+    """
+    
+    info_str = ''
+    if song._lyrics:
+        info_str = '<a href="#lyrics:@song_id@">Show Lyrics</a>'
+    else:
+        info_str = ' ... '
+    info_str += '&nbsp;<a href="#cmd:edit_lyrics"><img src="@icon_path@icon_edit.png"/></a>'
+    
+    # parse common tags
+    info_str = _DoParseHtmlTags(info_str, common_tags)
+    return info_str
+
+# ------------------------------------------------------------------------------
 def __getSongCreatePath(tags, song):
     # if there is a links path, do not display the create html code
     str_link_create = ''
@@ -388,7 +424,9 @@ song_tags   =  { HTML_LABEL_SONG:          lambda tags, song : song._title,
                  HTML_LINK_CREATEPATH:     __getSongCreatePath,
                  HTML_SONG_TYPE_ICON:      lambda tags, song : STR_ICON_GUITAR if song._songType == songs.ST_NORMAL \
                                                                                else STR_ICON_TUTORIAL,
-                 HTML_SONG_INFO:           __getSongInfo                                                       
+                 HTML_SONG_INFO:           __getSongInfo,
+                 HTML_SONG_INFO_LINK:      __getSongInfoLink,
+                 HTML_SONG_LYRICS_LINK:    __getSongLyricsLink
                 }
 
 link_tags    = { HTML_LINK_NAME:           lambda tags, link : link._name if link else 'None', 

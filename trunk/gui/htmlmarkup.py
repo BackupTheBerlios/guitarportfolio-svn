@@ -79,8 +79,8 @@ home_page = """
 songs_practicing_begin = """
 <font size="16"><img src="@icon_path@@icon_practicing@"/>&nbsp;Songs Currently Practicing</font><br><br>
 <font size="+1" face="Arial, Lucida Grande, sans-serif">
-<table border=0 bgcolor="#eeeef6" width="95%">
-  <tr><td valign="top" width="20%"><b><font size="+1">Started</font></b></td>
+<table  valign="top" border=0 bgcolor="#eeeef6" width="95%">
+  <tr><td width="20%"><b><font size="+1">Started</font></b></td>
       <td valign="top" width="30%"><b><font size="+1">Artist</font></b></td>
       <td valign="top" width="35%"><b><font size="+1">Title</font></b></td>
       <td valign="top" width="15%"><b><font size="+1">Progress</font></b></td></tr>
@@ -162,23 +162,22 @@ songinfo = """<html><body>
 </table>
 <br><br>
 <font size="+1">
-<table border=0 bgcolor="#eeeef6">
-  <tr><td valign="top"><b>Song Date:</b></td><td>@ldate@</td></tr>
-  <tr><td valign="top"><b>Categories:</b></td><td>@categories@</td></tr>
-  <tr><td valign="top"><b>Tuning:</b></td><td>@tuning_text@ (@tuning_name@)</td></tr>
-  <tr><td valign="top"><b>Capo On:</b></td><td>@capo_text@</td></tr>
-  <tr><td valign="top"><b>Measures:</b></td><td>@bar_count@</td></tr>
-  <tr><td valign="top"><b>Tabs:</b></td><td>@song_label_tabs@</td></tr>
-  <tr><td valign="top"><b>Progress:</b></td><td><b>@cprogress@</b>&nbsp;<img src="@icon_path@@song_status_icon@" />&nbsp;(@percprogress@%)</td></tr>
-  <tr><td valign="top"><b>Difficulty:</b></td><td><img src="@icon_path@@song_rank@" /></td></tr>
-  <tr><td valign="top"><b>Added In Database:</b></td><td>@time_added@</td></tr>
-  <tr><td valign="top"><b>Started Practicing:</b></td><td>@time_started@</td></tr>
-  <tr><td valign="top"><b>Completed Practicing:</b></td><td>@time_completed@</td></tr>
+<table valign="top" border=0 bgcolor="#eeeef6">
+  <tr>
+    <td><b>Song Date:</b></td><td>@ldate@</td>
+    <td><b>Song Info:</b></td><td>@song_info_link@</td>
+  </tr>
+  <tr><td><b>Tuning:</b></td><td>@tuning_text@ (@tuning_name@)</td><td><b>Song Lyrics:</b></td><td>@song_lyrics_link@</td></tr>
+  <tr><td><b>Measures:</b></td><td>@bar_count@</td><td><b>Capo On:</b></td><td>@capo_text@</td></tr>
+  <tr><td><b>Categories:</b></td><td>@categories@</td><td><b>Tabs:</b></td><td>@song_label_tabs@</td></tr>
+  <tr><td><b>Difficulty:</b></td><td><img src="@icon_path@@song_rank@" /></td><td><b>Progress:</b></td><td><b>@cprogress@</b>&nbsp;<img src="@icon_path@@song_status_icon@" />&nbsp;(@percprogress@%)</td></tr>
+  <tr><td><b>Added In Database:</b></td><td>@time_added@</td><td></td><td></td></tr>
+  <tr><td><b>Started Practicing:</b></td><td>@time_started@</td><td></td><td></td></tr>
+  <tr><td><b>Completed Practicing:</b></td><td>@time_completed@</td><td></td><td></td></tr>
 </table>
 </font>
 @song_status_change@
 @song_links@
-@song_info@
 </body></html>
 """
 
@@ -187,7 +186,7 @@ songinfo = """<html><body>
 song_links_begin = """
 <br><br><font size="+3"><img src="@icon_path@attach_icon.png"/><i>Attachments</i></font><br><br>
 <font size="+1">
-<table border=0 bgcolor="#DDDDED">
+<table valign="top" border=0 bgcolor="#DDDDED">
   <tr bgcolor="#eeeef6"><td colspan="3" rowspan="1"><img src="@icon_path@folder_go.png"/><b>&nbsp;@song_path@</b></td></tr>
   <tr><td><b><br>Name</b></td><td><b><br>Type</b></td><td><b><br>Description</b></td></tr>
 """

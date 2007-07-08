@@ -17,6 +17,9 @@ SIGNAL_SONG_ADDED       = ('song', 'added')             # transmits a signal whe
 SIGNAL_SONG_UPDATED     = ('song', 'updated')           # transmitted when the song is updated
 SIGNAL_SONG_DELETED     = ('song', 'deleted')           # transmitted when a song is deleted, can be followed
                                                         # by a SIGNAL_SONG_SELECTED as well
+SIGNAL_SHOW_EDIT_INFO   = ('song', 'show', 'edinfo')    # show the edit information of the song
+SIGNAL_SHOW_EDIT_LYRICS = ('song', 'show', 'edlyrics')  # show the edit lyrics of the song
+
 SIGNAL_SETTINGS_CHANGED = ('settings', 'changed')       # someone changed the settings, we need to send this out
 SIGNAL_LINKS_REFRESHED  = ('links', 'refreshed')        # transmitted when deliberately the attachments list
                                                         # needs to be refreshed.
@@ -771,7 +774,24 @@ def signalResetFilter():
     Get().ResetFilter()
     Publisher().sendMessage(SIGNAL_RESET_SONGFILTER)
 
-    
+# ------------------------------------------------------------------------------
+def signalSongEditInfo(song):
+    """
+    A signal is sent that the edit panel needs to be shown and the edit tab for the 
+    song info needs to be shown
+    """
+    if song:
+        Publisher().sendMessage(SIGNAL_SHOW_EDIT_INFO)
+
+# ------------------------------------------------------------------------------
+def signalSongEditLyrics(song):
+    """
+    A signal is sent that the edit panel needs to be shown and the edit tab for the 
+    song lyrics needs to be shown
+    """
+    if song:
+        Publisher().sendMessage(SIGNAL_SHOW_EDIT_LYRICS)
+
 #===============================================================================
 
 __obj = None

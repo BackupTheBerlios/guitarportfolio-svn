@@ -197,8 +197,12 @@ class SongBrowserPanel(wx.Panel):
     #---------------------------------------------------------------------------
     def __OnLinkClicked(self, event):
         tag = event.GetLinkInfo().GetHref()
+        
+        if linkfile.is_valid_external_link(tag):
+            linkfile.execute_uri(tag)
+
         # check if we need to select a song
-        if tag.startswith('#song:'):
+        elif tag.startswith('#song:'):
             song_nr = tag[6:]
             if song_nr:
                 song = viewmgr.Get()._list.find_id(int(song_nr))
@@ -212,12 +216,15 @@ class SongBrowserPanel(wx.Panel):
                 link = linkmgt.Get().links.find_id(int(link_nr))
                 if link:
                     linkfile.executelink(link)
+
         # check for execution of a command
         elif tag.startswith('#cmd:'):
             cmd = tag[5:]
             commands = { "status_practicing": lambda : self.__DoSetSongStatus(songs.SS_STARTED),
                          "status_postponed":  lambda : self.__DoSetSongStatus(songs.SS_POSTPONED),
-                         "status_completed":  lambda : self.__DoSetSongStatus(songs.SS_COMPLETED)
+                         "status_completed":  lambda : self.__DoSetSongStatus(songs.SS_COMPLETED),
+                         "edit_info":         self.__DoShowEditInfo,
+                         "edit_lyrics":       self.__DoShowEditLyrics,
                        }
             
             try:
@@ -236,6 +243,30 @@ class SongBrowserPanel(wx.Panel):
             # signal a status change so we can enter a log
             viewmgr.signalSongStatusChange(song, status)
         
+    #---------------------------------------------------------------------------
+    def __DoShowEditInfo(self):
+        """
+        The edit panel needs to be visible, and shown. We do this through the 
+        view mgr because on this level we do not have access to that frame
+        """
+        
+        song = viewmgr.Get()._selectedSong
+        if song:
+            # signal an edit request
+            viewmgr.signalSongEditInfo(song)
+
+    #---------------------------------------------------------------------------
+    def __DoShowEditLyrics(self):
+        """
+        The edit panel needs to be visible, and shown. We do this through the 
+        view mgr because on this level we do not have access to that frame
+        """
+        
+        song = viewmgr.Get()._selectedSong
+        if song:
+            # signal an edit request
+            viewmgr.signalSongEditLyrics(song)
+
     #---------------------------------------------------------------------------
     def __OnBrowseHome(self, event):
         """ User click to get to the homepage. This is indirectly done by the view manager """
