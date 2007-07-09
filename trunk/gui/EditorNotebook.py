@@ -34,8 +34,16 @@ class EditorNotebook(wx.Panel):
         """
         self.__mNB.SetSelection(2)
 
+    #---------------------------------------------------------------------------
     def SelectSongLyricsTab(self):
         """ 
         Shows the editor tab for the song lyrics
         """
         self.__mNB.SetSelection(3)
+
+    #---------------------------------------------------------------------------
+    def SelectSongProgressTab(self):
+        """ 
+        Shows the editor tab for the song progress
+        """
+        self.__mNB.SetSelection(1)

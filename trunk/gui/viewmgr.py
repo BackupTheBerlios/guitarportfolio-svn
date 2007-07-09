@@ -19,6 +19,7 @@ SIGNAL_SONG_DELETED     = ('song', 'deleted')           # transmitted when a son
                                                         # by a SIGNAL_SONG_SELECTED as well
 SIGNAL_SHOW_EDIT_INFO   = ('song', 'show', 'edinfo')    # show the edit information of the song
 SIGNAL_SHOW_EDIT_LYRICS = ('song', 'show', 'edlyrics')  # show the edit lyrics of the song
+SIGNAL_SHOW_EDIT_PROGR  = ('song', 'show', 'progress')  # show the progress panel
 
 SIGNAL_SETTINGS_CHANGED = ('settings', 'changed')       # someone changed the settings, we need to send this out
 SIGNAL_LINKS_REFRESHED  = ('links', 'refreshed')        # transmitted when deliberately the attachments list
@@ -791,6 +792,16 @@ def signalSongEditLyrics(song):
     """
     if song:
         Publisher().sendMessage(SIGNAL_SHOW_EDIT_LYRICS)
+
+# ------------------------------------------------------------------------------
+def signalSongEditProgress(song):
+    """
+    A signal is sent that the edit panel needs to be shown and the edit tab for the 
+    song progress needs to be shown
+    """
+    if song:
+        Publisher().sendMessage(SIGNAL_SHOW_EDIT_PROGR)
+
 
 #===============================================================================
 

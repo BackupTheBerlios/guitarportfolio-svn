@@ -170,13 +170,18 @@ songinfo = """<html><body>
   <tr><td><b>Tuning:</b></td><td>@tuning_text@ (@tuning_name@)</td><td><b>Song Lyrics:</b></td><td>@song_lyrics_link@</td></tr>
   <tr><td><b>Measures:</b></td><td>@bar_count@</td><td><b>Capo On:</b></td><td>@capo_text@</td></tr>
   <tr><td><b>Categories:</b></td><td>@categories@</td><td><b>Tabs:</b></td><td>@song_label_tabs@</td></tr>
-  <tr><td><b>Difficulty:</b></td><td><img src="@icon_path@@song_rank@" /></td><td><b>Progress:</b></td><td><b>@cprogress@</b>&nbsp;<img src="@icon_path@@song_status_icon@" />&nbsp;(@percprogress@%)</td></tr>
+  <tr><td><b>Difficulty:</b></td><td><img src="@icon_path@@song_rank@" /></td>
+    <td><b>Progress:</b></td>
+    <td><b>@cprogress@</b>&nbsp;<img src="@icon_path@@song_status_icon@" />&nbsp;<a href="#cmd:edit_progress"><img src="@icon_path@icon_edit.png"/></a><br>@progress_info@ (@percprogress@%)</td></tr>
   <tr><td><b>Added In Database:</b></td><td>@time_added@</td><td></td><td></td></tr>
   <tr><td><b>Started Practicing:</b></td><td>@time_started@</td><td></td><td></td></tr>
   <tr><td><b>Completed Practicing:</b></td><td>@time_completed@</td><td></td><td></td></tr>
 </table>
 </font>
+<br><br><ul>
 @song_status_change@
+<li><font size="+1">Enter <a href="#cmd:enter_comment">a comment</a> while studying ...</font></li>
+</ul>
 @song_links@
 </body></html>
 """
@@ -232,7 +237,7 @@ links_path_ok = """
 
 # ==============================================================================
 change_status_start = """
-<font size="+1"><br><br>Change status to: 
+<li><font size="+1">Change status to: 
 """
 change_status_in_progress = """
 <a href="#cmd:status_practicing">In Progress&nbsp;<img src="@icon_path@@icon_practicing@"/></a>
@@ -247,5 +252,5 @@ change_status_append = """
 , 
 """
 change_status_end = """
-</font>
+</font></li>
 """

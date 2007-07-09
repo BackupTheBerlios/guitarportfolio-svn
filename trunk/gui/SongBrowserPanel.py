@@ -225,6 +225,8 @@ class SongBrowserPanel(wx.Panel):
                          "status_completed":  lambda : self.__DoSetSongStatus(songs.SS_COMPLETED),
                          "edit_info":         self.__DoShowEditInfo,
                          "edit_lyrics":       self.__DoShowEditLyrics,
+                         "enter_comment":     self.__DoEnterComment,
+                         "edit_progress":      self.__DoShowEditProgress
                        }
             
             try:
@@ -266,6 +268,32 @@ class SongBrowserPanel(wx.Panel):
         if song:
             # signal an edit request
             viewmgr.signalSongEditLyrics(song)
+
+    #---------------------------------------------------------------------------
+    def __DoShowEditProgress(self):
+        """
+        The edit progress panel needs to be visible, and shown. We do this through the 
+        view mgr because on this level we do not have access to that frame
+        """
+        
+        song = viewmgr.Get()._selectedSong
+        if song:
+            # signal an edit request
+            viewmgr.signalSongEditProgress(song)
+
+    #---------------------------------------------------------------------------
+    def __DoEnterComment(self):
+        """
+        Popup a text dialog so that the user can enter a comment for the log
+        """
+        
+        song = viewmgr.Get()._selectedSong
+        if song:
+            dlg = wx.TextEntryDialog(self, 'Enter a comment for the log',
+                                     'Enter comment', '')
+    
+            if dlg.ShowModal() == wx.ID_OK and dlg.GetValue():
+                viewmgr.signalAddComment(song, dlg.GetValue())
 
     #---------------------------------------------------------------------------
     def __OnBrowseHome(self, event):

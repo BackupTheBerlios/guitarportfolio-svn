@@ -36,6 +36,7 @@ HTML_LABEL_SONGINFO_TXT  = '@song_label_infotxt@'
 HTML_SONG_INFO           = '@song_info@'
 HTML_SONG_INFO_LINK      = '@song_info_link@'
 HTML_SONG_LYRICS_LINK    = '@song_lyrics_link@'
+HTML_SONG_PROGRESS_INFO  = '@progress_info@'
 
 # LINKS HTML TAGS
 HTML_LINK_NAME           = '@link_name@'
@@ -305,6 +306,15 @@ def __getSongInfoLink(tags, song):
     return info_str
 
 # ------------------------------------------------------------------------------
+def __getSongProgressInfo(tags, song):
+    """ 
+    Show text describing more accurate proress information 
+    """
+    if song._percAccuracy or song._percCompleted:
+        return 'Accuracy: <b>%i</b>, completed: <b>%i</b>' % (song._percAccuracy, song._percCompleted)
+    else:
+        return ''
+# ------------------------------------------------------------------------------
 def __getSongLyricsLink(tags, song):
     """
     Returns "No Lyrics" or an anchor link to the song lyrics of the song
@@ -426,7 +436,8 @@ song_tags   =  { HTML_LABEL_SONG:          lambda tags, song : song._title,
                                                                                else STR_ICON_TUTORIAL,
                  HTML_SONG_INFO:           __getSongInfo,
                  HTML_SONG_INFO_LINK:      __getSongInfoLink,
-                 HTML_SONG_LYRICS_LINK:    __getSongLyricsLink
+                 HTML_SONG_LYRICS_LINK:    __getSongLyricsLink,
+                 HTML_SONG_PROGRESS_INFO:  __getSongProgressInfo
                 }
 
 link_tags    = { HTML_LINK_NAME:           lambda tags, link : link._name if link else 'None', 

@@ -174,6 +174,7 @@ class GuitarPortfolioFrame(wx.Frame):
         Publisher().subscribe(self.__SignalOnQueryEditAttachments, viewmgr.SIGNAL_EDIT_LINKS)
         Publisher().subscribe(self.__SignalOnOpenEditInformation, viewmgr.SIGNAL_SHOW_EDIT_INFO)
         Publisher().subscribe(self.__SignalOnOpenEditLyrics, viewmgr.SIGNAL_SHOW_EDIT_LYRICS)
+        Publisher().subscribe(self.__SignalOnOpenEditProgres, viewmgr.SIGNAL_SHOW_EDIT_PROGR)
         
         # dependent on the layout settings, we restore the old perspective, or save the default
         cfg = appcfg.Get()
@@ -548,4 +549,13 @@ class GuitarPortfolioFrame(wx.Frame):
         self.__aui.GetPane("editpanel").Show(True)
         self.__aui.Update()
         
+    #---------------------------------------------------------------------------
+    def __SignalOnOpenEditProgres(self, message):
+        """ 
+        We received a signal to open the editor pane if not opened yet, and select the 
+        edit tab for the song progress. Let's do so
+        """
+        self.__songEditNotebook.SelectSongProgressTab()
+        self.__aui.GetPane("editpanel").Show(True)
+        self.__aui.Update()
 
