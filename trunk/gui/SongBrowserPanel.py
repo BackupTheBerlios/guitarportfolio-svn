@@ -11,7 +11,41 @@ import db
 import db.songs_peer
 from images import icon_home, icon_browse_next, icon_browse_prev, \
                    icon_song_next, icon_song_previous, icon_song
-import xmlres, appcfg, htmlparse, linkfile, htmlmarkup, wikiparser, viewmgr
+import xmlres, appcfg, htmlparse, linkfile, htmlmarkup, wikiparser, \
+       viewmgr, browserstack
+
+PAGE_HOMEPAGE    = 0
+PAGE_SONG        = 1
+PAGE_SONG_INFO   = 2
+PAGE_SONG_TAB    = 3
+PAGE_SONG_LYRICS = 4
+
+# these pages are not allowed in the history of the stack. So what we do
+# is simply removing them from the past pages. This is done to make sure the 
+# pages are not shown when the selected song is not the song belonging to the
+# info shown
+forbidden_history = [PAGE_SONG_INFO, PAGE_SONG_LYRICS]
+
+songtaginfo = { htmlparse.HTML_LABEL_CATEGORIES:  (htmlmarkup.categories_begin, 
+                                                   htmlmarkup.categories_row, 
+                                                   htmlmarkup.categories_append,
+                                                   htmlmarkup.categories_end), 
+                htmlparse.HTML_LABEL_LINKS:       (htmlmarkup.song_links_begin,
+                                                   htmlmarkup.song_links_row,
+                                                   htmlmarkup.song_links_end),
+                htmlparse.HTML_LINK_CREATEPATH:   (htmlmarkup.links_path_not_ok,
+                                                   htmlmarkup.links_path_ok),
+                htmlparse.HTML_LABEL_STATCHANGE:  ({ songs.SS_STARTED:   htmlmarkup.change_status_in_progress,
+                                                     songs.SS_POSTPONED: htmlmarkup.change_status_in_postponed,
+                                                     songs.SS_COMPLETED: htmlmarkup.change_status_in_completed },
+                                                   htmlmarkup.change_status_start,
+                                                   htmlmarkup.change_status_append,
+                                                   htmlmarkup.change_status_end ),
+                htmlparse.HTML_SONG_INFO:          htmlmarkup.song_info_header
+          }        
+
+
+#===============================================================================
 
 class SongBrowserPanel(wx.Panel):
     def __init__(self, parent, id = -1):
@@ -19,15 +53,10 @@ class SongBrowserPanel(wx.Panel):
         xmlres.Res().LoadOnPanel(pre, parent, "SongBrowserPanel")
         self.PostCreate(pre)
         
-        # list of items that are browsed on the stack. with back 
-        # and next the user can select through them.
-        # an index of -1 means homepage diplay, else use stack
-        self._viewstack = []
-        self._stackIdx = -1 
-        
-        # OBSOLETED
-        self._currPage = -1
-        
+        # stack of items in the browser
+        self.stack = browserstack.BrowserStack()
+        self.stack.callbackOnChange = self.__OnRenderCurrPage
+                
         self.__homeButton = xrc.XRCCTRL( self, "ID_BTN_HOME")
         self.__browseBack = xrc.XRCCTRL( self, "ID_BTN_BACK")
         self.__browseForward = xrc.XRCCTRL( self, "ID_BTN_FORWARD")
@@ -36,6 +65,10 @@ class SongBrowserPanel(wx.Panel):
         self.__browseSongForward = xrc.XRCCTRL( self, "ID_NEXT_SONG")
         self.__songIcon = xrc.XRCCTRL(self, "ID_SONG_BMP")
         
+        self.__browseBack.Enable(False)
+        self.__browseForward.Enable(False)
+
+        
         if "gtk2" in wx.PlatformInfo:
             self.__songBrowser.SetStandardFonts()
             
@@ -43,6 +76,8 @@ class SongBrowserPanel(wx.Panel):
         self.Bind(wx.EVT_BUTTON, self.__OnBrowseHome, self.__homeButton)
         self.Bind(wx.EVT_BUTTON, self.__OnBrowseForward, self.__browseSongForward)
         self.Bind(wx.EVT_BUTTON, self.__OnBrowseBack, self.__browseSongBack)
+        self.Bind(wx.EVT_BUTTON, self.__OnBrowseHistoryBack, self.__browseBack)
+        self.Bind(wx.EVT_BUTTON, self.__OnBrowseHistoryForward, self.__browseForward)
 
         # signals for song selection dropdown
         Publisher().subscribe(self.__UpdateSong, viewmgr.SIGNAL_SONG_UPDATED)  
@@ -69,60 +104,72 @@ class SongBrowserPanel(wx.Panel):
     # --------------------------------------------------------------------------
     def __AddSongs(self, message):
         # if we are on the homepage, update the report
-        if self._currPage == -1:
-            self.__RenderHomepage()
+        if self.stack.IsCurrentPage((PAGE_HOMEPAGE,)):
+            self.__OnRenderCurrPage()        
+        else:
+            self.stack.Push((PAGE_HOMEPAGE,))
       
     # --------------------------------------------------------------------------
     def __UpdateSong(self, message):
-        
-        # if we are on the homepage, update the report
-        if self._currPage == message.data._id:
-            # we are on the song page, update
-            self.__RenderSongPage(message.data)
-
+        # update song page if needed        
+        page = self.stack.CurrentPage()
+        if page:
+            if page    == ((PAGE_SONG, message.data)) or \
+               page[0] == PAGE_SONG_LYRICS or page[0] == PAGE_SONG_INFO:
+                
+                # update
+                self.__OnRenderCurrPage()        
+    
     # --------------------------------------------------------------------------
     def __DeleteSong(self, message):
         # if we are on the current page of the song, render homepage
-        if self._currPage == message.data._id:
-            self._currPage = -1
-            self.__RenderHomePage()
+        if self.stack.IsCurrentPage((PAGE_SONG, message.data)):
+            self.stack.ResetAndPush((PAGE_HOMEPAGE,))
+        else:
+            self.stack.Truncate()
 
     # --------------------------------------------------------------------------
     def __ClearSongs(self, message):
         """ Clear list, we are changing databases """
-        wp = wikiparser.WikiParser()
-        self.__songBrowser.SetPage(wp.Parse(htmlmarkup.startupinfo))
-        
+        self.stack.ResetAndPush((PAGE_HOMEPAGE,))
+                
     # --------------------------------------------------------------------------
     def __OnSongSelected(self, message):
         """ Another song is selected, sync our list """
-        if message.data:
-            # render the song info page
-            self.__RenderSongPage(message.data)
+        song = message.data
+        if song:
+            # if we are looking at it, do not push it only refresh
+            if not self.stack.IsCurrentPage((PAGE_SONG, song)):
+                self.stack.Push((PAGE_SONG, song), forbidden_history)
         else:
-            self.__RenderHomepage()
-
+            # we push the homepage on the stack only when not looking
+            if not self.stack.IsCurrentPage((PAGE_HOMEPAGE,)):
+                self.stack.Push((PAGE_HOMEPAGE,), forbidden_history)
+        
+        # always render
+        self.__OnRenderCurrPage()
+            
     # --------------------------------------------------------------------------
     def __LinksRefreshed(self, message):
         """ Handler for refreshed links """
         
-        # we refresh the selected page, we assume the selected song
-        # got the links refresh event
-        
+        # we refresh the selected page, we assume the 
+        # selected song got the links refresh event        
         song = viewmgr.Get()._selectedSong
-        if song != None and self._currPage == song._id:
-            self.__RenderSongPage(song)
+        if song and self.stack.IsCurrentPage((PAGE_SONG, song)):
+            self.__OnRenderCurrPage()
 
     # --------------------------------------------------------------------------
     def __CriteriaListChanged(self, message):
         
         # if we are on the main page, render
-        if self._currPage == -1:
+        if self.stack.IsCurrentPage((PAGE_HOMEPAGE,)):
             self.__RenderHomepage()
             
     # --------------------------------------------------------------------------
     def __RenderHomepage(self):
         """ We render the homepage containing all song statuses divided in sections """
+        
         criteria = viewmgr.Get()._critList
         if not len(criteria):
             wp = wikiparser.WikiParser()
@@ -134,6 +181,7 @@ class SongBrowserPanel(wx.Panel):
                   songs.SS_COMPLETED:   [],
                   songs.SS_NOT_STARTED: [] }
         
+
         # go by the songs list, and get lists per status
         for stat_key in stats.iterkeys():
             lst = stats[stat_key]
@@ -141,27 +189,26 @@ class SongBrowserPanel(wx.Panel):
             for s in criteria:
                 if s._status == stat_key:
                     lst.append(s)
-        
-        # set the markup for the rendering engine
-        songs_section = { htmlparse.HTML_SECTION_PRACTICING: (stats[songs.SS_STARTED],
-                                                              htmlmarkup.songs_practicing_begin,
-                                                              htmlmarkup.songs_practicing_row,
-                                                              htmlmarkup.songs_practicing_end),
-                          htmlparse.HTML_SECTION_TODO:       (stats[songs.SS_NOT_STARTED],
-                                                              htmlmarkup.songs_todo_begin,
-                                                              htmlmarkup.songs_todo_row,
-                                                              htmlmarkup.songs_todo_end),
-                          htmlparse.HTML_SECTION_COMPLETED:  (stats[songs.SS_COMPLETED],
-                                                              htmlmarkup.songs_completed_begin,
-                                                              htmlmarkup.songs_completed_row,
-                                                              htmlmarkup.songs_completed_end),
-                          htmlparse.HTML_SECTION_POSTPONED:  (stats[songs.SS_POSTPONED], 
-                                                              htmlmarkup.songs_postponed_begin,
-                                                              htmlmarkup.songs_postponed_row,
-                                                              htmlmarkup.songs_postponed_end)
-                        }
-                              
-        page = htmlparse.ParseSongsByStatus(htmlmarkup.home_page, songs_section)
+
+        songs_section_info = { htmlparse.HTML_SECTION_PRACTICING: (stats[songs.SS_STARTED],
+                                                                   htmlmarkup.songs_practicing_begin,
+                                                                   htmlmarkup.songs_practicing_row,
+                                                                   htmlmarkup.songs_practicing_end),
+                               htmlparse.HTML_SECTION_TODO:       (stats[songs.SS_NOT_STARTED],
+                                                                   htmlmarkup.songs_todo_begin,
+                                                                   htmlmarkup.songs_todo_row,
+                                                                   htmlmarkup.songs_todo_end),
+                               htmlparse.HTML_SECTION_COMPLETED:  (stats[songs.SS_COMPLETED],
+                                                                   htmlmarkup.songs_completed_begin,
+                                                                   htmlmarkup.songs_completed_row,
+                                                                   htmlmarkup.songs_completed_end),
+                               htmlparse.HTML_SECTION_POSTPONED:  (stats[songs.SS_POSTPONED], 
+                                                                   htmlmarkup.songs_postponed_begin,
+                                                                   htmlmarkup.songs_postponed_row,
+                                                                   htmlmarkup.songs_postponed_end)
+                             }
+                                      
+        page = htmlparse.ParseSongsByStatus(htmlmarkup.home_page, songs_section_info)
         self.__songBrowser.SetPage(page)
         
     # --------------------------------------------------------------------------
@@ -169,27 +216,8 @@ class SongBrowserPanel(wx.Panel):
         """ 
         We render the homepage containing all song statuses divided in sections 
         """
-        
-        # TODO: We should place this in a one time structure since they are all static
-        taginfo = { htmlparse.HTML_LABEL_CATEGORIES:  (htmlmarkup.categories_begin, 
-                                                       htmlmarkup.categories_row, 
-                                                       htmlmarkup.categories_append,
-                                                       htmlmarkup.categories_end), 
-                    htmlparse.HTML_LABEL_LINKS:       (htmlmarkup.song_links_begin,
-                                                       htmlmarkup.song_links_row,
-                                                       htmlmarkup.song_links_end),
-                    htmlparse.HTML_LINK_CREATEPATH:   (htmlmarkup.links_path_not_ok,
-                                                       htmlmarkup.links_path_ok),
-                    htmlparse.HTML_LABEL_STATCHANGE:  ({ songs.SS_STARTED:   htmlmarkup.change_status_in_progress,
-                                                         songs.SS_POSTPONED: htmlmarkup.change_status_in_postponed,
-                                                         songs.SS_COMPLETED: htmlmarkup.change_status_in_completed },
-                                                       htmlmarkup.change_status_start,
-                                                       htmlmarkup.change_status_append,
-                                                       htmlmarkup.change_status_end ),
-                    htmlparse.HTML_SONG_INFO:          htmlmarkup.song_info_header
-                  }        
-
-        pg = htmlparse.ParseSongHtml(htmlmarkup.songinfo, song, taginfo)
+    
+        pg = htmlparse.ParseSongHtml(htmlmarkup.songinfo, song, songtaginfo)
 
         self.__songBrowser.SetPage(pg)
         self._currPage = song._id
@@ -226,7 +254,9 @@ class SongBrowserPanel(wx.Panel):
                          "edit_info":         self.__DoShowEditInfo,
                          "edit_lyrics":       self.__DoShowEditLyrics,
                          "enter_comment":     self.__DoEnterComment,
-                         "edit_progress":      self.__DoShowEditProgress
+                         "edit_progress":     self.__DoShowEditProgress,
+                         "show_lyrics":       self.__DoShowLyrics,
+                         "show_info":         self.__DoShowInfo                
                        }
             
             try:
@@ -296,6 +326,26 @@ class SongBrowserPanel(wx.Panel):
                 viewmgr.signalAddComment(song, dlg.GetValue())
 
     #---------------------------------------------------------------------------
+    def __DoShowLyrics(self):
+        """
+        Show the lyrics HTML of the current song
+        """
+        
+        song = viewmgr.Get()._selectedSong
+        if song:
+            self.stack.Push((PAGE_SONG_LYRICS, song))
+
+    #---------------------------------------------------------------------------
+    def __DoShowInfo(self):
+        """
+        Show the lyrics HTML of the current song
+        """
+        
+        song = viewmgr.Get()._selectedSong
+        if song:
+            self.stack.Push((PAGE_SONG_INFO, song))
+
+    #---------------------------------------------------------------------------
     def __OnBrowseHome(self, event):
         """ User click to get to the homepage. This is indirectly done by the view manager """
         viewmgr.signalSetHomepage()
@@ -303,15 +353,13 @@ class SongBrowserPanel(wx.Panel):
     #---------------------------------------------------------------------------
     def __OnSetHomepage(self, message):
         """ Signal is received that we have to switch to the homepage """
-        
-        self._currPage = -1
-        self.__RenderHomepage()        
+        self.stack.Push((PAGE_HOMEPAGE,))        
         
     #---------------------------------------------------------------------------
     def __OnBrowseForward(self, event):
         """ We are going to browse forward. This means we will emit a signal that
             will determine the best song to be selected for us """
-        
+                    
         # emit, and all will change
         viewmgr.signalSelectPreviousSong()
 
@@ -322,3 +370,71 @@ class SongBrowserPanel(wx.Panel):
         
         # emit, and all will change
         viewmgr.signalSelectNextSong()
+
+    #---------------------------------------------------------------------------
+    def __OnRenderCurrPage(self, pageTuple = None):
+        """
+        Handler to render the page on the HTML browser whenever a navigation 
+        action is done, can be called seperately too, to force a redraw
+        """
+        
+        page = self.stack.CurrentPage()
+        if page:
+            # render homepage
+            if page[0] == PAGE_HOMEPAGE:
+                self.__RenderHomepage()
+    
+            # else get song, and render
+            elif page[0] == PAGE_SONG:  
+                self.__RenderSongPage(page[1])
+                
+            # else get info, and render
+            elif page[0] == PAGE_SONG_INFO:
+                pg = htmlparse.ParseSongHtml(htmlmarkup.song_info_header, page[1])
+                self.__songBrowser.SetPage(pg)
+                
+            # else get lyrics, and render
+            elif page[0] == PAGE_SONG_LYRICS:
+                pg = htmlparse.ParseSongHtml(htmlmarkup.song_lyrics_header, page[1])
+                self.__songBrowser.SetPage(pg)
+        else:
+            wp = wikiparser.WikiParser()
+            self.__songBrowser.SetPage(wp.Parse(htmlmarkup.startupinfo))
+            
+        # based upon back or forward being present, 
+        # disable or enable buttons
+        self.__browseBack.Enable(self.stack.CanBrowseBack())
+        self.__browseForward.Enable(self.stack.CanBrowseForward())
+
+
+    #---------------------------------------------------------------------------
+    def __OnBrowseHistoryBack(self, event):
+        """
+        Handler to browse back into history
+        """
+        if self.stack.HistoryBack():
+            page = self.stack.CurrentPage()
+            self.__SyncPageWithStack(page)
+        
+    #---------------------------------------------------------------------------
+    def __OnBrowseHistoryForward(self, event):
+        """
+        Handler to browse back into history
+        """
+        if self.stack.HistoryForward():
+            page = self.stack.CurrentPage()
+            self.__SyncPageWithStack(page)
+            
+    #---------------------------------------------------------------------------
+    def __SyncPageWithStack(self, page):
+        """
+        Sync the selection mechanism with the current stack page. Simply viewing 
+        the previous or next page is not enough, if we look at a different
+        song, the selection mechanism should kick in and show it
+        """
+        if page[0] == PAGE_SONG:
+            viewmgr.signalSetSong(page[1])
+        elif page[0] == PAGE_HOMEPAGE:
+            viewmgr.signalSetSong(None)
+        else:
+            self.__OnRenderCurrPage()   # default   

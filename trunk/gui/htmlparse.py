@@ -277,17 +277,29 @@ def __getSongInfo(tags, song):
     """
 
     # look up the tag and parse the info
-    info_str = ''
+    info_str = '<br>No Information'
     if song._information:
-        if HTML_SONG_INFO in tags:
-            info_str = _DoParseHtmlTags(tags[HTML_SONG_INFO], common_tags)
-            
-            # now parse a wiki page
-            wp = wikiparser.WikiParser()
-            info_str += wp.Parse(song._information)            
+        # now parse a wiki page
+        wp = wikiparser.WikiParser()
+        info_str = wp.Parse(song._information)            
     
     return info_str
     
+# ------------------------------------------------------------------------------
+def __getSongLyrics(tags, song):
+    """
+    Return the lyrics of the song
+    """
+
+    # look up the tag and parse the info
+    info_str = 'No Lyrics'
+    if song._lyrics:
+        # now parse a wiki page
+        wp = wikiparser.WikiParser()
+        info_str = wp.Parse(song._lyrics)            
+    
+    return info_str
+
 # ------------------------------------------------------------------------------
 def __getSongInfoLink(tags, song):
     """
@@ -296,7 +308,7 @@ def __getSongInfoLink(tags, song):
     
     info_str = ''
     if song._information:
-        info_str = '<a href="#info:@song_id@">Show Info</a>'
+        info_str = '<a href="#cmd:show_info">Show Info</a>'
     else:
         info_str = ' ... '
     info_str += '&nbsp;<a href="#cmd:edit_info"><img src="@icon_path@icon_edit.png"/></a>'
@@ -322,7 +334,7 @@ def __getSongLyricsLink(tags, song):
     
     info_str = ''
     if song._lyrics:
-        info_str = '<a href="#lyrics:@song_id@">Show Lyrics</a>'
+        info_str = '<a href="#cmd:show_lyrics">Show Lyrics</a>'
     else:
         info_str = ' ... '
     info_str += '&nbsp;<a href="#cmd:edit_lyrics"><img src="@icon_path@icon_edit.png"/></a>'
@@ -416,8 +428,8 @@ song_tags   =  { HTML_LABEL_SONG:          lambda tags, song : song._title,
                  HTML_LABEL_TUNINGNAME:    lambda tags, song : song.GetTuningName(),
                  HTML_LABEL_COLORPROGRESS: __getSongProgress, 
                  HTML_LABEL_PERCPROGRESS:  lambda tags, song : '%d' % song.GetProgressPerc(), 
-                 HTML_LABEL_SONGINFO:      lambda tags, song : WikiParse(song._information),
-                 HTML_LABEL_LYRICS:        lambda tags, song : WikiParse(song._lyrics),
+                 #HTML_LABEL_SONGINFO:      lambda tags, song : WikiParse(song._information),
+                 HTML_LABEL_LYRICS:        __getSongLyrics,
                  HTML_LABEL_TIMESTARTED:   __getSongTimeStarted,
                  HTML_LABEL_TIMEADDED:     lambda tags, song : song._timeAdded.strftime('%d %B %Y'),
                  HTML_LABEL_TIMECOMPLETED: __getSongTimeCompleted,
