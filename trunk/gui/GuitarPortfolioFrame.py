@@ -129,7 +129,6 @@ class GuitarPortfolioFrame(wx.Frame):
         self.Bind(wx.EVT_MENU, self.__OnEditorMode, self.__menuEditorMode)
         self.Bind(wx.EVT_MENU, self.__OnVisitSite, self.__menuHelpVisitSite)
         self.Bind(wx.EVT_MENU, self.__OnAbout, self.__menuHelpAbout)
-
         self.Bind(wx.EVT_MENU, self.__OnCreateAttachmentsDir, self.__menuCreateAttachDir)
         self.Bind(wx.EVT_MENU, self.__OnAddAttachments, self.__menuAddAttachments)
         self.Bind(wx.EVT_MENU, self.__OnEditAttachments, self.__menuEditAttachments)
@@ -175,6 +174,7 @@ class GuitarPortfolioFrame(wx.Frame):
         Publisher().subscribe(self.__SignalOnOpenEditInformation, viewmgr.SIGNAL_SHOW_EDIT_INFO)
         Publisher().subscribe(self.__SignalOnOpenEditLyrics, viewmgr.SIGNAL_SHOW_EDIT_LYRICS)
         Publisher().subscribe(self.__SignalOnOpenEditProgres, viewmgr.SIGNAL_SHOW_EDIT_PROGR)
+        Publisher().subscribe(self.__SignalOnCreateLinksDir, viewmgr.SIGNAL_CREATE_LINKS_DIR)
         
         # dependent on the layout settings, we restore the old perspective, or save the default
         cfg = appcfg.Get()
@@ -454,7 +454,7 @@ class GuitarPortfolioFrame(wx.Frame):
         info.Developers = [ "Jorgen Bodde (jorgb@xs4all.nl)" ]
         info.License = wordwrap(appcfg.licensetext, 500, wx.ClientDC(self))
         wx.AboutBox(info)
-    
+        
     #---------------------------------------------------------------------------
     def __OnVisitSite(self, event):
         """ Execute the internet page as an external link """
@@ -503,7 +503,11 @@ class GuitarPortfolioFrame(wx.Frame):
         
     #---------------------------------------------------------------------------
     def __OnCreateAttachmentsDir(self, event):
-        pass
+        """ 
+        We received a menu event and need to create the attachments dir
+        """
+        viewmgr.signalOnCreateAttachmentsDir(viewmgr.Get()._selectedSong)   
+
     #---------------------------------------------------------------------------
     def __OnAddAttachments(self, event):
         pass
@@ -559,3 +563,9 @@ class GuitarPortfolioFrame(wx.Frame):
         self.__aui.GetPane("editpanel").Show(True)
         self.__aui.Update()
 
+    #---------------------------------------------------------------------------
+    def __SignalOnCreateLinksDir(self, message):
+        """
+        We received a request to create a path for the song 
+        """
+        pass    

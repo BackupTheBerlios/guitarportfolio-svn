@@ -37,6 +37,8 @@ HTML_SONG_INFO           = '@song_info@'
 HTML_SONG_INFO_LINK      = '@song_info_link@'
 HTML_SONG_LYRICS_LINK    = '@song_lyrics_link@'
 HTML_SONG_PROGRESS_INFO  = '@progress_info@'
+HTML_SONG_TAB            = '@song_tab@'
+HTML_SONG_TAB_NAME       = '@song_tab_name@'
 
 # LINKS HTML TAGS
 HTML_LINK_NAME           = '@link_name@'
@@ -318,6 +320,32 @@ def __getSongInfoLink(tags, song):
     return info_str
 
 # ------------------------------------------------------------------------------
+def __getSongTab(tags, song):
+    """ 
+    Returns the tab that is currently displayed
+    """
+    
+    tab_str = 'No tab'
+    if "tabdata" in tags:
+        tab = tags["tabdata"]
+        tab_str = tab._text
+    
+    return tab_str
+
+# ------------------------------------------------------------------------------
+def __getSongTabName(tags, song):
+    """ 
+    Returns the tab title that is currently displayed
+    """
+    
+    tab_str = 'No Title'
+    if "tabdata" in tags:
+        tab = tags["tabdata"]
+        tab_str = tab._name
+    
+    return tab_str
+
+# ------------------------------------------------------------------------------
 def __getSongProgressInfo(tags, song):
     """ 
     Show text describing more accurate proress information 
@@ -449,7 +477,9 @@ song_tags   =  { HTML_LABEL_SONG:          lambda tags, song : song._title,
                  HTML_SONG_INFO:           __getSongInfo,
                  HTML_SONG_INFO_LINK:      __getSongInfoLink,
                  HTML_SONG_LYRICS_LINK:    __getSongLyricsLink,
-                 HTML_SONG_PROGRESS_INFO:  __getSongProgressInfo
+                 HTML_SONG_PROGRESS_INFO:  __getSongProgressInfo,
+                 HTML_SONG_TAB:            __getSongTab,
+                 HTML_SONG_TAB_NAME:       __getSongTabName 
                 }
 
 link_tags    = { HTML_LINK_NAME:           lambda tags, link : link._name if link else 'None', 

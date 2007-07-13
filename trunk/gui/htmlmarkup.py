@@ -205,15 +205,22 @@ song_links_end = """
 # ==============================================================================
 
 song_info_header = """
-<font size="+3"><img src="@icon_path@icon_info.png"/><i>&nbsp;Information - @song@</i></font><br><br>
+<font size="+3"><img src="@icon_path@icon_info.png"/><i>&nbsp;@song@ - @artist@</i></font><br><br>
 @song_info@
 """
 
 # ==============================================================================
 
 song_lyrics_header = """
-<font size="+3"><img src="@icon_path@icon_lyrics.png"/><i>&nbsp;Lyrics - @song@</i></font><br><br>
+<font size="+3"><img src="@icon_path@icon_lyrics.png"/><i>&nbsp;@song@ - @artist@</i></font><br><br>
 @lyrics@
+"""
+
+# ==============================================================================
+
+song_tab_header = """
+<font size="+3"><img src="@icon_path@icon_tab.png"/><i>&nbsp;@song@ - @song_tab_name@</i></font>
+<pre>@song_tab@</pre>
 """
 
 # ==============================================================================

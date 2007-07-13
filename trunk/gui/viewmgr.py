@@ -1,3 +1,5 @@
+import os
+import os.path
 
 import wx
 from wx.lib.pubsub import Publisher
@@ -45,6 +47,8 @@ SONG_VIEW_DELETED       = ('song', 'view', 'deleted')   # song deleted from view
 SIGNAL_CRITLIST_CHANGED = ('song', 'view', 'changed')   # criteria list is changed 
 
 SIGNAL_RESET_SONGFILTER = ('songfilter', 'reset')       # reset the songfilter
+
+SIGNAL_CREATE_LINKS_DIR = ('songs', 'dir', 'create')    # create links directory of song
 
 # definitions
 ADD    = 0
@@ -802,7 +806,33 @@ def signalSongEditProgress(song):
     if song:
         Publisher().sendMessage(SIGNAL_SHOW_EDIT_PROGR)
 
-
+# ------------------------------------------------------------------------------
+def signalOnCreateAttachmentsDir(song):
+    """
+    Signal a request to create the work directory based upon the song that
+    is currently sent to us
+    """
+    if song:
+        path = appcfg.GetAbsWorkPathFromSong(song)
+        if os.path.isabs(path):        
+            result = wx.MessageBox('Would you like to create the work directory for this song?', 'Warning', wx.ICON_QUESTION | wx.YES_NO)
+            if result == wx.YES:
+                try:
+                    # create the images dir, and the attachments dir
+                    os.makedirs(path)
+                    os.makedirs(os.path.join(path, 'images'))
+                    
+                    wx.MessageBox('Path creation succesful!\n' + 
+                                  'Now copy your gathered song files to this directory', 'Succes', wx.ICON_INFORMATION | wx.OK)                
+                except EnvironmentError:
+                    wx.MessageBox('Path creation unsuccesful\n' +
+                                  'Please check for a valid base path, file rights and retry', 'Error', wx.ICON_ERROR | wx.OK)
+                _DoReloadAttachments(song)
+        else:
+            # warn about relative path
+            wx.MessageBox('Cannot create a relative work directory\n'
+                          'Please fill in your base directory in the Preferences', 'Error', wx.ICON_ERROR | wx.OK)
+        
 #===============================================================================
 
 __obj = None

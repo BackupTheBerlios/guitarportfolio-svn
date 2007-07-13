@@ -20,11 +20,12 @@ PAGE_SONG_INFO   = 2
 PAGE_SONG_TAB    = 3
 PAGE_SONG_LYRICS = 4
 
-# these pages are not allowed in the history of the stack. So what we do
+# these pages are not allowed in the history of the browse stack. So what we do
 # is simply removing them from the past pages. This is done to make sure the 
 # pages are not shown when the selected song is not the song belonging to the
-# info shown
-forbidden_history = [PAGE_SONG_INFO, PAGE_SONG_LYRICS]
+# info shown. When the user clicks 'back' the first page that is valid is shown
+# usually the song belonging to the info, lyrics or song tab(s)
+forbidden_history = [PAGE_SONG_INFO, PAGE_SONG_LYRICS, PAGE_SONG_TAB]
 
 songtaginfo = { htmlparse.HTML_LABEL_CATEGORIES:  (htmlmarkup.categories_begin, 
                                                    htmlmarkup.categories_row, 
@@ -111,19 +112,20 @@ class SongBrowserPanel(wx.Panel):
       
     # --------------------------------------------------------------------------
     def __UpdateSong(self, message):
-        # update song page if needed        
-        page = self.stack.CurrentPage()
-        if page:
-            if page    == ((PAGE_SONG, message.data)) or \
-               page[0] == PAGE_SONG_LYRICS or page[0] == PAGE_SONG_INFO:
-                
-                # update
-                self.__OnRenderCurrPage()        
+        """
+        Update the song information (tab, lyrics, info) if the song receives
+        an update event 
+        """
+        
+        if self.__IsSongPageDisplayed(message.data):
+            self.__OnRenderCurrPage()        
     
     # --------------------------------------------------------------------------
     def __DeleteSong(self, message):
-        # if we are on the current page of the song, render homepage
-        if self.stack.IsCurrentPage((PAGE_SONG, message.data)):
+        """
+        A song is deleted, check if we are looking at it, else take some action
+        """
+        if self.__IsSongPageDisplayed(message.data):
             self.stack.ResetAndPush((PAGE_HOMEPAGE,))
         else:
             self.stack.Truncate()
@@ -161,6 +163,10 @@ class SongBrowserPanel(wx.Panel):
 
     # --------------------------------------------------------------------------
     def __CriteriaListChanged(self, message):
+        """
+        We received a message that the filter criteria is changed, so when
+        looking at the homepage, change the list
+        """
         
         # if we are on the main page, render
         if self.stack.IsCurrentPage((PAGE_HOMEPAGE,)):
@@ -168,7 +174,9 @@ class SongBrowserPanel(wx.Panel):
             
     # --------------------------------------------------------------------------
     def __RenderHomepage(self):
-        """ We render the homepage containing all song statuses divided in sections """
+        """ 
+        We render the homepage containing all song statuses divided in sections 
+        """
         
         criteria = viewmgr.Get()._critList
         if not len(criteria):
@@ -245,6 +253,17 @@ class SongBrowserPanel(wx.Panel):
                 if link:
                     linkfile.executelink(link)
 
+        # check for execution of a tab
+        elif tag.startswith('#tab:'):
+            tab_nr = tag[5:]
+            if tab_nr:
+                song = viewmgr.Get()._selectedSong
+                if song:
+                    tab = song.tabs.find_id(int(tab_nr))
+                    if tab:
+                        # push the tab on the stack, and refresh the view
+                        self.stack.Push((PAGE_SONG_TAB, song, tab))
+                        
         # check for execution of a command
         elif tag.startswith('#cmd:'):
             cmd = tag[5:]
@@ -347,26 +366,34 @@ class SongBrowserPanel(wx.Panel):
 
     #---------------------------------------------------------------------------
     def __OnBrowseHome(self, event):
-        """ User click to get to the homepage. This is indirectly done by the view manager """
+        """ 
+        User click to get to the homepage. This is indirectly done by the view manager 
+        """
         viewmgr.signalSetHomepage()
         
     #---------------------------------------------------------------------------
     def __OnSetHomepage(self, message):
-        """ Signal is received that we have to switch to the homepage """
+        """
+        Signal is received that we have to switch to the homepage
+        """
         self.stack.Push((PAGE_HOMEPAGE,))        
         
     #---------------------------------------------------------------------------
     def __OnBrowseForward(self, event):
-        """ We are going to browse forward. This means we will emit a signal that
-            will determine the best song to be selected for us """
+        """ 
+        We are going to browse forward. This means we will emit a signal that
+        will determine the best song to be selected for us 
+        """
                     
         # emit, and all will change
         viewmgr.signalSelectPreviousSong()
 
     #---------------------------------------------------------------------------
     def __OnBrowseBack(self, event):
-        """ We are going to browse back. This means we will emit a signal that
-            will determine the best song to be selected for us """
+        """ 
+        We are going to browse back. This means we will emit a signal that
+        will determine the best song to be selected for us
+        """
         
         # emit, and all will change
         viewmgr.signalSelectNextSong()
@@ -396,6 +423,12 @@ class SongBrowserPanel(wx.Panel):
             # else get lyrics, and render
             elif page[0] == PAGE_SONG_LYRICS:
                 pg = htmlparse.ParseSongHtml(htmlmarkup.song_lyrics_header, page[1])
+                self.__songBrowser.SetPage(pg)
+                
+            # else try tabs
+            elif page[0] == PAGE_SONG_TAB:
+                tags = { "tabdata": page[2] }
+                pg = htmlparse.ParseSongHtml(htmlmarkup.song_tab_header, page[1], tags)
                 self.__songBrowser.SetPage(pg)
         else:
             wp = wikiparser.WikiParser()
@@ -438,3 +471,18 @@ class SongBrowserPanel(wx.Panel):
             viewmgr.signalSetSong(None)
         else:
             self.__OnRenderCurrPage()   # default   
+
+    #---------------------------------------------------------------------------
+    def __IsSongPageDisplayed(self, song):
+        """
+        Test if the song or any sub page of that song is currently displayed
+        as first item on the browserstack, so we know when to update the view
+        """
+
+        page = self.stack.CurrentPage()
+        if page:
+            if page[0] in [PAGE_SONG, PAGE_SONG_INFO, 
+                           PAGE_SONG_LYRICS, PAGE_SONG_TAB]:
+                return page[1] == song
+        return False
+    
