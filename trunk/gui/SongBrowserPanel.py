@@ -196,6 +196,9 @@ class SongBrowserPanel(wx.Panel):
             for s in criteria:
                 if s._status == stat_key:
                     lst.append(s)
+            
+            # sort the list
+            lst.sort(songs.SongTitleCmpFunction)
 
         songs_section_info = { htmlparse.HTML_SECTION_PRACTICING: (stats[songs.SS_STARTED],
                                                                    htmlmarkup.songs_practicing_begin,

@@ -51,7 +51,19 @@ def GetCapoString(fret_nr):
     if fret_nr > 0:
         return 'Fret %d' % fret_nr
     return 'No Capo'
-           
+
+# ------------------------------------------------------------------------------
+def SongTitleCmpFunction(song1, song2):
+    """
+    Compares song1 and song2 title and returns 0, -1 or 1 to 
+    let the built in sort method do it's work
+    """
+    if song1._title.upper() > song2._title.upper():
+        return 1
+    elif song1._title.upper() < song2._title.upper():
+        return -1
+    return 0
+
 """
     Song object. 
 """
