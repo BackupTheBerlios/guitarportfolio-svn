@@ -69,7 +69,6 @@ class SongBrowserPanel(wx.Panel):
         self.__browseBack.Enable(False)
         self.__browseForward.Enable(False)
 
-        
         if "gtk2" in wx.PlatformInfo:
             self.__songBrowser.SetStandardFonts()
             
@@ -275,7 +274,8 @@ class SongBrowserPanel(wx.Panel):
                          "enter_comment":     self.__DoEnterComment,
                          "edit_progress":     self.__DoShowEditProgress,
                          "show_lyrics":       self.__DoShowLyrics,
-                         "show_info":         self.__DoShowInfo                
+                         "show_info":         self.__DoShowInfo,
+                         "reset_filter":      lambda : viewmgr.signalResetFilter()
                        }
             
             try:

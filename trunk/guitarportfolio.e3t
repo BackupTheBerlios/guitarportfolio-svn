@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Tasks SYSTEM "Tasks-3.8.dtd">
 <!-- Tasks file for project guitarportfolio -->
-<!-- Saved: 2007-07-10, 20:35:52 -->
+<!-- Saved: 2007-07-14, 15:40:10 -->
 <Tasks version="3.8">
   <Task priority="0" completed="0" bugfix="0">
     <Description>BUG: Categories cannot be added when song is not yet in DB</Description>
@@ -38,28 +38,6 @@
         <Name>wikiparser.py</Name>
       </Filename>
       <Linenumber>143</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Make a wx.ListCtrl, listmix.ListCtrlAutoWidthMixin custom class for XRC</Description>
-    <Created>2007-06-26, 19:42:48</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>LinksPanel.py</Name>
-      </Filename>
-      <Linenumber>20</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Make sure song information can also be substituted in the tab</Description>
-    <Created>2007-06-26, 19:46:51</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>GuitarTabPanel.py</Name>
-      </Filename>
-      <Linenumber>17</Linenumber>
     </Resource>
   </Task>
   <Task priority="1" completed="0" bugfix="0">
@@ -162,19 +140,8 @@
     </Resource>
   </Task>
   <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: The Wiki HTML parser should be a generic component, so that other</Description>
-    <Created>2007-07-08, 13:52:27</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>CurrSongInfoPanel.py</Name>
-      </Filename>
-      <Linenumber>18</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
     <Description>TODO: Shouldn't we use OnUpdateUI event instead?</Description>
-    <Created>2007-07-09, 20:53:56</Created>
+    <Created>2007-07-14, 12:09:28</Created>
     <Resource>
       <Filename>
         <Dir>gui</Dir>
@@ -185,7 +152,7 @@
   </Task>
   <Task priority="1" completed="0" bugfix="0">
     <Description>TODO: Small problem, the category relations can be</Description>
-    <Created>2007-07-09, 20:53:56</Created>
+    <Created>2007-07-14, 12:09:28</Created>
     <Resource>
       <Filename>
         <Dir>gui</Dir>
@@ -195,41 +162,30 @@
     </Resource>
   </Task>
   <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO:       (stats[songs.SS_NOT_STARTED],</Description>
-    <Created>2007-07-10, 20:20:16</Created>
+    <Description>TODO: Make a wx.ListCtrl, listmix.ListCtrlAutoWidthMixin custom class for XRC</Description>
+    <Created>2007-07-14, 12:31:02</Created>
     <Resource>
       <Filename>
         <Dir>gui</Dir>
-        <Name>SongBrowserPanel.py</Name>
+        <Name>LinksPanel.py</Name>
       </Filename>
-      <Linenumber>197</Linenumber>
+      <Linenumber>20</Linenumber>
     </Resource>
   </Task>
   <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO:            lambda tags : STR_ICON_TODO,</Description>
-    <Created>2007-07-10, 20:28:22</Created>
+    <Description>TODO: The Wiki HTML parser should be a generic component, so that other</Description>
+    <Created>2007-07-14, 12:37:10</Created>
     <Resource>
       <Filename>
         <Dir>gui</Dir>
-        <Name>htmlparse.py</Name>
+        <Name>CurrSongInfoPanel.py</Name>
       </Filename>
-      <Linenumber>416</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO:       lambda tags : \</Description>
-    <Created>2007-07-10, 20:28:22</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>htmlparse.py</Name>
-      </Filename>
-      <Linenumber>464</Linenumber>
+      <Linenumber>18</Linenumber>
     </Resource>
   </Task>
   <Task priority="1" completed="0" bugfix="0">
     <Description>TODO: Put the text inside the DB!</Description>
-    <Created>2007-07-10, 20:32:51</Created>
+    <Created>2007-07-14, 12:46:49</Created>
     <Resource>
       <Filename>
         <Dir>gui</Dir>
@@ -240,7 +196,7 @@
   </Task>
   <Task priority="1" completed="0" bugfix="0">
     <Description>TODO: Substitute version number / appname in HTML text</Description>
-    <Created>2007-07-10, 20:32:51</Created>
+    <Created>2007-07-14, 12:46:49</Created>
     <Resource>
       <Filename>
         <Dir>gui</Dir>
@@ -251,13 +207,46 @@
   </Task>
   <Task priority="1" completed="0" bugfix="0">
     <Description>TODO: Put inside the DB!</Description>
-    <Created>2007-07-10, 20:32:51</Created>
+    <Created>2007-07-14, 12:46:49</Created>
     <Resource>
       <Filename>
         <Dir>gui</Dir>
         <Name>htmlmarkup.py</Name>
       </Filename>
       <Linenumber>4</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO:       (stats[songs.SS_NOT_STARTED],</Description>
+    <Created>2007-07-14, 13:02:48</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>SongBrowserPanel.py</Name>
+      </Filename>
+      <Linenumber>204</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO:            lambda tags : STR_ICON_TODO,</Description>
+    <Created>2007-07-14, 13:12:26</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>htmlparse.py</Name>
+      </Filename>
+      <Linenumber>461</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO:       lambda tags : \</Description>
+    <Created>2007-07-14, 13:12:26</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>htmlparse.py</Name>
+      </Filename>
+      <Linenumber>512</Linenumber>
     </Resource>
   </Task>
 </Tasks>

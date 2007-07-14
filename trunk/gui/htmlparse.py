@@ -55,6 +55,9 @@ HTML_ICON_POSTPONED      = '@icon_postponed@'
 HTML_GUITAR_ICON         = '@guitar_icon@'
 HTML_ICON_PATH           = '@icon_path@'
 
+# HTML BROWSER TAGS
+HTML_HOMEPAGE_FILTER     = '@filter_display@'
+
 # FILE NAME CONSTANTS
 STR_ICON_TODO            = 'icon_todo.png'
 STR_ICON_POSTPONED       = 'icon_not_practicing.png'
@@ -83,7 +86,7 @@ HTML_LABEL_TABID         = '@id@'                # only used in section!
 
 log_begin_html = """
 <html><body>
-  <table cellspacing="0" width="95%">
+  <table valign="top" cellspacing="0" width="95%">
      <tr bgcolor="#CCCDE4">
        <td><b>Date</b></td>
        <td><b>Time</b></td>
@@ -421,6 +424,20 @@ def __getCurrentSongPath(tags):
     return result
 
 # ------------------------------------------------------------------------------
+def __getSongFilterStats(tags):
+    """
+    Returns the song filter statistics and a possible link to reset the filter
+    """
+    result = ''
+    filter = viewmgr.Get()
+    if filter._list.count():
+        # if list contains more then critlist, we show a count
+        if filter._list.count() > len(filter._critList):
+            result += '<b>%i</b> of <b>%i</b> songs displayed' % (len(filter._critList), filter._list.count())
+            result += ' <a href="#cmd:reset_filter"><i>[reset filter]</i></a>'
+    
+    return result
+# ------------------------------------------------------------------------------
 def __getStatusCommands(tags, song):
     result = ''
     if HTML_LABEL_STATCHANGE in tags:
@@ -445,7 +462,8 @@ common_tags = { HTML_ICON_PATH:            __getIconPath,
                 HTML_ICON_COMPLETED:       lambda tags : STR_ICON_COMPLETED,
                 HTML_ICON_POSTPONED:       lambda tags : STR_ICON_POSTPONED,
                 HTML_GUITAR_ICON:          lambda tags : STR_ICON_GUITAR,
-                HTML_LABEL_SONGPATH:       __getCurrentSongPath
+                HTML_LABEL_SONGPATH:       __getCurrentSongPath,
+                HTML_HOMEPAGE_FILTER:      __getSongFilterStats,
               }
 
 song_tags   =  { HTML_LABEL_SONG:          lambda tags, song : song._title, 

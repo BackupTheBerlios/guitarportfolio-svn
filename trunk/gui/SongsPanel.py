@@ -31,9 +31,6 @@ class SongsListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
         self.InsertColumn(0, "Song", width = 170)
         self.InsertColumn(1, "%", width = 30, format = wx.LIST_FORMAT_RIGHT)
         self.InsertColumn(2, "Artist", width = 170)
-        self.InsertColumn(3, "Capo", width = 50)
-        self.InsertColumn(4, "Tuning", width = 100)
-        self.InsertColumn(5, "Started On")
 
         # create an image list
         self.__statToIcon = {}
@@ -75,7 +72,6 @@ class SongsListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
         index = self.InsertStringItem(sys.maxint, song._title)
         self.SetStringItem(index, 1, '%d' % song.GetProgressPerc())
         self.SetStringItem(index, 2, song._artist)
-        self.SetStringItem(index, 3, songs.GetCapoString(song._capoOnFret))
         self.SetItemData(index, song._id)
         if song.IsConcept():
             self.SetItemImage(index, self._conceptIconIndex, self._conceptIconIndex)
@@ -98,7 +94,6 @@ class SongsListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
                 else:
                     self.SetItemImage(index, self.__statToIcon[song._status],
                                              self.__statToIcon[song._status])
-                self.SetStringItem(index, 3, songs.GetCapoString(song._capoOnFret))
                 
     # --------------------------------------------------------------------------
     def __DeleteSong(self, message):

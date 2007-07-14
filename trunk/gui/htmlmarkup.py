@@ -71,6 +71,7 @@ home_page = """
 @songs_todo@
 @songs_completed@
 @songs_postponed@
+<p align="right">@filter_display@</p>
 </body></html>
 """
 
@@ -130,7 +131,7 @@ songs_completed_row = """
 songs_completed_end = """
 </table>
 </font>
-<br><br><br>
+<br>
 """
 
 # ==============================================================================
