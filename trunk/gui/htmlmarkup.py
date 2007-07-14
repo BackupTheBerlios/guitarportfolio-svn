@@ -171,11 +171,9 @@ songinfo = """<html><body>
   <tr><td><b>Measures:</b></td><td>@bar_count@</td><td><b>Capo On:</b></td><td>@capo_text@</td></tr>
   <tr><td><b>Categories:</b></td><td>@categories@</td><td><b>Tabs:</b></td><td>@song_label_tabs@</td></tr>
   <tr><td><b>Difficulty:</b></td><td><img src="@icon_path@@song_rank@" /></td>
-    <td><b>Progress:</b></td>
-    <td><b>@cprogress@</b>&nbsp;<img src="@icon_path@@song_status_icon@" />&nbsp;<a href="#cmd:edit_progress"><img src="@icon_path@icon_edit.png"/></a><br>@progress_info@ (@percprogress@%)</td></tr>
-  <tr><td><b>Added In Database:</b></td><td>@time_added@</td><td></td><td></td></tr>
-  <tr><td><b>Started Practicing:</b></td><td>@time_started@</td><td></td><td></td></tr>
-  <tr><td><b>Completed Practicing:</b></td><td>@time_completed@</td><td></td><td></td></tr>
+    <td><b>Status:</b></td><td><b>@cprogress@</b>&nbsp;<img src="@icon_path@@song_status_icon@" />&nbsp;<a href="#cmd:edit_progress"><img src="@icon_path@icon_edit.png"/></a></td></tr>
+  <tr><td><b>Added:</b></td><td>@time_added@</td><td><b>Progress:</b></td><td>@progress_info@ (@percprogress@%)</td></tr>
+  <tr><td><b>Started On:</b></td><td>@time_started@</td><td><b>Completed On:</b></td><td>@time_completed@</td></tr>
 </table>
 </font>
 <br><br><ul>

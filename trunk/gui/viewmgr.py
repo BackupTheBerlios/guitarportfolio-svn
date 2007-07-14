@@ -41,14 +41,14 @@ SIGNAL_TAB_DELETED      = ('tab', 'deleted')            # send around that we lo
 SIGNAL_APP_READY        = ('app', 'ready')              # sent when all stuff is done, app is ready
 SIGNAL_APP_QUIT         = ('app', 'quit')               # sent when app quits
 
-SONG_VIEW_ADDED         = ('song', 'view', 'added')     # song added to view
-SONG_VIEW_UPDATED       = ('song', 'view', 'updated')   # selected song updated in view 
-SONG_VIEW_DELETED       = ('song', 'view', 'deleted')   # song deleted from view
-SIGNAL_CRITLIST_CHANGED = ('song', 'view', 'changed')   # criteria list is changed 
+SONG_VIEW_ADDED          = ('song', 'view', 'added')     # song added to view
+SONG_VIEW_UPDATED        = ('song', 'view', 'updated')   # selected song updated in view 
+SONG_VIEW_DELETED        = ('song', 'view', 'deleted')   # song deleted from view
+SIGNAL_CRITLIST_CHANGED  = ('song', 'view', 'changed')   # criteria list is changed 
 
-SIGNAL_RESET_SONGFILTER = ('songfilter', 'reset')       # reset the songfilter
+SIGNAL_RESET_SONGFILTER  = ('songfilter', 'reset')       # reset the songfilter
 
-SIGNAL_CREATE_LINKS_DIR = ('songs', 'dir', 'create')    # create links directory of song
+SIGNAL_LINKS_DIR_CREATED = ('songs', 'links', 'create')    # create links directory of song
 
 # definitions
 ADD    = 0
@@ -824,10 +824,13 @@ def signalOnCreateAttachmentsDir(song):
                     
                     wx.MessageBox('Path creation succesful!\n' + 
                                   'Now copy your gathered song files to this directory', 'Succes', wx.ICON_INFORMATION | wx.OK)                
+                    
+                    Publisher().sendMessage(SIGNAL_LINKS_DIR_CREATED)
+                
                 except EnvironmentError:
                     wx.MessageBox('Path creation unsuccesful\n' +
                                   'Please check for a valid base path, file rights and retry', 'Error', wx.ICON_ERROR | wx.OK)
-                _DoReloadAttachments(song)
+                
         else:
             # warn about relative path
             wx.MessageBox('Cannot create a relative work directory\n'

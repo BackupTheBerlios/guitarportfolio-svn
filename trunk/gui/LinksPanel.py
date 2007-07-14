@@ -41,10 +41,9 @@ class LinksPanel(wx.Panel):
         Publisher().subscribe(self.__OnSongSelected, viewmgr.SIGNAL_SONG_UPDATED)
         Publisher().subscribe(self.__OnRefreshLinks, viewmgr.SIGNAL_SETTINGS_CHANGED)
         Publisher().subscribe(self.__OnRefreshLinks, viewmgr.SIGNAL_LINKS_REFRESHED)
+        Publisher().subscribe(self.__OnRefreshLinks, viewmgr.SIGNAL_LINKS_DIR_CREATED)
         
         self.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.__OnExecuteLink, self._links)
-
-        self._song = None
 
     # --------------------------------------------------------------------------
     def __OnSongSelected(self, message):
@@ -52,11 +51,11 @@ class LinksPanel(wx.Panel):
             when we get a song, get the signals, set the work path and also
             sync the icon to verify if the path already exists or not """
         
-        self._song = message.data
-        self.__create.Enable(self._song <> None)        
+        song = message.data
+        self.__create.Enable(song <> None)        
         self.__SyncWorkDirState()
         
-        if self._song:
+        if song:
             self.__PopulateLinks()
         else:
             self._links.DeleteAllItems()
@@ -68,7 +67,8 @@ class LinksPanel(wx.Panel):
         
         self.__SyncWorkDirState()
         
-        if self._song:
+        song = viewmgr.Get()._selectedSong
+        if song:
             self.__PopulateLinks()
         else:
             self._links.DeleteAllItems()
@@ -78,8 +78,9 @@ class LinksPanel(wx.Panel):
         """ Syncs the work dir and enables / disables the buttons and shows the 
             latest workdir for the user. Returns True when there is a valid
             work directory """
-        if self._song:
-            path = appcfg.GetAbsWorkPathFromSong(self._song)
+        song = viewmgr.Get()._selectedSong
+        if song:
+            path = appcfg.GetAbsWorkPathFromSong(song)
             path_ok = os.path.exists(path)
             if path_ok:
                 self.__pathOK.SetBitmap(icon_path_ok.getBitmap())
@@ -125,7 +126,9 @@ class LinksPanel(wx.Panel):
         main frame where the same menu option exists
         """
         
-        viewmgr.signalOnCreateAttachmentsDir(self._song)
+        song = viewmgr.Get()._selectedSong
+        if song:
+            viewmgr.signalOnCreateAttachmentsDir(song)
             
     # --------------------------------------------------------------------------
     def __OnExecuteLink(self, event):

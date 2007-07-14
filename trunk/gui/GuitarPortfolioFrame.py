@@ -174,7 +174,7 @@ class GuitarPortfolioFrame(wx.Frame):
         Publisher().subscribe(self.__SignalOnOpenEditInformation, viewmgr.SIGNAL_SHOW_EDIT_INFO)
         Publisher().subscribe(self.__SignalOnOpenEditLyrics, viewmgr.SIGNAL_SHOW_EDIT_LYRICS)
         Publisher().subscribe(self.__SignalOnOpenEditProgres, viewmgr.SIGNAL_SHOW_EDIT_PROGR)
-        Publisher().subscribe(self.__SignalOnCreateLinksDir, viewmgr.SIGNAL_CREATE_LINKS_DIR)
+        Publisher().subscribe(self.__SignalOnCreateLinksDir, viewmgr.SIGNAL_LINKS_DIR_CREATED)
         
         # dependent on the layout settings, we restore the old perspective, or save the default
         cfg = appcfg.Get()
@@ -566,6 +566,6 @@ class GuitarPortfolioFrame(wx.Frame):
     #---------------------------------------------------------------------------
     def __SignalOnCreateLinksDir(self, message):
         """
-        We received a request to create a path for the song 
+        We received a signal that the links dir is created, update our menu items
         """
-        pass    
+        self.__SyncMenuItems()    
