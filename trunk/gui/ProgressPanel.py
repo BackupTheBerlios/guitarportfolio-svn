@@ -1,8 +1,12 @@
+import datetime
+import time
+
 import wx
 import wx.xrc as xrc
 from wx.lib.pubsub import Publisher
 import xmlres, viewmgr, appcfg
 from objs import songs
+
 
 class ProgressPanel(wx.Panel):
     def __init__(self, parent, id = wx.ID_ANY):
@@ -111,14 +115,64 @@ class ProgressPanel(wx.Panel):
         
     # --------------------------------------------------------------------------
     def __OnSubmitComment(self, event):
-        """ Submit text to the log """
+        """ 
+        Submit text to the log 
+        """
+        
+        # if we must use custom back logging, we construct the new date
+        backlogDate = None
+        if self.__useCustom.GetValue():
+            backlogDate = self.__GetBacklogDate()
+            # when date is invalid, we ignore this
+            if not backlogDate:
+                return
         
         # signal the change to the view manager, and update the song
         song = viewmgr.Get()._selectedSong
-        if song:                    
-            viewmgr.signalAddComment(song, self.__log.GetValue())
+        if song and self.__log.GetValue():                    
+            viewmgr.signalAddComment(song, self.__log.GetValue(), backlogDate)
             self.__log.SetValue('')
-         
+      
+    # --------------------------------------------------------------------------
+    def __GetBacklogDate(self):
+        """
+        Parse the contents of the date to backlog, if the obtained date is too
+        new or past the time of the song added, then we report an error and 
+        return none
+        """
+        
+        result = None
+
+        song = viewmgr.Get()._selectedSong
+        if song:
+            # convert the time portion
+            try:
+                the_time = time.strptime(self.__customTime.GetValue(), '%H:%M')
+            except ValueError:
+                wx.MessageBox('The suggested time is invalid. Please specify in HH:MM format', 'Error', wx.ICON_ERROR | wx.OK)
+                return None
+            
+            # convert from date selector
+            dt = self.__logDate.GetValue()
+            the_time = datetime.datetime(dt.GetYear(), dt.GetMonth() + 1, dt.GetDay(), 
+                                         hour = the_time.tm_hour, minute = the_time.tm_min, second = 0)
+            
+            # if the log date is too old or too new, we notify
+            now_time = datetime.datetime.now()
+            if the_time > now_time:
+                wx.MessageBox('The back log date is in the future, please specify a valid date', 'Error', wx.ICON_ERROR | wx.OK)
+                return None
+            
+            # if the log date is older then the creation date of the song, also notify
+            if the_time < song._timeAdded:
+                wx.MessageBox('The back log date is older then the when the song is added to the database, ' + \
+                              'please specify a valid date', 'Error', wx.ICON_ERROR | wx.OK)
+                return None
+            
+            result = the_time
+        
+        return result
+
     # --------------------------------------------------------------------------
     def __OnAccuracyEnd(self, event): 
         """ Handler to update the song with the % completed accuracy """
@@ -161,8 +215,18 @@ class ProgressPanel(wx.Panel):
 
     # --------------------------------------------------------------------------
     def __OnStudyTimeSubmit(self, event):
-        """ Handler to add study time to the log """
+        """ 
+        Handler to add study time to the log 
+        """
         
+        # if we must use custom back logging, we construct the new date
+        backlogDate = None
+        if self.__useCustom.GetValue():
+            backlogDate = self.__GetBacklogDate()
+            # when date is invalid, we ignore this
+            if not backlogDate:
+                return
+                
         # add studytime to log, notify user when the 
         # time is illegal
         song = viewmgr.Get()._selectedSong
@@ -174,7 +238,7 @@ class ProgressPanel(wx.Panel):
                 pass
                 
             if studytime:
-                viewmgr.signalAddStudyTime(song, studytime)
+                viewmgr.signalAddStudyTime(song, studytime, backlogDate)
             else:
                 wx.MessageBox('The studytime is invalid, please enter a number!', 'Error', wx.ICON_HAND | wx.OK)
     

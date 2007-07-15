@@ -723,7 +723,7 @@ def signalCompletedChange(song, completed):
             signalSongUpdated(song)
 
 # ------------------------------------------------------------------------------
-def signalAddComment(song, comment):
+def signalAddComment(song, comment, backlogDate = None):
     """ Add a comment to the song log """
     
     if song:                
@@ -733,6 +733,8 @@ def signalAddComment(song, comment):
             logentry = log.LogItem()
             logentry._type = log.LOG_COMMENT
             logentry._text = comment
+            if backlogDate:
+                logentry._date = backlogDate
                         
             # insert the log object
             sp = db.log_peer.LogPeer(db.engine.GetDb())
@@ -751,7 +753,7 @@ def _DoReloadAttachments(song):
         linkmgt.Get().Clear()
         
 # ------------------------------------------------------------------------------
-def signalAddStudyTime(song, studytime):
+def signalAddStudyTime(song, studytime, backlogDate = None):
     """ Send a study time to the log belonging to the current song """
     
     if song and studytime:
@@ -759,6 +761,8 @@ def signalAddStudyTime(song, studytime):
         logentry = log.LogItem()
         logentry._type = log.LOG_STUDYTIME
         logentry._value = studytime
+        if backlogDate:
+            logentry._date = backlogDate
                     
         # insert the log object
         sp = db.log_peer.LogPeer(db.engine.GetDb())

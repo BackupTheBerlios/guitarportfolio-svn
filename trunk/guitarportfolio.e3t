@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Tasks SYSTEM "Tasks-3.8.dtd">
 <!-- Tasks file for project guitarportfolio -->
-<!-- Saved: 2007-07-14, 15:40:10 -->
+<!-- Saved: 2007-07-15, 13:40:53 -->
 <Tasks version="3.8">
   <Task priority="0" completed="0" bugfix="0">
     <Description>BUG: Categories cannot be added when song is not yet in DB</Description>
@@ -71,17 +71,6 @@
         <Name>linkmgt.py</Name>
       </Filename>
       <Linenumber>22</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO: Artists which are mistyped (lower / upper) should not appear twice</Description>
-    <Created>2007-06-29, 21:57:14</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>NewSongDlg.py</Name>
-      </Filename>
-      <Linenumber>57</Linenumber>
     </Resource>
   </Task>
   <Task priority="1" completed="0" bugfix="0">
@@ -185,7 +174,7 @@
   </Task>
   <Task priority="1" completed="0" bugfix="0">
     <Description>TODO: Put the text inside the DB!</Description>
-    <Created>2007-07-14, 12:46:49</Created>
+    <Created>2007-07-14, 21:05:28</Created>
     <Resource>
       <Filename>
         <Dir>gui</Dir>
@@ -196,7 +185,7 @@
   </Task>
   <Task priority="1" completed="0" bugfix="0">
     <Description>TODO: Substitute version number / appname in HTML text</Description>
-    <Created>2007-07-14, 12:46:49</Created>
+    <Created>2007-07-14, 21:05:28</Created>
     <Resource>
       <Filename>
         <Dir>gui</Dir>
@@ -207,7 +196,7 @@
   </Task>
   <Task priority="1" completed="0" bugfix="0">
     <Description>TODO: Put inside the DB!</Description>
-    <Created>2007-07-14, 12:46:49</Created>
+    <Created>2007-07-14, 21:05:28</Created>
     <Resource>
       <Filename>
         <Dir>gui</Dir>
@@ -217,19 +206,8 @@
     </Resource>
   </Task>
   <Task priority="1" completed="0" bugfix="0">
-    <Description>TODO:       (stats[songs.SS_NOT_STARTED],</Description>
-    <Created>2007-07-14, 13:02:48</Created>
-    <Resource>
-      <Filename>
-        <Dir>gui</Dir>
-        <Name>SongBrowserPanel.py</Name>
-      </Filename>
-      <Linenumber>204</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="0" bugfix="0">
     <Description>TODO:            lambda tags : STR_ICON_TODO,</Description>
-    <Created>2007-07-14, 13:12:26</Created>
+    <Created>2007-07-14, 21:05:35</Created>
     <Resource>
       <Filename>
         <Dir>gui</Dir>
@@ -240,13 +218,35 @@
   </Task>
   <Task priority="1" completed="0" bugfix="0">
     <Description>TODO:       lambda tags : \</Description>
-    <Created>2007-07-14, 13:12:26</Created>
+    <Created>2007-07-14, 21:05:35</Created>
     <Resource>
       <Filename>
         <Dir>gui</Dir>
         <Name>htmlparse.py</Name>
       </Filename>
       <Linenumber>512</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO:       (stats[songs.SS_NOT_STARTED],</Description>
+    <Created>2007-07-14, 21:15:39</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>SongBrowserPanel.py</Name>
+      </Filename>
+      <Linenumber>207</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="0" bugfix="0">
+    <Description>TODO: Artists which are mistyped (lower / upper) should not appear twice</Description>
+    <Created>2007-07-15, 12:49:23</Created>
+    <Resource>
+      <Filename>
+        <Dir>gui</Dir>
+        <Name>NewSongDlg.py</Name>
+      </Filename>
+      <Linenumber>57</Linenumber>
     </Resource>
   </Task>
 </Tasks>
