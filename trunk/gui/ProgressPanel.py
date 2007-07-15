@@ -5,7 +5,8 @@ import wx
 import wx.xrc as xrc
 from wx.lib.pubsub import Publisher
 import xmlres, viewmgr, appcfg
-from objs import songs
+from objs import songs, log
+import db, db.engine, db.log_peer, db.songs_peer
 
 
 class ProgressPanel(wx.Panel):
@@ -177,10 +178,40 @@ class ProgressPanel(wx.Panel):
     def __OnAccuracyEnd(self, event): 
         """ Handler to update the song with the % completed accuracy """
 
+        # if we must use custom back logging, we construct the new date
+        backlogDate = None
+        if self.__useCustom.GetValue():
+            backlogDate = self.__GetBacklogDate()
+            # when date is invalid, we ignore this
+            if not backlogDate:
+                return
+
         # signal the change to the view manager, and update the song
         song = viewmgr.Get()._selectedSong
         if song:                    
-            viewmgr.signalAccuracyChange(song, self.__accuracy.GetValue())
+            viewmgr.signalAccuracyChange(song, self.__accuracy.GetValue(), backlogDate)
+
+            # we must check if the current completion percentage is still accurate
+            if backlogDate:
+                log_types = [log.LOG_PROGRESS_CHANGE_ACC]
+                    
+                # restore all log entries that match the criteria
+                lp = db.log_peer.LogSetPeer(db.engine.GetDb())
+                objs = lp.Restore(song._id, False, log_types, None)
+                if objs and len(objs) > 0:
+                    if song._percAccuracy != objs[0]._value:
+                        song._percAccuracy = objs[0]._value
+                        
+                        # update song in DB
+                        sp = db.songs_peer.SongPeer(db.engine.GetDb())
+                        sp.Update(song, all = False)
+                        
+                        viewmgr.signalSongUpdated(song)
+
+                        # the update resets the backlog date, so we manually
+                        # set it back to what it was
+                        self.__useCustom.SetValue(True)
+                        self.__logDate.SetValue(wx.DateTimeFromDMY(backlogDate.day, backlogDate.month - 1, backlogDate.year))
 
     # --------------------------------------------------------------------------
     def __OnAccuracyScroll(self, event): 
@@ -197,11 +228,41 @@ class ProgressPanel(wx.Panel):
     def __OnCompletedEnd(self, event):
         """ Handler to update the song with the % completed percentage """
 
+        # if we must use custom back logging, we construct the new date
+        backlogDate = None
+        if self.__useCustom.GetValue():
+            backlogDate = self.__GetBacklogDate()
+            # when date is invalid, we ignore this
+            if not backlogDate:
+                return
+
         # signal the change to the view manager, and update the song
         song = viewmgr.Get()._selectedSong
         if song:                    
-            viewmgr.signalCompletedChange(song, self.__estimated.GetValue())
-
+            viewmgr.signalCompletedChange(song, self.__estimated.GetValue(), backlogDate)
+            
+            # we must check if the current completion percentage is still accurate
+            if backlogDate:
+                log_types = [log.LOG_PROGRESS_CHANGE_CMP]
+                    
+                # restore all log entries that match the criteria
+                lp = db.log_peer.LogSetPeer(db.engine.GetDb())
+                objs = lp.Restore(song._id, False, log_types, None)
+                if objs and len(objs) > 0:
+                    if song._percCompleted != objs[0]._value:
+                        song._percCompleted = objs[0]._value
+                        
+                        # update song in DB
+                        sp = db.songs_peer.SongPeer(db.engine.GetDb())
+                        sp.Update(song, all = False)
+                        
+                        viewmgr.signalSongUpdated(song)
+                        
+                        # the update resets the backlog date, so we manually
+                        # set it back to what it was
+                        self.__useCustom.SetValue(True)
+                        self.__logDate.SetValue(wx.DateTimeFromDMY(backlogDate.day, backlogDate.month - 1, backlogDate.year))
+                        
     # --------------------------------------------------------------------------
     def __OnCompletedScroll(self, event):
         """ Handler to show the live update of the completed status """     

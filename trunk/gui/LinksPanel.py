@@ -9,7 +9,7 @@ import wx.xrc as xrc
 
 from images import icon_path_ok, icon_path_not_ok
 from objs import linkmgt
-import appcfg, xmlres, viewmgr
+import appcfg, xmlres, viewmgr, linkfile
                 
 class LinksPanel(wx.Panel):
     def __init__(self, parent, id = -1):

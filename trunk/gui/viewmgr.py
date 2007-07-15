@@ -667,7 +667,7 @@ def signalSongStatusChange(song, new_status):
         signalSongUpdated(song)
             
 # ------------------------------------------------------------------------------
-def signalAccuracyChange(song, accuracy):
+def signalAccuracyChange(song, accuracy, backlogDate):
     """ Signal an accuracy % change to the log, and update the song and the database """
                 
     if song:
@@ -677,6 +677,8 @@ def signalAccuracyChange(song, accuracy):
             logentry = log.LogItem()
             logentry._type = log.LOG_PROGRESS_CHANGE_ACC
             logentry._value = accuracy
+            if backlogDate:
+                logentry._date = backlogDate
             
             # in the text portion set the current % in progress
             logentry._text = '%.02i' % (((song._percCompleted *10) + (accuracy * 10)) / 2)
@@ -695,8 +697,10 @@ def signalAccuracyChange(song, accuracy):
             signalSongUpdated(song)
 
 # ------------------------------------------------------------------------------
-def signalCompletedChange(song, completed):
-    """ Signal an completed % change to the log, and update the song and the database """
+def signalCompletedChange(song, completed, backlogDate = None):
+    """ 
+    Signal an completed % change to the log, and update the song and the database
+    """
 
     if song:                
         # only change when a change occured
@@ -705,6 +709,8 @@ def signalCompletedChange(song, completed):
             logentry = log.LogItem()
             logentry._type = log.LOG_PROGRESS_CHANGE_CMP
             logentry._value = completed
+            if backlogDate:
+                logentry._date = backlogDate
 
             # in the text portion set the current % in progress
             logentry._text = '%.02i' % (((song._percAccuracy *10) + (completed * 10)) / 2)
