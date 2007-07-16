@@ -8,7 +8,7 @@ import db.songs_peer
 
 from objs import tuning_mgr, songs
 
-import appcfg, xmlres
+import appcfg, xmlres, viewmgr
 import CategoriesDlg
 
 class NewSongDlg(wx.Dialog):
@@ -133,7 +133,11 @@ class NewSongDlg(wx.Dialog):
         self.__SyncExamplePath()
 
     # --------------------------------------------------------------------------
-    def OnOk(self, event): # wxGlade: NewSongDlg.<event_handler>
+    def OnOk(self, event): 
+        """
+        Handler to either close the song dialog and save settings or deny this
+        """
+        
         if self.__barCount.GetValue() < 0:
             wx.MessageBox('Please enter the number of bars in the song, or 0 for none', style = wx.ICON_EXCLAMATION | wx.OK)
             return
@@ -143,6 +147,20 @@ class NewSongDlg(wx.Dialog):
         if self.__title.GetValue().strip() == '':
             wx.MessageBox('Please enter a valid song title', style = wx.ICON_EXCLAMATION | wx.OK)
             return
+        
+        # go by all songs, and match case insensitive if a title already exists 
+        # like the one added, to prevent double songs
+        if not self.__dbAllowed:
+            title = self.__title.GetValue().strip().upper()
+            for s in viewmgr.Get()._list:
+                if s != self.__song and (title == s._title.upper()):
+                    res = wx.MessageBox('A similar song title already exists in the database.\nAre you sure you want to add this song?',
+                                        'Warning', wx.ICON_QUESTION | wx.YES_NO)
+                    if res != wx.YES:
+                        return
+                    else:
+                        break
+        
         event.Skip()
 
     # --------------------------------------------------------------------------

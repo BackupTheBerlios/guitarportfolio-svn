@@ -282,11 +282,19 @@ class GuitarPortfolioFrame(wx.Frame):
             dlg = NewSongDlg.NewSongDlg(self)
             dlg.LoadFromSong(s)
             if dlg.ShowModal() == wx.ID_OK:
-                # TODO: Small problem, the category relations can be 
-                # changed due to a second editor, but cancelling does not
-                # show these changes.
+                
+                # we first remember the last dir if we have one, and then
+                # see what the new dir will be. If we have a change, notify
+                path_before = appcfg.GetAbsWorkPathFromSong(s)
                 dlg.SaveToSong(s)
+                path_after = appcfg.GetAbsWorkPathFromSong(s)
 
+                # if we  have a new attachments path, notify user
+                if path_before.upper() != path_after.upper() and os.path.exists(path_before):
+                    wx.MessageBox('The attachment path is changed!\n' + \
+                                  'Make sure you manually copy all files to the new attachments directory',
+                                  'Path is changed', wx.ICON_WARNING | wx.OK)
+            
                 # update the song in the database
                 sp = db.songs_peer.SongPeer(db.engine.GetDb())
                 sp.Update(s, all = True)  
